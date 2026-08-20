@@ -19,7 +19,7 @@ public class EnemyData : ScriptableObject
     
     void chosen()
     {
-        if (CombatHandler.ChoosingTargetEnemy)
+        if (CombatHandler.ChoosingTarget)
         {
 
         }
