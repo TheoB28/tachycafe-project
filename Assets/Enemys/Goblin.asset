@@ -9,10 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58a30df456204394082c855f1de177ac, type: 3}
-  m_Name: Zoltraak
-  m_EditorClassIdentifier: Assembly-CSharp::Action
-  Damage: 1000000
-  Heal: 0
-  Target: 2
-  Description: blast
+  m_Script: {fileID: 11500000, guid: a20b7cf5fd8d8f148aac0a2945060136, type: 3}
+  m_Name: Goblin
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy
+  Actions:
+  - {fileID: 11400000, guid: cb871c57b397a874997f3bf052ebc0cd, type: 2}
+  HP: 10
+  FP: 0
+  MaxHP: 10
+  MaxFP: 0

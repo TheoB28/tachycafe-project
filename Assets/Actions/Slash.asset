@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Action
   Damage: 2
   Heal: 0
-  Targets: 2
+  Target: 2
   Description: swings at a enemy

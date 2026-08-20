@@ -21,7 +21,15 @@ public class CombatHandler : MonoBehaviour
     [SerializeField] GameObject DescriptionTab;
     [SerializeField] TextMeshProUGUI DescriptionText;
 
+    [Header("Players")]
     [SerializeField] PlayerCombat player;
+    [SerializeField] int CurrentActionID;
+
+    [Header("Enemys")]
+    [SerializeField] EnemyCombat[] Enemies;
+
+    public bool ChoosingTargetEnemy;
+    public bool ChoosingTargetAlly;
 
     private void Start()
     {
@@ -57,6 +65,27 @@ public class CombatHandler : MonoBehaviour
     {
         DescriptionText.text = player.Actions[ID].Description;
         
+    }
+
+    public void UseAction(int ID)
+    {
+        CurrentActionID = ID;
+        ChoosingTargetEnemy = true;
+    }
+
+    public void ActivateAction(EnemyCombat enemy)
+    {
+        Debug.Log("d");
+        switch (player.Actions[CurrentActionID].Target)
+        {
+            case Action.PossibleTarget.enemy:
+                enemy.TakeDamage(player.Actions[CurrentActionID].Damage);
+                break;
+            case Action.PossibleTarget.ally:
+                break;
+            case Action.PossibleTarget.self:
+                break;
+        }
     }
 }
 

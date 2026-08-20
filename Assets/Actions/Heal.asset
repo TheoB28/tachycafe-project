@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Action
   Damage: 0
   Heal: 5
-  Targets: 1
+  Target: 1
   Description: Heals one ally
