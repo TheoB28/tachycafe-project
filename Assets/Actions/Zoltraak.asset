@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58a30df456204394082c855f1de177ac, type: 3}
   m_Name: Zoltraak
   m_EditorClassIdentifier: Assembly-CSharp::Action
-  Name: Zoltraak
   Damage: 1000000
   Heal: 0
   Targets: 2
-  Description: 
+  Description: blast

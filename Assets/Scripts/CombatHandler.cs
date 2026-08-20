@@ -17,6 +17,10 @@ public class CombatHandler : MonoBehaviour
     [Header("Items Tab")]
     [SerializeField] GameObject ItemsTab;
 
+    [Header("Description Tab")]
+    [SerializeField] GameObject DescriptionTab;
+    [SerializeField] TextMeshProUGUI DescriptionText;
+
     [SerializeField] PlayerCombat player;
 
     private void Start()
@@ -27,12 +31,14 @@ public class CombatHandler : MonoBehaviour
     public void ShowFightTab()
     {
         FightTab.SetActive(true);  
+        DescriptionTab.SetActive(true);
         ItemsTab.SetActive(false);
     }
     public void ShowItemTab()
     {
-        FightTab.SetActive(true);
-        ItemsTab.SetActive(false);
+        FightTab.SetActive(false);
+        DescriptionTab.SetActive(false);
+        ItemsTab.SetActive(true);
     }
 
     void SetupPlayerTabs()
@@ -45,6 +51,12 @@ public class CombatHandler : MonoBehaviour
         ButtonText.text = player.Actions[2].name;
         ButtonText = action4Button.GetComponentInChildren<TextMeshProUGUI>();
         ButtonText.text = player.Actions[3].name;
+    }
+
+    public void ChangeDescription(int ID)
+    {
+        DescriptionText.text = player.Actions[ID].Description;
+        
     }
 }
 
