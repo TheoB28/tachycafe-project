@@ -2,6 +2,7 @@ using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class CombatHandler : MonoBehaviour
@@ -31,6 +32,12 @@ public class CombatHandler : MonoBehaviour
     [Header("Enemys")]
     [SerializeField] EnemyCombat[] Enemies;
 
+    [Header("Turn")]
+    [SerializeField] GameObject Selector;
+    [SerializeField] float SelectorHeight;
+    int CurrentTargetID;
+
+
     public bool ChoosingTarget;
     public bool PlayerTurn;
 
@@ -39,6 +46,44 @@ public class CombatHandler : MonoBehaviour
         SetupPlayerTabs();
     }
 
+    public void OnNavigate(InputValue Input)
+    {
+        if (ChoosingTarget)
+        {
+            switch (players[CurrentCharacterID].Actions[CurrentActionID].Target) 
+            {
+                case Action.PossibleTarget.enemy:
+                    if (Input.Get<Vector2>().x > 0)
+                    {
+                        if (CurrentTargetID >= Enemies.Length - 1) { return; }
+                        Selector.transform.position = Enemies[CurrentTargetID + 1].transform.position + new Vector3(0, SelectorHeight, 0);
+                        CurrentTargetID++;
+                    }
+                    else if (Input.Get<Vector2>().x < 0)
+                    {
+                        if (CurrentTargetID == 0) { return; }
+                        Selector.transform.position = Enemies[CurrentTargetID - 1].transform.position + new Vector3(0, SelectorHeight, 0);
+                        CurrentTargetID--;
+                    }
+                    break;
+                case Action.PossibleTarget.ally:
+                    if (Input.Get<Vector2>().x > 0)
+                    {
+                        if (CurrentTargetID == 0) { return; }
+                        Selector.transform.position = players[CurrentTargetID - 1].transform.position + new Vector3(0, SelectorHeight, 0);
+                        CurrentTargetID--;
+                    }
+                    else if (Input.Get<Vector2>().x < 0)
+                    {
+                        if (CurrentTargetID >= players.Length - 1) { return; }
+                        Selector.transform.position = players[CurrentTargetID + 1].transform.position + new Vector3(0, SelectorHeight, 0);
+                        CurrentTargetID++;
+                    }
+                    break;
+            }
+        }
+    }
+     
     public void ShowFightTab()
     {
         FightTab.SetActive(true);  
@@ -76,23 +121,28 @@ public class CombatHandler : MonoBehaviour
         {
             CurrentActionID = ID;
             ChoosingTarget = true;
-            switch (ID)
-            {
-                case 0:
-                    action1Button.GetComponent<Outline>().enabled = true;
-                    break;
-                case 1:
-                    action2Button.GetComponent<Outline>().enabled = true;
-                    break;
-                case 2:
-                    action3Button.GetComponent<Outline>().enabled = true;
-                    break;
-                case 3:
-                    action4Button.GetComponent<Outline>().enabled = true;
-                    break;
-            }
+            SelectTarget();
         }
     }
+
+    public void SelectTarget()
+    {
+
+        switch (players[CurrentCharacterID].Actions[CurrentActionID].Target)
+        {
+            case Action.PossibleTarget.enemy:
+                Selector.transform.position = Enemies[0].transform.position + new Vector3(0, SelectorHeight, 0);
+                break;
+            case Action.PossibleTarget.ally:
+                Selector.transform.position = players[0].transform.position + new Vector3(0, SelectorHeight, 0);
+                break;
+            case Action.PossibleTarget.self:
+                Selector.transform.position = players[CurrentCharacterID].transform.position + new Vector3(0, SelectorHeight, 0);
+                break;
+        }
+    }
+
+
 
     public void ActivateAction(EnemyCombat Targget)
     {
@@ -113,45 +163,11 @@ public class CombatHandler : MonoBehaviour
         }
         ChoosingTarget = false;
         CurrentCharacterID++;
-        action1Button.GetComponent<Outline>().enabled = false;
-        action2Button.GetComponent<Outline>().enabled = false;
-        action3Button.GetComponent<Outline>().enabled = false;
-        action4Button.GetComponent<Outline>().enabled = false;
         if (CurrentCharacterID >= players.Length)
         {
             PlayerTurn = false;
         }
     }
-
-    public void HighLight(EnemyCombat enemy)
-    {
-        if (ChoosingTarget && players[CurrentCharacterID].Actions[CurrentActionID].Target == Action.PossibleTarget.enemy)
-        {
-            enemy.GetComponent<Renderer>().material = OutlineMaterial;
-        }
-    }
-
-    public void HighLight(PlayerCombat player)
-    {
-        if (ChoosingTarget && players[CurrentCharacterID].Actions[CurrentActionID].Target == Action.PossibleTarget.ally)
-        {
-            player.GetComponent<Renderer>().material = OutlineMaterial;
-        }
-    }
-
-    public void RemoveHighLight(EnemyCombat enemy)
-    {
-        if (ChoosingTarget && players[CurrentCharacterID].Actions[CurrentActionID].Target == Action.PossibleTarget.enemy)
-        {
-            enemy.GetComponent<Renderer>().material = DefaultMaterial;
-        }
-    }
-    public void RemoveHighLight(PlayerCombat player)
-    {
-        if (ChoosingTarget && players[CurrentCharacterID].Actions[CurrentActionID].Target == Action.PossibleTarget.ally)
-        {
-            player.GetComponent<Renderer>().material = DefaultMaterial;
-        }
-    }   
+ 
 }
 

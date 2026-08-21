@@ -16,14 +16,4 @@ public class EnemyData : ScriptableObject
     {
         CombatHandler = FindAnyObjectByType<CombatHandler>();
     }
-    
-    void chosen()
-    {
-        if (CombatHandler.ChoosingTarget)
-        {
-
-        }
-    }
-
-
 }
