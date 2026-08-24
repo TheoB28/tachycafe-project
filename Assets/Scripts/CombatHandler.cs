@@ -2,6 +2,7 @@ using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
@@ -9,6 +10,7 @@ public class CombatHandler : MonoBehaviour
 {
 
     [Header("Fight Tab")]
+    [SerializeField] Button FightButton;
     [SerializeField] GameObject FightTab;
     [SerializeField] Button action1Button;
     [SerializeField] Button action2Button;
@@ -41,9 +43,19 @@ public class CombatHandler : MonoBehaviour
     public bool ChoosingTarget;
     public bool PlayerTurn;
 
+    EventSystem eventSystem;
+
+    private void Awake()
+    {
+        eventSystem = GetComponentInChildren<EventSystem>();
+    }
+
+
     private void Start()
     {
         SetupPlayerTabs();
+        FightButton.Select();
+
     }
 
     public void OnNavigate(InputValue Input)
@@ -83,12 +95,34 @@ public class CombatHandler : MonoBehaviour
             }
         }
     }
+
+    public void OnCancel()
+    {
+        if (ChoosingTarget)
+        {
+            action1Button.Select();
+            ChoosingTarget = false;
+            Selector.SetActive(false);
+        }
+        else
+        {
+            FightButton.Select();
+            FightTab.SetActive(false);
+            DescriptionTab.SetActive(false);
+        }
+    }
+
+    public void OnSubmit()
+    {
+        Debug.Log("sub");
+    }
      
     public void ShowFightTab()
     {
         FightTab.SetActive(true);  
         DescriptionTab.SetActive(true);
         ItemsTab.SetActive(false);
+        action1Button.Select();
     }
     public void ShowItemTab()
     {
@@ -122,6 +156,8 @@ public class CombatHandler : MonoBehaviour
             CurrentActionID = ID;
             ChoosingTarget = true;
             SelectTarget();
+            eventSystem.SetSelectedGameObject(null);
+            Selector.SetActive(true);
         }
     }
 
@@ -140,6 +176,7 @@ public class CombatHandler : MonoBehaviour
                 Selector.transform.position = players[CurrentCharacterID].transform.position + new Vector3(0, SelectorHeight, 0);
                 break;
         }
+        Selector.SetActive(false);
     }
 
 
