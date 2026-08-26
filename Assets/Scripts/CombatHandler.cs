@@ -32,7 +32,7 @@ public class CombatHandler : MonoBehaviour
     [SerializeField] Material DefaultMaterial;
 
     [Header("Enemys")]
-    [SerializeField] EnemyCombat[] Enemies;
+    [SerializeField] public EnemyCombat[] Enemies;
 
     [Header("Turn")]
     [SerializeField] GameObject Selector;
@@ -55,7 +55,7 @@ public class CombatHandler : MonoBehaviour
     {
         SetupPlayerTabs();
         FightButton.Select();
-
+        PlayerTurn = true;
     }
 
     public void OnNavigate(InputValue Input)
@@ -96,6 +96,31 @@ public class CombatHandler : MonoBehaviour
         }
     }
 
+    public void OnSubmit()
+    {
+        if (ChoosingTarget)
+        {
+            switch (players[CurrentCharacterID].Actions[CurrentActionID].Target)
+            {
+                case Action.PossibleTarget.enemy:
+                    ActivateAction(Enemies[CurrentTargetID]);
+                    break;
+                case Action.PossibleTarget.ally:
+                    ActivateAction(players[CurrentTargetID]);
+                    break;
+                case Action.PossibleTarget.self:
+                    ActivateAction(players[CurrentCharacterID]);
+                    break;
+            }
+            FightTab.SetActive(false);
+            if (PlayerTurn)
+            {
+                SetupPlayerTabs();
+                FightButton.Select();
+            }
+        }
+    }
+
     public void OnCancel()
     {
         if (ChoosingTarget)
@@ -112,11 +137,6 @@ public class CombatHandler : MonoBehaviour
         }
     }
 
-    public void OnSubmit()
-    {
-        Debug.Log("sub");
-    }
-     
     public void ShowFightTab()
     {
         FightTab.SetActive(true);  
@@ -151,7 +171,7 @@ public class CombatHandler : MonoBehaviour
 
     public void UseAction(int ID)
     {
-        if (!PlayerTurn)
+        if (PlayerTurn)
         {
             CurrentActionID = ID;
             ChoosingTarget = true;
@@ -186,6 +206,11 @@ public class CombatHandler : MonoBehaviour
         Targget.TakeDamage(players[CurrentCharacterID].Actions[CurrentActionID].Damage);
         ChoosingTarget = false;
         CurrentCharacterID++;
+        Selector.SetActive(false);
+        if (CurrentCharacterID >= players.Length)
+        {
+            PlayerTurn = false;
+        }
     }
 
     public void ActivateAction(PlayerCombat Tarrget)
@@ -200,9 +225,20 @@ public class CombatHandler : MonoBehaviour
         }
         ChoosingTarget = false;
         CurrentCharacterID++;
+        Selector.SetActive(false);
         if (CurrentCharacterID >= players.Length)
         {
             PlayerTurn = false;
+        }
+    }
+
+    public void EnemyDeath(EnemyCombat enemy)
+    {
+        Enemies = Enemies.Where(e => e != enemy).ToArray();
+        if (Enemies.Length == 0)
+        {
+            Debug.Log("All enemies defeated!");
+            // Handle victory condition here
         }
     }
  
