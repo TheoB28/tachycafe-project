@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
@@ -171,7 +173,7 @@ public class CombatHandler : MonoBehaviour
 
     public void UseAction(int ID)
     {
-        if (PlayerTurn)
+        if (PlayerTurn && players[CurrentCharacterID].FP >= players[CurrentCharacterID].Actions[ID].FPCost)
         {
             CurrentActionID = ID;
             ChoosingTarget = true;
@@ -203,13 +205,15 @@ public class CombatHandler : MonoBehaviour
 
     public void ActivateAction(EnemyCombat Targget)
     {
-        Targget.TakeDamage(players[CurrentCharacterID].Actions[CurrentActionID].Damage);
+        Targget.UseAction(players[CurrentCharacterID].Actions[CurrentActionID]);
         ChoosingTarget = false;
+        players[CurrentCharacterID].UseFP(players[CurrentCharacterID].Actions[CurrentActionID].FPCost);
         CurrentCharacterID++;
         Selector.SetActive(false);
         if (CurrentCharacterID >= players.Length)
         {
             PlayerTurn = false;
+            StartCoroutine(StartEnemyTurn());
         }
     }
 
@@ -217,19 +221,40 @@ public class CombatHandler : MonoBehaviour
     {
         if (players[CurrentCharacterID].Actions[CurrentActionID].Target == Action.PossibleTarget.self && players[CurrentCharacterID].gameObject == Tarrget)
         {
-            Tarrget.HealHP(players[CurrentCharacterID].Actions[CurrentActionID].Heal);
+            Tarrget.UseAction(players[CurrentCharacterID].Actions[CurrentActionID]);
         }
         else if (players[CurrentCharacterID].Actions[CurrentActionID].Target == Action.PossibleTarget.ally && players[CurrentCharacterID].gameObject != Tarrget)
         {
-            Tarrget.HealHP(players[CurrentCharacterID].Actions[CurrentActionID].Heal);
+            Tarrget.UseAction(players[CurrentCharacterID].Actions[CurrentActionID]);
         }
         ChoosingTarget = false;
+        players[CurrentCharacterID].UseFP(players[CurrentCharacterID].Actions[CurrentActionID].FPCost);
         CurrentCharacterID++;
         Selector.SetActive(false);
         if (CurrentCharacterID >= players.Length)
         {
             PlayerTurn = false;
+            StartCoroutine(StartEnemyTurn());
         }
+    }
+
+    IEnumerator StartEnemyTurn()
+    {
+        foreach (EnemyCombat enemy in Enemies)
+        {
+            yield return new WaitForSeconds(1f);
+            enemy.UseTurn(players, Enemies);
+            yield return new WaitForSeconds(1f);
+        }
+        StartPlayerTurn();
+    }
+
+    void StartPlayerTurn()
+    {
+        CurrentCharacterID = 0;
+        PlayerTurn = true;
+        SetupPlayerTabs();
+        FightButton.Select();
     }
 
     public void EnemyDeath(EnemyCombat enemy)

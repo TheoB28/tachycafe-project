@@ -7,6 +7,9 @@ public class Action : ScriptableObject
 
     [SerializeField] public int Damage;
     [SerializeField] public int Heal;
+    [SerializeField] public int FPCost;
+    [SerializeField] public int Duration;
     [SerializeField] public PossibleTarget Target;
+    [SerializeField] public Effects ActionEffect;
     [SerializeField] public string Description;
 }

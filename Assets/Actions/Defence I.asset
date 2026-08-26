@@ -9,11 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58a30df456204394082c855f1de177ac, type: 3}
-  m_Name: Zoltraak
-  m_EditorClassIdentifier: Assembly-CSharp::Action
-  Damage: 1000000
-  Heal: 0
-  FPCost: 10
-  Target: 2
-  Description: blast
+  m_Script: {fileID: 11500000, guid: 7986293759168d049a933e5c02ee0596, type: 3}
+  m_Name: Defence I
+  m_EditorClassIdentifier: Assembly-CSharp::Effects
+  duration: 1
+  DamageMultiplier: 1
+  DamageTakenMultiplier: 0.5

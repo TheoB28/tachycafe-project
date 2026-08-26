@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Action
   Damage: 0
   Heal: 0
-  Targets: 0
+  FPCost: 5
+  Target: 0
   Description: increses the users strenth
