@@ -46,6 +46,7 @@ public class CombatHandler : MonoBehaviour
     public bool PlayerTurn;
 
     EventSystem eventSystem;
+    SceneLoader SceneLoader;
 
     private void Awake()
     {
@@ -55,10 +56,12 @@ public class CombatHandler : MonoBehaviour
 
     private void Start()
     {
+        SceneLoader = FindObjectOfType<SceneLoader>();
         SetupPlayerTabs();
         FightButton.Select();
         PlayerTurn = true;
     }
+
 
     public void OnNavigate(InputValue Input)
     {
@@ -153,6 +156,26 @@ public class CombatHandler : MonoBehaviour
         ItemsTab.SetActive(true);
     }
 
+    public void SetupEnemies(EnemyData[] enemies)
+    {
+        for (int i = 0; i < Enemies.Length; i++)
+        {
+            if (i < enemies.Length) 
+            { Enemies[i].LoadData(enemies[i]); } 
+            else 
+            {
+                Destroy(Enemies[i].gameObject);
+
+            }
+        }
+        EnemyCombat[] NewEnemies = new EnemyCombat[enemies.Length];
+        for (int i = 0; i < enemies.Length; i++)
+        {
+            NewEnemies[i] = Enemies[i];
+        }
+        Enemies = NewEnemies;
+    }
+
     void SetupPlayerTabs()
     {
         TextMeshProUGUI ButtonText = action1Button.GetComponentInChildren<TextMeshProUGUI>();
@@ -240,6 +263,10 @@ public class CombatHandler : MonoBehaviour
 
     IEnumerator StartEnemyTurn()
     {
+        if (Enemies.Length == 0)
+        {
+            SceneLoader.LoadOverworld();
+        }
         foreach (EnemyCombat enemy in Enemies)
         {
             yield return new WaitForSeconds(1f);
@@ -262,8 +289,7 @@ public class CombatHandler : MonoBehaviour
         Enemies = Enemies.Where(e => e != enemy).ToArray();
         if (Enemies.Length == 0)
         {
-            Debug.Log("All enemies defeated!");
-            // Handle victory condition here
+            SceneLoader.LoadOverworld();
         }
     }
  

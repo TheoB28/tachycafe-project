@@ -4,7 +4,7 @@ using UnityEngine;
 public class EnemyCombat : MonoBehaviour
 {
 
-    [SerializeField] EnemyData Data;
+    public EnemyData Data;
 
     [SerializeField] Action[] Actions;
     [SerializeField] int HP;
@@ -17,8 +17,9 @@ public class EnemyCombat : MonoBehaviour
 
     [SerializeField] CombatHandler CombatHandler;
 
-    private void Awake()
+    public void LoadData(EnemyData data)
     {
+        Data = data;
         HP = Data.HP; FP = Data.FP; MaxHP = Data.MaxHP; MaxFP = Data.MaxFP; Behaviour = Data.Behavior; Actions = Data.Actions;
         text.text = HP.ToString();
     }
