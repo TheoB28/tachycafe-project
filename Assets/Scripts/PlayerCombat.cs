@@ -1,3 +1,4 @@
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -9,7 +10,7 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] public int FP;
     [SerializeField] public int MaxHP;
     [SerializeField] public int MaxFP;
-    [SerializeField] Effects[] CurrentEffects;
+    [SerializeField] public Effects[] CurrentEffects;
     [SerializeField] public TextMeshProUGUI HPText;
     [SerializeField] public TextMeshProUGUI FPText;
 
@@ -17,9 +18,8 @@ public class PlayerCombat : MonoBehaviour
 
     public void UseAction(Action action)
     {
-    
-        CurrentEffects = System.Array.FindAll(CurrentEffects, e => e != action.ActionEffect);
 
+        CurrentEffects.ut
         int ActualDamage = action.Damage;
         foreach (var effect in CurrentEffects)
         {

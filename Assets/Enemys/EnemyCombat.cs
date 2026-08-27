@@ -23,7 +23,7 @@ public class EnemyCombat : MonoBehaviour
         HP = Data.HP; FP = Data.FP; MaxHP = Data.MaxHP; MaxFP = Data.MaxFP; Behaviour = Data.Behavior; Actions = Data.Actions;
         text.text = HP.ToString();
     }
-    public void UseAction(Action action)
+    public void UseAction(Action action, Effects[] PlayerEffects)
     {
         CurrentEffects = System.Array.FindAll(CurrentEffects, e => e != action.ActionEffect);
 
@@ -31,6 +31,11 @@ public class EnemyCombat : MonoBehaviour
         foreach(var effect in CurrentEffects)
         {
             ActualDamage = Mathf.RoundToInt(ActualDamage * effect.DamageTakenMultiplier);
+        }
+        foreach (var effect in PlayerEffects)
+        {
+            Debug.Log(effect.ToString());
+            ActualDamage = Mathf.RoundToInt(ActualDamage * effect.DamageMultiplier);
         }
         HP -= ActualDamage;
 
@@ -165,11 +170,11 @@ public class EnemyCombat : MonoBehaviour
         switch (ChosenAction.Target)
         {
             case Action.PossibleTarget.self:
-                UseAction(ChosenAction);
+                UseAction(ChosenAction, CurrentEffects);
 
                 break;
             case Action.PossibleTarget.ally:
-                TargetEnemy.UseAction(ChosenAction);
+                TargetEnemy.UseAction(ChosenAction, CurrentEffects);
                 break;
             case Action.PossibleTarget.enemy:
                 TargetPlayer.UseAction(ChosenAction);

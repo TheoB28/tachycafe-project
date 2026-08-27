@@ -44,7 +44,9 @@ public class CombatHandler : MonoBehaviour
 
     public bool ChoosingTarget;
     public bool PlayerTurn;
+    bool HasWon;
 
+    PlayerDataHolder PlayerDataHolder;
     EventSystem eventSystem;
     SceneLoader SceneLoader;
 
@@ -56,6 +58,7 @@ public class CombatHandler : MonoBehaviour
 
     private void Start()
     {
+        PlayerDataHolder = FindAnyObjectByType<PlayerDataHolder>();
         SceneLoader = FindObjectOfType<SceneLoader>();
         SetupPlayerTabs();
         FightButton.Select();
@@ -158,22 +161,25 @@ public class CombatHandler : MonoBehaviour
 
     public void SetupEnemies(EnemyData[] enemies)
     {
-        for (int i = 0; i < Enemies.Length; i++)
+        if (!HasWon)
         {
-            if (i < enemies.Length) 
-            { Enemies[i].LoadData(enemies[i]); } 
-            else 
+            for (int i = 0; i < Enemies.Length; i++)
             {
-                Destroy(Enemies[i].gameObject);
+                if (i < enemies.Length)
+                { Enemies[i].LoadData(enemies[i]); }
+                else
+                {
+                    Destroy(Enemies[i].gameObject);
 
+                }
             }
+            EnemyCombat[] NewEnemies = new EnemyCombat[enemies.Length];
+            for (int i = 0; i < enemies.Length; i++)
+            {
+                NewEnemies[i] = Enemies[i];
+            }
+            Enemies = NewEnemies;
         }
-        EnemyCombat[] NewEnemies = new EnemyCombat[enemies.Length];
-        for (int i = 0; i < enemies.Length; i++)
-        {
-            NewEnemies[i] = Enemies[i];
-        }
-        Enemies = NewEnemies;
     }
 
     void SetupPlayerTabs()
@@ -228,7 +234,7 @@ public class CombatHandler : MonoBehaviour
 
     public void ActivateAction(EnemyCombat Targget)
     {
-        Targget.UseAction(players[CurrentCharacterID].Actions[CurrentActionID]);
+        Targget.UseAction(players[CurrentCharacterID].Actions[CurrentActionID], players[CurrentCharacterID].CurrentEffects);
         ChoosingTarget = false;
         players[CurrentCharacterID].UseFP(players[CurrentCharacterID].Actions[CurrentActionID].FPCost);
         CurrentCharacterID++;
@@ -242,7 +248,7 @@ public class CombatHandler : MonoBehaviour
 
     public void ActivateAction(PlayerCombat Tarrget)
     {
-        if (players[CurrentCharacterID].Actions[CurrentActionID].Target == Action.PossibleTarget.self && players[CurrentCharacterID].gameObject == Tarrget)
+        if (players[CurrentCharacterID].Actions[CurrentActionID].Target == Action.PossibleTarget.self && players[CurrentCharacterID].gameObject == Tarrget.gameObject)
         {
             Tarrget.UseAction(players[CurrentCharacterID].Actions[CurrentActionID]);
         }
@@ -289,6 +295,8 @@ public class CombatHandler : MonoBehaviour
         Enemies = Enemies.Where(e => e != enemy).ToArray();
         if (Enemies.Length == 0)
         {
+            HasWon = true;
+            PlayerDataHolder.UpdateData();
             SceneLoader.LoadOverworld();
         }
     }

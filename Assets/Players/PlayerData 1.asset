@@ -18,6 +18,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 113ac263df710c048a7e73af9d7011f1, type: 2}
   - {fileID: 11400000, guid: 72fffed0d65b2ac4c905facfa1c15735, type: 2}
   HP: 10
-  FP: 5
+  FP: 2147483647
   MaxHP: 10
   MaxFP: 5
