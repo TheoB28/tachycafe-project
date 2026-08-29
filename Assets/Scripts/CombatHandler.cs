@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -250,11 +251,11 @@ public class CombatHandler : MonoBehaviour
     {
         if (players[CurrentCharacterID].Actions[CurrentActionID].Target == Action.PossibleTarget.self && players[CurrentCharacterID].gameObject == Tarrget.gameObject)
         {
-            Tarrget.UseAction(players[CurrentCharacterID].Actions[CurrentActionID]);
+            Tarrget.UseAction(players[CurrentCharacterID].Actions[CurrentActionID], players[CurrentCharacterID].CurrentEffects);
         }
         else if (players[CurrentCharacterID].Actions[CurrentActionID].Target == Action.PossibleTarget.ally && players[CurrentCharacterID].gameObject != Tarrget)
         {
-            Tarrget.UseAction(players[CurrentCharacterID].Actions[CurrentActionID]);
+            Tarrget.UseAction(players[CurrentCharacterID].Actions[CurrentActionID], players[CurrentCharacterID].CurrentEffects);
         }
         ChoosingTarget = false;
         players[CurrentCharacterID].UseFP(players[CurrentCharacterID].Actions[CurrentActionID].FPCost);
@@ -269,12 +270,18 @@ public class CombatHandler : MonoBehaviour
 
     IEnumerator StartEnemyTurn()
     {
+
         if (Enemies.Length == 0)
         {
             SceneLoader.LoadOverworld();
         }
         foreach (EnemyCombat enemy in Enemies)
         {
+            foreach (var effect in enemy.CurrentEffects)
+            {
+                effect.duration--;
+                if (effect.duration <= 0) { ArrayUtility.Remove(ref enemy.CurrentEffects, effect); }
+            }
             yield return new WaitForSeconds(1f);
             enemy.UseTurn(players, Enemies);
             yield return new WaitForSeconds(1f);
@@ -284,6 +291,14 @@ public class CombatHandler : MonoBehaviour
 
     void StartPlayerTurn()
     {
+        foreach(var player in players)
+        {
+            foreach(var effect in player.CurrentEffects)
+            {
+                effect.duration--;
+                if (effect.duration <= 0) { ArrayUtility.Remove(ref player.CurrentEffects, effect); }
+            }
+        }
         CurrentCharacterID = 0;
         PlayerTurn = true;
         SetupPlayerTabs();

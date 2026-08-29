@@ -1,4 +1,5 @@
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 
 public class EnemyCombat : MonoBehaviour
@@ -13,7 +14,7 @@ public class EnemyCombat : MonoBehaviour
     [SerializeField] int MaxFP;
     [SerializeField] EnemyData.EnemyBehavior Behaviour;
     [SerializeField] TextMeshProUGUI text;
-    [SerializeField] Effects[] CurrentEffects;
+    [SerializeField] public Effects[] CurrentEffects;
 
     [SerializeField] CombatHandler CombatHandler;
 
@@ -25,19 +26,31 @@ public class EnemyCombat : MonoBehaviour
     }
     public void UseAction(Action action, Effects[] PlayerEffects)
     {
-        CurrentEffects = System.Array.FindAll(CurrentEffects, e => e != action.ActionEffect);
+        if (action.ActionEffect != null)
+        {
+            Effects effect = action.ActionEffect;
+            ArrayUtility.Add(ref CurrentEffects, effect);
+        }
 
-        int ActualDamage = action.Damage;
-        foreach(var effect in CurrentEffects)
+        float ActualDamage = action.Damage;
+        if (CurrentEffects.Length != 0)
         {
-            ActualDamage = Mathf.RoundToInt(ActualDamage * effect.DamageTakenMultiplier);
+            foreach (var effect in CurrentEffects)
+            {
+
+                ActualDamage = ActualDamage * effect.DamageResistanceMultiplier;
+
+            }
+
         }
-        foreach (var effect in PlayerEffects)
+        if (PlayerEffects.Length != 0)
         {
-            Debug.Log(effect.ToString());
-            ActualDamage = Mathf.RoundToInt(ActualDamage * effect.DamageMultiplier);
+            foreach (var effect in PlayerEffects)
+            {
+                ActualDamage = ActualDamage * effect.DamageMultiplier;
+            }
         }
-        HP -= ActualDamage;
+        HP -= (int)ActualDamage;
 
         if (HP <= 0)
         {
@@ -94,7 +107,7 @@ public class EnemyCombat : MonoBehaviour
                 {
                     foreach (var action in Actions)
                     {
-                        if (action.ActionEffect.DamageTakenMultiplier <= ChosenAction.ActionEffect.DamageTakenMultiplier)
+                        if (action.ActionEffect.DamageResistanceMultiplier <= ChosenAction.ActionEffect.DamageResistanceMultiplier)
                         {
                             ChosenAction = action;
                         }
@@ -109,7 +122,7 @@ public class EnemyCombat : MonoBehaviour
                             ChosenAction = action;
                         }
                     }
-                    TargetPlayer.UseAction(ChosenAction);
+                    TargetPlayer.UseAction(ChosenAction, CurrentEffects);
                 }
                 break;
             case EnemyData.EnemyBehavior.Supportive:
@@ -135,7 +148,7 @@ public class EnemyCombat : MonoBehaviour
                 {
                     foreach (var action in Actions)
                     {
-                        if (action.ActionEffect.DamageTakenMultiplier <= ChosenAction.ActionEffect.DamageTakenMultiplier && action.FPCost <= FP)
+                        if (action.ActionEffect.DamageResistanceMultiplier <= ChosenAction.ActionEffect.DamageResistanceMultiplier && action.FPCost <= FP)
                         {
                             ChosenAction = action;
                         }
@@ -150,7 +163,7 @@ public class EnemyCombat : MonoBehaviour
                             ChosenAction = action;
                         }
                     }
-                    TargetPlayer.UseAction(ChosenAction);
+                    TargetPlayer.UseAction(ChosenAction, CurrentEffects);
                 }
                 break;
         }
@@ -177,7 +190,7 @@ public class EnemyCombat : MonoBehaviour
                 TargetEnemy.UseAction(ChosenAction, CurrentEffects);
                 break;
             case Action.PossibleTarget.enemy:
-                TargetPlayer.UseAction(ChosenAction);
+                TargetPlayer.UseAction(ChosenAction, CurrentEffects);
                 Debug.Log($"{gameObject.name} uses {ChosenAction.name} on {TargetPlayer.gameObject.name}");
                 break;
         }

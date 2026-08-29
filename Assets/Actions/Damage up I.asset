@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7986293759168d049a933e5c02ee0596, type: 3}
   m_Name: Damage up I
   m_EditorClassIdentifier: Assembly-CSharp::Effects
-  duration: 4
+  duration: 1
   DamageMultiplier: 1.25
-  DamageTakenMultiplier: 1
+  DamageResistanceMultiplier: 0

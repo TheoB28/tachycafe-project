@@ -1,5 +1,6 @@
 using System.Linq;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 
 public class PlayerCombat : MonoBehaviour
@@ -16,16 +17,37 @@ public class PlayerCombat : MonoBehaviour
 
     public bool IsDead = false;
 
-    public void UseAction(Action action)
+    public void UseAction(Action action, Effects[] UsersEffects)
     {
 
-        CurrentEffects.ut
-        int ActualDamage = action.Damage;
-        foreach (var effect in CurrentEffects)
+
+        if(action.ActionEffect != null)
         {
-            ActualDamage = Mathf.RoundToInt(ActualDamage * effect.DamageTakenMultiplier);
+            Effects effect = ScriptableObject.CreateInstance<Effects>();
+            effect.copyFrom(action.ActionEffect);
+            ArrayUtility.Add(ref CurrentEffects, effect);
         }
-        HP -= ActualDamage;
+
+        float ActualDamage = action.Damage;
+        if (CurrentEffects.Length != 0)
+        {
+            foreach (var effect in CurrentEffects)
+            {
+                
+                ActualDamage = ActualDamage * effect.DamageResistanceMultiplier * effect.DamageMultiplier;
+
+            }
+        }
+
+        if (UsersEffects.Length != 0)
+        {
+            foreach (var effect in UsersEffects)
+            {
+                ActualDamage = ActualDamage * effect.DamageMultiplier;
+            }
+        }
+
+        HP -= (int) ActualDamage;
 
         if (HP <= 0)
         {
