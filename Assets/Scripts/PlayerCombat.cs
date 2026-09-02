@@ -15,11 +15,31 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] public TextMeshProUGUI HPText;
     [SerializeField] public TextMeshProUGUI FPText;
 
+    [Header("Misc")]
+    [SerializeField] public string PlayerName;
+    [SerializeField] GameObject EffectHolder;
+    [SerializeField] Vector2 EffectOffset;
+    [SerializeField] int ListSize = 5;
+
     public bool IsDead = false;
+
+
+    Canvas Canvas;
+
+    private void Awake()
+    {
+        Canvas = GetComponent<Canvas>();
+        gameObject.name = PlayerName;
+    }
+
+    private void Update()
+    {
+        UpdateEffects();
+    }
 
     public void UseAction(Action action, Effects[] UsersEffects)
     {
-
+        
 
         if(action.ActionEffect != null)
         {
@@ -27,6 +47,8 @@ public class PlayerCombat : MonoBehaviour
             effect.copyFrom(action.ActionEffect);
             ArrayUtility.Add(ref CurrentEffects, effect);
         }
+
+        UpdateEffects();
 
         float ActualDamage = action.Damage;
         if (CurrentEffects.Length != 0)
@@ -69,4 +91,21 @@ public class PlayerCombat : MonoBehaviour
         FP -= amount;
         FPText.text = FP.ToString();
     }   
+
+    void UpdateEffects()
+    {
+        int rows = 1;
+        Vector2 offset = Vector2.zero;
+        foreach (var effect in CurrentEffects)
+        {
+            if((int)(offset.x/ListSize) >= rows) 
+            { 
+                offset.y += EffectOffset.y;
+                offset.x = 0;
+                rows++;
+            }
+            Instantiate(effect.Icon, EffectHolder.transform.position + new Vector3(offset.x, offset.y, 0), Quaternion.identity, EffectHolder.transform);
+            offset.x += EffectOffset.x;
+        }
+    }
 }

@@ -8,9 +8,14 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class CombatHandler : MonoBehaviour
 {
+
+    [Header("UI")]
+    [SerializeField] TextMeshProUGUI PlayerNameText;
+
 
     [Header("Fight Tab")]
     [SerializeField] Button FightButton;
@@ -64,70 +69,18 @@ public class CombatHandler : MonoBehaviour
         SetupPlayerTabs();
         FightButton.Select();
         PlayerTurn = true;
+        PlayerNameText.text = players[CurrentCharacterID].PlayerName;
     }
 
 
     public void OnNavigate(InputValue Input)
     {
-        if (ChoosingTarget)
-        {
-            switch (players[CurrentCharacterID].Actions[CurrentActionID].Target) 
-            {
-                case Action.PossibleTarget.enemy:
-                    if (Input.Get<Vector2>().x > 0)
-                    {
-                        if (CurrentTargetID >= Enemies.Length - 1) { return; }
-                        Selector.transform.position = Enemies[CurrentTargetID + 1].transform.position + new Vector3(0, SelectorHeight, 0);
-                        CurrentTargetID++;
-                    }
-                    else if (Input.Get<Vector2>().x < 0)
-                    {
-                        if (CurrentTargetID == 0) { return; }
-                        Selector.transform.position = Enemies[CurrentTargetID - 1].transform.position + new Vector3(0, SelectorHeight, 0);
-                        CurrentTargetID--;
-                    }
-                    break;
-                case Action.PossibleTarget.ally:
-                    if (Input.Get<Vector2>().x > 0)
-                    {
-                        if (CurrentTargetID == 0) { return; }
-                        Selector.transform.position = players[CurrentTargetID - 1].transform.position + new Vector3(0, SelectorHeight, 0);
-                        CurrentTargetID--;
-                    }
-                    else if (Input.Get<Vector2>().x < 0)
-                    {
-                        if (CurrentTargetID >= players.Length - 1) { return; }
-                        Selector.transform.position = players[CurrentTargetID + 1].transform.position + new Vector3(0, SelectorHeight, 0);
-                        CurrentTargetID++;
-                    }
-                    break;
-            }
-        }
+        TargetSelecting(Input);
     }
 
     public void OnSubmit()
     {
-        if (ChoosingTarget)
-        {
-            switch (players[CurrentCharacterID].Actions[CurrentActionID].Target)
-            {
-                case Action.PossibleTarget.enemy:
-                    ActivateAction(Enemies[CurrentTargetID]);
-                    break;
-                case Action.PossibleTarget.ally:
-                    ActivateAction(players[CurrentTargetID]);
-                    break;
-                case Action.PossibleTarget.self:
-                    ActivateAction(players[CurrentCharacterID]);
-                    break;
-            }
-            FightTab.SetActive(false);
-            if (PlayerTurn)
-            {
-                SetupPlayerTabs();
-                FightButton.Select();
-            }
-        }
+        submitAction();
     }
 
     public void OnCancel()
@@ -193,6 +146,7 @@ public class CombatHandler : MonoBehaviour
         ButtonText.text = players[CurrentCharacterID].Actions[2].name;
         ButtonText = action4Button.GetComponentInChildren<TextMeshProUGUI>();
         ButtonText.text = players[CurrentCharacterID].Actions[3].name;
+        PlayerNameText.text = players[CurrentCharacterID].PlayerName;
     }
 
     public void ChangeDescription(int ID)
@@ -207,13 +161,13 @@ public class CombatHandler : MonoBehaviour
         {
             CurrentActionID = ID;
             ChoosingTarget = true;
-            SelectTarget();
+            SubmitTarget();
             eventSystem.SetSelectedGameObject(null);
             Selector.SetActive(true);
         }
     }
 
-    public void SelectTarget()
+    public void SubmitTarget()
     {
 
         switch (players[CurrentCharacterID].Actions[CurrentActionID].Target)
@@ -231,7 +185,68 @@ public class CombatHandler : MonoBehaviour
         Selector.SetActive(false);
     }
 
+    void submitAction()
+    {
+        if (ChoosingTarget)
+        {
+            switch (players[CurrentCharacterID].Actions[CurrentActionID].Target)
+            {
+                case Action.PossibleTarget.enemy:
+                    ActivateAction(Enemies[CurrentTargetID]);
+                    break;
+                case Action.PossibleTarget.ally:
+                    ActivateAction(players[CurrentTargetID]);
+                    break;
+                case Action.PossibleTarget.self:
+                    ActivateAction(players[CurrentCharacterID]);
+                    break;
+            }
+            FightTab.SetActive(false);
+            if (PlayerTurn)
+            {
+            SetupPlayerTabs();
+            FightButton.Select();
+            }
+        }
+    }
 
+    void TargetSelecting(InputValue Input)
+    {
+        if (ChoosingTarget)
+        {
+            switch (players[CurrentCharacterID].Actions[CurrentActionID].Target)
+            {
+                case Action.PossibleTarget.enemy:
+                    if (Input.Get<Vector2>().x > 0)
+                    {
+                        if (CurrentTargetID >= Enemies.Length - 1) { return; }
+                        Selector.transform.position = Enemies[CurrentTargetID + 1].transform.position + new Vector3(0, SelectorHeight, 0);
+                        CurrentTargetID++;
+                    }
+                    else if (Input.Get<Vector2>().x < 0)
+                    {
+                        if (CurrentTargetID == 0) { return; }
+                        Selector.transform.position = Enemies[CurrentTargetID - 1].transform.position + new Vector3(0, SelectorHeight, 0);
+                        CurrentTargetID--;
+                    }
+                    break;
+                case Action.PossibleTarget.ally:
+                    if (Input.Get<Vector2>().x > 0)
+                    {
+                        if (CurrentTargetID == 0) { return; }
+                        Selector.transform.position = players[CurrentTargetID - 1].transform.position + new Vector3(0, SelectorHeight, 0);
+                        CurrentTargetID--;
+                    }
+                    else if (Input.Get<Vector2>().x < 0)
+                    {
+                        if (CurrentTargetID >= players.Length - 1) { return; }
+                        Selector.transform.position = players[CurrentTargetID + 1].transform.position + new Vector3(0, SelectorHeight, 0);
+                        CurrentTargetID++;
+                    }
+                    break;
+            }
+        }
+    }
 
     public void ActivateAction(EnemyCombat Targget)
     {

@@ -10,8 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7986293759168d049a933e5c02ee0596, type: 3}
-  m_Name: Damage up I
+  m_Name: Defence I
   m_EditorClassIdentifier: Assembly-CSharp::Effects
   duration: 1
-  DamageMultiplier: 1.25
-  DamageResistanceMultiplier: 0
+  DamageMultiplier: 1
+  DamageResistanceMultiplier: 0.75
+  Icon: {fileID: 6177230073030811756, guid: 75054099a2f9c4749bfe7877ca9edd27, type: 3}

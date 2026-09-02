@@ -21,6 +21,7 @@ public class PlayerDataHolder : MonoBehaviour
         playerCombat = FindObjectsOfType<PlayerCombat>();
         for (int i = 0; i < playerCombat.Length; i++)
         {
+            playerCombat[i].PlayerName = playerData[i].PlayerName;
             playerCombat[i].Actions = playerData[i].Actions;
             playerCombat[i].HP = playerData[i].HP;
             playerCombat[i].FP = playerData[i].FP;
