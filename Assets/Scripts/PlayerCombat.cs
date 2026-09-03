@@ -29,7 +29,6 @@ public class PlayerCombat : MonoBehaviour
     private void Awake()
     {
         Canvas = GetComponent<Canvas>();
-        gameObject.name = PlayerName;
     }
 
     private void Update()

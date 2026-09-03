@@ -15,6 +15,7 @@ public class CombatHandler : MonoBehaviour
 
     [Header("UI")]
     [SerializeField] TextMeshProUGUI PlayerNameText;
+    [SerializeField] TextMeshProUGUI CombatLogText;
 
 
     [Header("Fight Tab")]
@@ -52,7 +53,7 @@ public class CombatHandler : MonoBehaviour
     public bool PlayerTurn;
     bool HasWon;
 
-    PlayerDataHolder PlayerDataHolder;
+    PlayerDataHandler PlayerDataHolder;
     EventSystem eventSystem;
     SceneLoader SceneLoader;
 
@@ -64,7 +65,7 @@ public class CombatHandler : MonoBehaviour
 
     private void Start()
     {
-        PlayerDataHolder = FindAnyObjectByType<PlayerDataHolder>();
+        PlayerDataHolder = FindAnyObjectByType<PlayerDataHandler>();
         SceneLoader = FindObjectOfType<SceneLoader>();
         SetupPlayerTabs();
         FightButton.Select();
@@ -205,12 +206,6 @@ public class CombatHandler : MonoBehaviour
                     ActivateAction(players[CurrentCharacterID]);
                     break;
             }
-            FightTab.SetActive(false);
-            if (PlayerTurn)
-            {
-            SetupPlayerTabs();
-            FightButton.Select();
-            }
         }
     }
 
@@ -259,13 +254,7 @@ public class CombatHandler : MonoBehaviour
         Targget.UseAction(players[CurrentCharacterID].Actions[CurrentActionID], players[CurrentCharacterID].CurrentEffects);
         ChoosingTarget = false;
         players[CurrentCharacterID].UseFP(players[CurrentCharacterID].Actions[CurrentActionID].FPCost);
-        CurrentCharacterID++;
-        Selector.SetActive(false);
-        if (CurrentCharacterID >= players.Length)
-        {
-            PlayerTurn = false;
-            StartCoroutine(StartEnemyTurn());
-        }
+        NextPlayerTurn();
     }
 
     public void ActivateAction(PlayerCombat Tarrget)
@@ -281,13 +270,7 @@ public class CombatHandler : MonoBehaviour
         }
         ChoosingTarget = false;
         players[CurrentCharacterID].UseFP(players[CurrentCharacterID].Actions[CurrentActionID].FPCost);
-        CurrentCharacterID++;
-        Selector.SetActive(false);
-        if (CurrentCharacterID >= players.Length)
-        {
-            PlayerTurn = false;
-            StartCoroutine(StartEnemyTurn());
-        }
+        NextPlayerTurn();
     }
 
     IEnumerator StartEnemyTurn()
@@ -295,6 +278,7 @@ public class CombatHandler : MonoBehaviour
         //checks win
         if (Enemies.Length == 0)
         {
+            PlayerDataHolder.UpdateData();
             SceneLoader.LoadOverworld();
         }
         //activates the enemys turns
@@ -312,6 +296,23 @@ public class CombatHandler : MonoBehaviour
         StartPlayerTurn();
     }
 
+    void EffectActivationPreAction()
+    {
+        foreach(Effects effect in players[CurrentCharacterID].CurrentEffects)
+        {
+            if(effect.activation == Effects.ActivationType.preAction)
+            {
+                float i = Random.value;
+                if (effect.isDysphoria && i < effect.SkipChans)
+                {
+                    CombatLogText.text = effect.Log(players[CurrentCharacterID].gameObject);
+                    NextPlayerTurn();
+                } 
+            }
+        }
+    }
+
+
     void StartPlayerTurn()
     {
         //ticks down effects and restarts round
@@ -327,15 +328,36 @@ public class CombatHandler : MonoBehaviour
         PlayerTurn = true;
         SetupPlayerTabs();
         FightButton.Select();
+        EffectActivationPreAction();
+    }
+
+    void NextPlayerTurn()
+    {
+        Selector.SetActive(false);
+        CurrentCharacterID++;
+        FightTab.SetActive(false);
+
+        if (CurrentCharacterID >= players.Length)
+        {
+            PlayerTurn = false;
+            StartCoroutine(StartEnemyTurn());
+        }
+        else
+        {
+            EffectActivationPreAction();
+            SetupPlayerTabs();
+            FightButton.Select();
+        }
     }
 
     public void EnemyDeath(EnemyCombat enemy)
     {
         //takes the enemy out off the arrray an checks win
-        Enemies = Enemies.Where(e => e != enemy).ToArray();
+        ArrayUtility.Remove(ref Enemies, enemy);
         if (Enemies.Length == 0)
         {
             HasWon = true;
+            PlayerDataHolder.UpdateData();
             SceneLoader.LoadOverworld();
         }
     }

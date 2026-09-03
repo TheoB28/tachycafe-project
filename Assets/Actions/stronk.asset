@@ -17,5 +17,5 @@ MonoBehaviour:
   FPCost: 5
   Duration: 0
   Target: 0
-  ActionEffect: {fileID: 11400000, guid: 6bfbd7e7c74d30741a22555c585b878d, type: 2}
+  ActionEffect: {fileID: 11400000, guid: 2bcca4ede38266d4593c0099963d6a69, type: 2}
   Description: increses the users strenth

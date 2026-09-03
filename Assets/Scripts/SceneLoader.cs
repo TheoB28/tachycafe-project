@@ -4,8 +4,11 @@ using UnityEngine.SceneManagement;
 public class SceneLoader : MonoBehaviour
 {
     EnemyData[] Enemies;
+    public bool Incombat;
+
 
     CombatHandler combatHandler;
+    PlayerDataHandler playerDataHandler;
 
     void Start()
     {
@@ -18,6 +21,7 @@ public class SceneLoader : MonoBehaviour
         {
             DontDestroyOnLoad(gameObject);
         }
+        playerDataHandler = FindFirstObjectByType<PlayerDataHandler>();
     }
 
     private void Update()
@@ -33,12 +37,14 @@ public class SceneLoader : MonoBehaviour
     public void LoadCombatScene(EnemyData[] enemies)
     {
         SceneManager.LoadScene("CombatScene");
+        Incombat = true;
         Enemies = enemies;
     }
 
     public void LoadOverworld()
     {
         SceneManager.LoadScene("Overworld");
+        Incombat = false;
         combatHandler = null;
     }
 }

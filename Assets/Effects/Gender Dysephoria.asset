@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7986293759168d049a933e5c02ee0596, type: 3}
+  m_Name: Gender Dysephoria
+  m_EditorClassIdentifier: Assembly-CSharp::Effects
+  duration: 1000
+  DamageMultiplier: 0.75
+  DamageResistanceMultiplier: 1.25
+  Icon: {fileID: 6177230073030811756, guid: cfec9ece50473984fad1dc15700185ce, type: 3}
+  effectLog: pp bad
+  isDysphoria: 1
+  SkipChans: 1
+  activation: 1
