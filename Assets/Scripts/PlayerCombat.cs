@@ -38,9 +38,8 @@ public class PlayerCombat : MonoBehaviour
     }
 
     public void UseAction(Action action, Effects[] UsersEffects)
-    {
-        
-
+    {  
+        //is called by the user to effect the player
         if(action.ActionEffect != null)
         {
             Effects effect = ScriptableObject.CreateInstance<Effects>();
@@ -69,19 +68,13 @@ public class PlayerCombat : MonoBehaviour
             }
         }
 
+        //hurts the player and clamps the health
         HP -= (int) ActualDamage;
 
+        Mathf.Clamp(HP, 0, MaxHP);
         if (HP <= 0)
         {
-            HP = 0;
             IsDead = true;
-            Debug.Log("Player is dead");
-        }
-
-        HP += action.Heal;
-        if (HP > MaxHP)
-        {
-            HP = MaxHP;
         }
         HPText.text = HP.ToString();
     }
@@ -94,6 +87,7 @@ public class PlayerCombat : MonoBehaviour
 
     void UpdateEffects()
     {
+        //places the effects by the charachter
         int rows = 1;
         Vector2 offset = Vector2.zero;
         foreach (var effect in CurrentEffects)

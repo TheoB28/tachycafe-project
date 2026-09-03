@@ -115,6 +115,7 @@ public class CombatHandler : MonoBehaviour
 
     public void SetupEnemies(EnemyData[] enemies)
     {
+        //adds the data to the enemys and removes the vessels without data
         if (!HasWon)
         {
             for (int i = 0; i < Enemies.Length; i++)
@@ -138,6 +139,7 @@ public class CombatHandler : MonoBehaviour
 
     void SetupPlayerTabs()
     {
+        //sets up the UI or the current character
         TextMeshProUGUI ButtonText = action1Button.GetComponentInChildren<TextMeshProUGUI>();
         ButtonText.text = players[CurrentCharacterID].Actions[0].name;
         ButtonText = action2Button.GetComponentInChildren<TextMeshProUGUI>();
@@ -151,25 +153,26 @@ public class CombatHandler : MonoBehaviour
 
     public void ChangeDescription(int ID)
     {
+        //Take a wild guess
         DescriptionText.text = players[CurrentCharacterID].Actions[ID].Description;
-        
     }
 
-    public void UseAction(int ID)
+    public void StartChosing(int ID)
     {
+        //starts the choosing off targets
         if (PlayerTurn && players[CurrentCharacterID].FP >= players[CurrentCharacterID].Actions[ID].FPCost)
         {
             CurrentActionID = ID;
             ChoosingTarget = true;
-            SubmitTarget();
+            PlaceSelector();
             eventSystem.SetSelectedGameObject(null);
             Selector.SetActive(true);
         }
     }
 
-    public void SubmitTarget()
+    public void PlaceSelector()
     {
-
+        //activates the selector and puts it on the first possible target
         switch (players[CurrentCharacterID].Actions[CurrentActionID].Target)
         {
             case Action.PossibleTarget.enemy:
@@ -187,6 +190,7 @@ public class CombatHandler : MonoBehaviour
 
     void submitAction()
     {
+        //activates the action
         if (ChoosingTarget)
         {
             switch (players[CurrentCharacterID].Actions[CurrentActionID].Target)
@@ -212,6 +216,7 @@ public class CombatHandler : MonoBehaviour
 
     void TargetSelecting(InputValue Input)
     {
+        //moves the selector and selects the target
         if (ChoosingTarget)
         {
             switch (players[CurrentCharacterID].Actions[CurrentActionID].Target)
@@ -250,6 +255,7 @@ public class CombatHandler : MonoBehaviour
 
     public void ActivateAction(EnemyCombat Targget)
     {
+        //activats the action on the chosen enemy
         Targget.UseAction(players[CurrentCharacterID].Actions[CurrentActionID], players[CurrentCharacterID].CurrentEffects);
         ChoosingTarget = false;
         players[CurrentCharacterID].UseFP(players[CurrentCharacterID].Actions[CurrentActionID].FPCost);
@@ -264,6 +270,7 @@ public class CombatHandler : MonoBehaviour
 
     public void ActivateAction(PlayerCombat Tarrget)
     {
+        //activats the action on the chosen ally/self
         if (players[CurrentCharacterID].Actions[CurrentActionID].Target == Action.PossibleTarget.self && players[CurrentCharacterID].gameObject == Tarrget.gameObject)
         {
             Tarrget.UseAction(players[CurrentCharacterID].Actions[CurrentActionID], players[CurrentCharacterID].CurrentEffects);
@@ -285,11 +292,12 @@ public class CombatHandler : MonoBehaviour
 
     IEnumerator StartEnemyTurn()
     {
-
+        //checks win
         if (Enemies.Length == 0)
         {
             SceneLoader.LoadOverworld();
         }
+        //activates the enemys turns
         foreach (EnemyCombat enemy in Enemies)
         {
             foreach (var effect in enemy.CurrentEffects)
@@ -306,6 +314,7 @@ public class CombatHandler : MonoBehaviour
 
     void StartPlayerTurn()
     {
+        //ticks down effects and restarts round
         foreach(var player in players)
         {
             foreach(var effect in player.CurrentEffects)
@@ -322,11 +331,11 @@ public class CombatHandler : MonoBehaviour
 
     public void EnemyDeath(EnemyCombat enemy)
     {
+        //takes the enemy out off the arrray an checks win
         Enemies = Enemies.Where(e => e != enemy).ToArray();
         if (Enemies.Length == 0)
         {
             HasWon = true;
-            PlayerDataHolder.UpdateData();
             SceneLoader.LoadOverworld();
         }
     }

@@ -22,6 +22,7 @@ public class SceneLoader : MonoBehaviour
 
     private void Update()
     {
+        //finds the combatHandler if in combat
         if(!combatHandler && SceneManager.GetActiveScene().name == "CombatScene")
         {
             combatHandler = FindObjectOfType<CombatHandler>();

@@ -19,6 +19,7 @@ public class PlayerDataHolder : MonoBehaviour
         }
 
         playerCombat = FindObjectsOfType<PlayerCombat>();
+        //loads each player with its data
         for (int i = 0; i < playerCombat.Length; i++)
         {
             playerCombat[i].PlayerName = playerData[i].PlayerName;
@@ -29,18 +30,6 @@ public class PlayerDataHolder : MonoBehaviour
             playerCombat[i].MaxFP = playerData[i].MaxFP;
             playerCombat[i].HPText.text = playerData[i].HP.ToString();
             playerCombat[i].FPText.text = playerData[i].FP.ToString();
-        }
-    }
-
-    public void UpdateData()
-    {
-        playerCombat = FindObjectsOfType<PlayerCombat>();
-        for (int i = 0; i < playerCombat.Length; i++)
-        {
-            playerData[i].HP = playerCombat[i].HP;
-            playerData[i].FP = playerCombat[i].FP; 
-            playerData[i].MaxHP = playerCombat[i].MaxHP;
-            playerData[i].MaxFP = playerCombat[i].MaxFP ;
         }
     }
 }

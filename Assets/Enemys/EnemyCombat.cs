@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEditor;
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class EnemyCombat : MonoBehaviour
 {
@@ -20,6 +21,7 @@ public class EnemyCombat : MonoBehaviour
 
     public void LoadData(EnemyData data)
     {
+        //lodas the data into the enemy
         Data = data;
         HP = Data.HP; FP = Data.FP; MaxHP = Data.MaxHP; MaxFP = Data.MaxFP; Behaviour = Data.Behavior; Actions = Data.Actions;
         text.text = HP.ToString();
@@ -69,6 +71,7 @@ public class EnemyCombat : MonoBehaviour
 
     public void UseTurn(PlayerCombat[] players , EnemyCombat[] enemies)
     {
+        //the enemys turn
         foreach(var effect in CurrentEffects)
         {
             effect.duration--;
@@ -82,90 +85,54 @@ public class EnemyCombat : MonoBehaviour
         EnemyCombat TargetEnemy = enemies[0];
         switch (Behaviour)
         {
+            //checks how it should act
             case EnemyData.EnemyBehavior.Aggressive:
-
-                foreach (var action in Actions)
-                {
-                    if(action.Damage > ChosenAction.Damage && action.FPCost <= FP)
-                    {
-                        ChosenAction = action;
-                    }
-                }
-                foreach (var player in players)
-                {
-                    if(player.HP > TargetPlayer.HP)
-                    {
-                        TargetPlayer = player;
-                    }
-                }
-                
-
+                AggresivAction(players, enemies);
                 break;
             case EnemyData.EnemyBehavior.Defensive:
-                TargetPlayer = players[Random.Range(0, players.Length)];
-                if (Random.Range(0, 2) == 0)
-                {
-                    foreach (var action in Actions)
-                    {
-                        if (action.ActionEffect.DamageResistanceMultiplier <= ChosenAction.ActionEffect.DamageResistanceMultiplier)
-                        {
-                            ChosenAction = action;
-                        }
-                    }
-                }
-                else
-                {
-                    foreach (var action in Actions)
-                    {
-                        if(action.Damage > ChosenAction.Damage && action.FPCost <= FP)
-                        {
-                            ChosenAction = action;
-                        }
-                    }
-                    TargetPlayer.UseAction(ChosenAction, CurrentEffects);
-                }
+                DefensiveAction(players, enemies);
                 break;
             case EnemyData.EnemyBehavior.Supportive:
-                
-                foreach(var enemy in enemies)
-                {
-                    if(enemy.HP < TargetEnemy.HP && enemy.HP < enemy.HP / 2)
-                    {
-                        TargetEnemy = enemy;
-                    }
-                }
-                if(TargetEnemy.HP < TargetEnemy.MaxHP / 2)
-                {
-                    foreach (var action in Actions)
-                    {
-                        if (action.Heal > ChosenAction.Heal)
-                        {
-                            ChosenAction = action;
-                        }
-                    }
-                }
-                else if (Random.Range(0, 2) == 0)
-                {
-                    foreach (var action in Actions)
-                    {
-                        if (action.ActionEffect.DamageResistanceMultiplier <= ChosenAction.ActionEffect.DamageResistanceMultiplier && action.FPCost <= FP)
-                        {
-                            ChosenAction = action;
-                        }
-                    }
-                }
-                else
-                {
-                    foreach (var action in Actions)
-                    {
-                        if (action.Damage > ChosenAction.Damage)
-                        {
-                            ChosenAction = action;
-                        }
-                    }
-                    TargetPlayer.UseAction(ChosenAction, CurrentEffects);
-                }
+                SupportivAction(players, enemies);
                 break;
+        }
+
+
+
+
+        switch (ChosenAction.Target)
+        {
+            case Action.PossibleTarget.self:
+                UseAction(ChosenAction, CurrentEffects);
+                break;
+            case Action.PossibleTarget.ally:
+                TargetEnemy.UseAction(ChosenAction, CurrentEffects);
+                break;
+            case Action.PossibleTarget.enemy:
+                TargetPlayer.UseAction(ChosenAction, CurrentEffects);
+                Debug.Log($"{gameObject.name} uses {ChosenAction.name} on {TargetPlayer.gameObject.name}");
+                break;
+        }
+    }
+
+    void AggresivAction(PlayerCombat[] players, EnemyCombat[] enemies)
+    {
+        Action ChosenAction = Actions[0];
+        PlayerCombat TargetPlayer = players[0];
+        EnemyCombat TargetEnemy = enemies[0];
+        foreach (var action in Actions)
+        {
+            if (action.Damage > ChosenAction.Damage && action.FPCost <= FP)
+            {
+                ChosenAction = action;
+            }
+        }
+        foreach (var player in players)
+        {
+            if (player.HP > TargetPlayer.HP)
+            {
+                TargetPlayer = player;
+            }
         }
         if (ChosenAction.FPCost > FP)
         {
@@ -177,22 +144,99 @@ public class EnemyCombat : MonoBehaviour
                 }
             }
         }
+    }
 
-
-
-        switch (ChosenAction.Target)
+    void DefensiveAction(PlayerCombat[] players, EnemyCombat[] enemies)
+    {
+        Action ChosenAction = Actions[0];
+        PlayerCombat TargetPlayer = players[0];
+        EnemyCombat TargetEnemy = enemies[0];
+        TargetPlayer = players[Random.Range(0, players.Length)];
+        if (Random.Range(0, 2) == 0)
         {
-            case Action.PossibleTarget.self:
-                UseAction(ChosenAction, CurrentEffects);
+            foreach (var action in Actions)
+            {
+                if (action.ActionEffect.DamageResistanceMultiplier <= ChosenAction.ActionEffect.DamageResistanceMultiplier)
+                {
+                    ChosenAction = action;
+                }
+            }
+        }
+        else
+        {
+            foreach (var action in Actions)
+            {
+                if (action.Damage > ChosenAction.Damage && action.FPCost <= FP)
+                {
+                    ChosenAction = action;
+                }
+            }
+            TargetPlayer.UseAction(ChosenAction, CurrentEffects);
+        }
+        if (ChosenAction.FPCost > FP)
+        {
+            foreach (var action in Actions)
+            {
+                if (action.FPCost <= FP)
+                {
+                    ChosenAction = action;
+                }
+            }
+        }
+    }
 
-                break;
-            case Action.PossibleTarget.ally:
-                TargetEnemy.UseAction(ChosenAction, CurrentEffects);
-                break;
-            case Action.PossibleTarget.enemy:
-                TargetPlayer.UseAction(ChosenAction, CurrentEffects);
-                Debug.Log($"{gameObject.name} uses {ChosenAction.name} on {TargetPlayer.gameObject.name}");
-                break;
+    void SupportivAction(PlayerCombat[] players, EnemyCombat[] enemies)
+    {
+        Action ChosenAction = Actions[0];
+        PlayerCombat TargetPlayer = players[0];
+        EnemyCombat TargetEnemy = enemies[0];
+        foreach (var enemy in enemies)
+        {
+            if (enemy.HP < TargetEnemy.HP && enemy.HP < enemy.HP / 2)
+            {
+                TargetEnemy = enemy;
+            }
+        }
+        if (TargetEnemy.HP < TargetEnemy.MaxHP / 2)
+        {
+            foreach (var action in Actions)
+            {
+                if (action.Heal > ChosenAction.Heal)
+                {
+                    ChosenAction = action;
+                }
+            }
+        }
+        else if (Random.Range(0, 2) == 0)
+        {
+            foreach (var action in Actions)
+            {
+                if (action.ActionEffect.DamageResistanceMultiplier <= ChosenAction.ActionEffect.DamageResistanceMultiplier && action.FPCost <= FP)
+                {
+                    ChosenAction = action;
+                }
+            }
+        }
+        else
+        {
+            foreach (var action in Actions)
+            {
+                if (action.Damage > ChosenAction.Damage)
+                {
+                    ChosenAction = action;
+                }
+            }
+            TargetPlayer.UseAction(ChosenAction, CurrentEffects);
+        }
+        if (ChosenAction.FPCost > FP)
+        {
+            foreach (var action in Actions)
+            {
+                if (action.FPCost <= FP)
+                {
+                    ChosenAction = action;
+                }
+            }
         }
     }
 }
