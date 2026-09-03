@@ -298,16 +298,18 @@ public class CombatHandler : MonoBehaviour
 
     void EffectActivationPreAction()
     {
+        //activates effects that happen before the players action
         foreach(Effects effect in players[CurrentCharacterID].CurrentEffects)
         {
             if(effect.activation == Effects.ActivationType.preAction)
             {
-                float i = Random.value;
-                if (effect.isDysphoria && i < effect.SkipChans)
-                {
-                    CombatLogText.text = effect.Log(players[CurrentCharacterID].gameObject);
-                    NextPlayerTurn();
-                } 
+                CombatLogText.text = effect.Log(players[CurrentCharacterID].gameObject);
+ 
+            }
+            float i = Random.value;
+            if (PlayerDataHolder.playerData[CurrentCharacterID].HasDysphoria && i > PlayerDataHolder.playerData[CurrentCharacterID].SkipChans)
+            {
+                NextPlayerTurn();
             }
         }
     }

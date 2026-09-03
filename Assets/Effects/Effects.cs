@@ -20,10 +20,6 @@ public class Effects : ScriptableObject
     [SerializeField] public int framesToTick = 60;
     public bool ActivatesOutOfCombat;
 
-    [Header("Dysphoria")]
-    public bool isDysphoria;
-    [SerializeField] public float SkipChans = 0.5f;
-
 
 
 
@@ -36,8 +32,6 @@ public class Effects : ScriptableObject
         effectLog = other.effectLog;
         activation = other.activation;
         name = other.name;
-        isDysphoria = other.isDysphoria;
-        SkipChans = other.SkipChans;
         
     }
 
