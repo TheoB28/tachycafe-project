@@ -19,6 +19,10 @@ public class EnemyCombat : MonoBehaviour
 
     [SerializeField] CombatHandler CombatHandler;
 
+    Action ChosenAction;
+    PlayerCombat TargetPlayer;
+    EnemyCombat TargetEnemy;
+
     public void LoadData(EnemyData data)
     {
         //lodas the data into the enemy
@@ -72,7 +76,12 @@ public class EnemyCombat : MonoBehaviour
     public void UseTurn(PlayerCombat[] players , EnemyCombat[] enemies)
     {
         //the enemys turn
-        foreach(var effect in CurrentEffects)
+
+        ChosenAction = Actions[0];
+        TargetPlayer = players[0];
+        TargetEnemy = enemies[0];
+
+        foreach (var effect in CurrentEffects)
         {
             effect.duration--;
             if(effect.duration <= 0)
@@ -80,9 +89,7 @@ public class EnemyCombat : MonoBehaviour
                 CurrentEffects = System.Array.FindAll(CurrentEffects, e => e != effect);
             }
         }
-        Action ChosenAction = Actions[0];
-        PlayerCombat TargetPlayer = players[0];
-        EnemyCombat TargetEnemy = enemies[0];
+
         switch (Behaviour)
         {
             //checks how it should act
@@ -96,9 +103,6 @@ public class EnemyCombat : MonoBehaviour
                 SupportivAction(players, enemies);
                 break;
         }
-
-
-
 
         switch (ChosenAction.Target)
         {
@@ -117,9 +121,6 @@ public class EnemyCombat : MonoBehaviour
 
     void AggresivAction(PlayerCombat[] players, EnemyCombat[] enemies)
     {
-        Action ChosenAction = Actions[0];
-        PlayerCombat TargetPlayer = players[0];
-        EnemyCombat TargetEnemy = enemies[0];
         foreach (var action in Actions)
         {
             if (action.Damage > ChosenAction.Damage && action.FPCost <= FP)
