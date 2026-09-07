@@ -305,7 +305,8 @@ public class CombatHandler : MonoBehaviour
     void EffectActivationPreAction()
     {
         //activates effects that happen before the players action
-        foreach(Effects effect in players[CurrentCharacterID].CurrentEffects)
+        if (players[CurrentCharacterID].IsDead) { NextPlayerTurn(); }
+        foreach (Effects effect in players[CurrentCharacterID].CurrentEffects)
         {
             if(effect.activation == Effects.ActivationType.preAction)
             {

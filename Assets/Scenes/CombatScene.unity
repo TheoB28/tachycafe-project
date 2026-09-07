@@ -4604,7 +4604,7 @@ Transform:
   m_GameObject: {fileID: 1709231885}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.38, y: 1.57, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5011,14 +5011,15 @@ MonoBehaviour:
   OutlineMaterial: {fileID: 2100000, guid: 3aeb2589311ab6f408ed8d177a7d051e, type: 2}
   DefaultMaterial: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   Enemies:
+  - {fileID: 1535020081}
   - {fileID: 609077758}
   - {fileID: 490383802}
-  - {fileID: 1535020081}
+  - {fileID: 1733868596}
   - {fileID: 1610975060}
   - {fileID: 346044923}
-  - {fileID: 1733868596}
   Selector: {fileID: 1713449381}
   SelectorHeight: 1.5
+  ExpReward: 0
   ChoosingTarget: 0
   PlayerTurn: 0
 --- !u!4 &1850517740
@@ -5030,7 +5031,7 @@ Transform:
   m_GameObject: {fileID: 1850517738}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.5, y: -0.49, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

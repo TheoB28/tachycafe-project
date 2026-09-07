@@ -25,6 +25,7 @@ public class PlayerCombat : MonoBehaviour
 
 
     Canvas Canvas;
+    PlayerDataHandler PlayerDataHandler;
 
     private void Awake()
     {
@@ -34,6 +35,13 @@ public class PlayerCombat : MonoBehaviour
     private void Update()
     {
         UpdateEffects();
+    }
+
+    private void Start()
+    {
+        PlayerDataHandler = GetComponentInParent<PlayerDataHandler>();
+        HPText.text = HP.ToString();
+        FPText.text = FP.ToString();
     }
 
     public void UseAction(Action action, Effects[] UsersEffects)
@@ -70,10 +78,11 @@ public class PlayerCombat : MonoBehaviour
         //hurts the player and clamps the health
         HP -= (int) ActualDamage;
 
-        Mathf.Clamp(HP, 0, MaxHP);
         if (HP <= 0)
         {
+            HP = 0;
             IsDead = true;
+            PlayerDataHandler.UpdateData();
         }
         HPText.text = HP.ToString();
     }

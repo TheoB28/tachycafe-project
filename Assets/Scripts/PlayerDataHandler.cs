@@ -36,7 +36,7 @@ public class PlayerDataHandler : MonoBehaviour
 
     public void UpdateData()
     {
-        
+        int d = 0;
         int i = 0;
         foreach (PlayerCombat player in playerCombat) 
         {
@@ -44,7 +44,16 @@ public class PlayerDataHandler : MonoBehaviour
             playerData[i].FP = player.FP;
             playerData[i].MaxHP = player.MaxHP;
             playerData[i].MaxFP = player.MaxFP;
+            playerData[i].IsDead = player.IsDead;
+            if(playerData[i].IsDead)
+            {
+                d++;
+            }
             i++;
+        }
+        if (d == playerCombat.Length)
+        {
+            Debug.Log("GameOver");
         }
     }
 
