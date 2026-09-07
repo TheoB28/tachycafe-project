@@ -315,9 +315,9 @@ public class CombatHandler : MonoBehaviour
             
         }
         float i = Random.value;
-        
-        if (PlayerDataHandler.playerData[CurrentCharacterID].HasDysphoria && i > PlayerDataHandler.playerData[CurrentCharacterID].SkipChans)
+        if (PlayerDataHandler.playerData[CurrentCharacterID].HasDysphoria && i < PlayerDataHandler.playerData[CurrentCharacterID].SkipChans)
         {
+            CombatLogText.text = players[CurrentCharacterID].name + " does nothing due to dysphoria.";
             NextPlayerTurn();
         }
     }
