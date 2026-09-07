@@ -11,6 +11,7 @@ public class EnemyData : ScriptableObject
     [SerializeField] public int FP;
     [SerializeField] public int MaxHP;
     [SerializeField] public int MaxFP;
+    [SerializeField] public int XPReward;
     [SerializeField] public EnemyBehavior Behavior;
 
     CombatHandler CombatHandler;

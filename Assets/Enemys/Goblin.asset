@@ -18,3 +18,5 @@ MonoBehaviour:
   FP: 0
   MaxHP: 10
   MaxFP: 0
+  XPReward: 10
+  Behavior: 0

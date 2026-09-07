@@ -88,4 +88,12 @@ public class PlayerDataHandler : MonoBehaviour
         combatHandler = FindAnyObjectByType<CombatHandler>();
         combatHandler.SetupPlayers(playerCombat);
     }
+
+    public void giveExp(int XP)
+    {
+        foreach (PlayerData player in playerData)
+        {
+            player.GiveXP(XP);
+        }
+    }
 }

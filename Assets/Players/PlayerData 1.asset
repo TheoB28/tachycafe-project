@@ -23,6 +23,27 @@ MonoBehaviour:
   MaxHP: 10
   MaxFP: 5
   CurrentEffects: []
+  Level: 5
+  Exp: 43
+  ExpToNextLevel: 27
+  SkillPoints: 5
+  Vitality: 0
+  Mentality: 0
+  Fortitude: 0
+  PhysicalPower: 0
+  Nimbleness: 0
+  Brilliance: 0
+  Hope: 0
+  VitalityScale1To20: 0
+  VitalityScale20To40: 0
+  VitalityScale40To60: 0
+  VitalityScale60To80: 0
+  VitalityScale80To100: 0
+  MentalityScale1To20: 0
+  MentalityScale20To40: 0
+  MentalityScale40To60: 0
+  MentalityScale60To80: 0
+  MentalityScale80To100: 0
   IsDead: 0
   Gender: -380
   HasDysphoria: 1

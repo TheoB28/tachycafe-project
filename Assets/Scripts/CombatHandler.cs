@@ -48,7 +48,7 @@ public class CombatHandler : MonoBehaviour
     [SerializeField] float SelectorHeight;
     int CurrentTargetID;
 
-
+    public int ExpReward;
     public bool ChoosingTarget;
     public bool PlayerTurn;
     bool HasWon;
@@ -132,6 +132,7 @@ public class CombatHandler : MonoBehaviour
             { 
                 Enemies[i].LoadData(enemies[i]); 
                 ArrayUtility.Add(ref NewEnemies, Enemies[i]);
+                ExpReward += enemies[i].XPReward;
             }
             else
             {
@@ -284,8 +285,7 @@ public class CombatHandler : MonoBehaviour
         //checks win
         if (Enemies.Length == 0)
         {
-            PlayerDataHandler.UpdateData();
-            SceneLoader.LoadOverworld();
+            StopCoroutine(StartEnemyTurn());
         }
         //activates the enemys turns
         foreach (EnemyCombat enemy in Enemies)
@@ -366,11 +366,18 @@ public class CombatHandler : MonoBehaviour
         ArrayUtility.Remove(ref Enemies, enemy);
         if (Enemies.Length == 0)
         {
-            HasWon = true;
-            PlayerDataHandler.UpdateData();
-            SceneLoader.LoadOverworld();
+
+            EndCombat();
         }
     }
- 
+
+    void EndCombat()
+    {
+        PlayerDataHandler.giveExp(ExpReward);
+        HasWon = true;
+        PlayerDataHandler.UpdateData();
+        SceneLoader.LoadOverworld();
+    }
+
 }
 
