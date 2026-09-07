@@ -53,7 +53,7 @@ public class CombatHandler : MonoBehaviour
     public bool PlayerTurn;
     bool HasWon;
 
-    PlayerDataHandler PlayerDataHolder;
+    PlayerDataHandler PlayerDataHandler;
     EventSystem eventSystem;
     SceneLoader SceneLoader;
 
@@ -65,12 +65,7 @@ public class CombatHandler : MonoBehaviour
 
     private void Start()
     {
-        PlayerDataHolder = FindAnyObjectByType<PlayerDataHandler>();
-        SceneLoader = FindObjectOfType<SceneLoader>();
-        SetupPlayerTabs();
-        FightButton.Select();
-        PlayerTurn = true;
-        PlayerNameText.text = players[CurrentCharacterID].PlayerName;
+
     }
 
 
@@ -114,28 +109,39 @@ public class CombatHandler : MonoBehaviour
         ItemsTab.SetActive(true);
     }
 
+    public void SetupPlayers(PlayerCombat[] players)
+    {
+        PlayerDataHandler = FindAnyObjectByType<PlayerDataHandler>();
+        SceneLoader = FindObjectOfType<SceneLoader>();
+        this.players = players;
+        SetupPlayerTabs();
+        FightButton.Select();
+        PlayerTurn = true;
+        PlayerNameText.text = players[CurrentCharacterID].PlayerName;
+    }
+
     public void SetupEnemies(EnemyData[] enemies)
     {
         //adds the data to the enemys and removes the vessels without data
-        if (!HasWon)
+        EnemyCombat[] NewEnemies = new EnemyCombat[0];
+        int i = 0;
+        for (; i < Enemies.Length; )
         {
-            for (int i = 0; i < Enemies.Length; i++)
-            {
-                if (i < enemies.Length)
-                { Enemies[i].LoadData(enemies[i]); }
-                else
-                {
-                    Destroy(Enemies[i].gameObject);
-
-                }
+            if(enemies == null) { return; }
+            if (i < enemies.Length)
+            { 
+                Enemies[i].LoadData(enemies[i]); 
+                ArrayUtility.Add(ref NewEnemies, Enemies[i]);
             }
-            EnemyCombat[] NewEnemies = new EnemyCombat[enemies.Length];
-            for (int i = 0; i < enemies.Length; i++)
+            else
             {
-                NewEnemies[i] = Enemies[i];
+                Destroy(Enemies[i].gameObject);
+                //Enemies[i].GameObject().SetActive(false);
             }
-            Enemies = NewEnemies;
+            i++;
         }
+         Enemies = NewEnemies;
+        
     }
 
     void SetupPlayerTabs()
@@ -278,7 +284,7 @@ public class CombatHandler : MonoBehaviour
         //checks win
         if (Enemies.Length == 0)
         {
-            PlayerDataHolder.UpdateData();
+            PlayerDataHandler.UpdateData();
             SceneLoader.LoadOverworld();
         }
         //activates the enemys turns
@@ -306,11 +312,13 @@ public class CombatHandler : MonoBehaviour
                 CombatLogText.text = effect.Log(players[CurrentCharacterID].gameObject);
  
             }
-            float i = Random.value;
-            if (PlayerDataHolder.playerData[CurrentCharacterID].HasDysphoria && i > PlayerDataHolder.playerData[CurrentCharacterID].SkipChans)
-            {
-                NextPlayerTurn();
-            }
+            
+        }
+        float i = Random.value;
+        
+        if (PlayerDataHandler.playerData[CurrentCharacterID].HasDysphoria && i > PlayerDataHandler.playerData[CurrentCharacterID].SkipChans)
+        {
+            NextPlayerTurn();
         }
     }
 
@@ -359,7 +367,7 @@ public class CombatHandler : MonoBehaviour
         if (Enemies.Length == 0)
         {
             HasWon = true;
-            PlayerDataHolder.UpdateData();
+            PlayerDataHandler.UpdateData();
             SceneLoader.LoadOverworld();
         }
     }

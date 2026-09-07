@@ -5,18 +5,17 @@ public class PlayerDataHandler : MonoBehaviour
 {
 
     [SerializeField] public PlayerData[] playerData;
-    [SerializeField] PlayerCombat[] playerCombat;
+    [SerializeField] public PlayerCombat[] playerCombat;
 
     int tick;
 
     SceneLoader sceneLoader;
+    CombatHandler combatHandler;
 
-    
 
-    private void Start()
+    private void Awake()
     {
-
-
+        
         int playerDataHolderCount = FindObjectsOfType<PlayerDataHandler>().Length;
         if (playerDataHolderCount > 1)
         {
@@ -26,20 +25,20 @@ public class PlayerDataHandler : MonoBehaviour
         {
             DontDestroyOnLoad(gameObject);
         }
-        sceneLoader = FindAnyObjectByType<SceneLoader>();
-
+        
     }
 
-    private void FixedUpdate()
+    private void Start()
     {
-        UpdateCombat();
+        sceneLoader = FindAnyObjectByType<SceneLoader>();
     }
+
 
     public void UpdateData()
     {
         
         int i = 0;
-        foreach (PlayerCombat player in playerCombat)
+        foreach (PlayerCombat player in playerCombat) 
         {
             playerData[i].HP = player.HP;
             playerData[i].FP = player.FP;
@@ -51,21 +50,42 @@ public class PlayerDataHandler : MonoBehaviour
 
     public void UpdateCombat()
     {
-        playerCombat = FindObjectsOfType<PlayerCombat>();
         //loads each player with its data
-        for (int i = 0; i < playerCombat.Length; i++)
+        int i = 0;
+        foreach (PlayerCombat player in playerCombat)
         {
-            playerCombat[i].PlayerName = playerData[i].PlayerName;
-            playerCombat[i].gameObject.name = playerData[i].PlayerName;
-            playerCombat[i].Actions = playerData[i].Actions;
-            playerCombat[i].HP = playerData[i].HP;
-            playerCombat[i].FP = playerData[i].FP;
-            playerCombat[i].MaxHP = playerData[i].MaxHP;
-            playerCombat[i].MaxFP = playerData[i].MaxFP;
-            playerCombat[i].HPText.text = playerData[i].HP.ToString();
-            playerCombat[i].FPText.text = playerData[i].FP.ToString();
+            player.PlayerName = playerData[i].PlayerName;
+            player.gameObject.name = playerData[i].PlayerName;
+            player.Actions = playerData[i].Actions;
+            player.HP = playerData[i].HP;
+            player.FP = playerData[i].FP;
+            player.MaxHP = playerData[i].MaxHP;
+            player.MaxFP = playerData[i].MaxFP;
+            player.HPText.text = playerData[i].HP.ToString();
+            player.FPText.text = playerData[i].FP.ToString();
+            i++;
         }
-        playerCombat = null;
     }
 
+    public void DeactivateCombat()
+    {
+        foreach (PlayerCombat player in playerCombat)
+        {
+            if (player == null) { return; }
+            player.gameObject.SetActive(false);
+        }
+    }
+
+    public void ActivateCombat()
+    {
+
+        foreach (PlayerCombat player in playerCombat)
+        {
+            if (player == null) { return; }
+            player.gameObject.SetActive(true);
+            UpdateCombat();
+        }
+        combatHandler = FindAnyObjectByType<CombatHandler>();
+        combatHandler.SetupPlayers(playerCombat);
+    }
 }

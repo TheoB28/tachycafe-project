@@ -22,3 +22,8 @@ MonoBehaviour:
   FP: 10
   MaxHP: 5
   MaxFP: 10
+  CurrentEffects: []
+  IsDead: 0
+  Gender: 0
+  HasDysphoria: 0
+  SkipChans: 0

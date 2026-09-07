@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Effects
   duration: 6
   DamageMultiplier: 1.25
-  DamageResistanceMultiplier: 0
+  DamageResistanceMultiplier: 1
   Icon: {fileID: 6177230073030811756, guid: 75054099a2f9c4749bfe7877ca9edd27, type: 3}
