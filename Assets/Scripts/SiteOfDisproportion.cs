@@ -3,7 +3,6 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class SiteOfDisproportion : MonoBehaviour
@@ -19,6 +18,7 @@ public class SiteOfDisproportion : MonoBehaviour
     [SerializeField] TextMeshProUGUI LevelText;
     [SerializeField] TextMeshProUGUI ExpText;
     [SerializeField] TextMeshProUGUI ExpToNextLevelText;
+    [SerializeField] TextMeshProUGUI SkillPointsText;
 
     [SerializeField] TextMeshProUGUI VitalityText;
     [SerializeField] TextMeshProUGUI MentalityText;
@@ -33,8 +33,9 @@ public class SiteOfDisproportion : MonoBehaviour
     [SerializeField] GameObject selector;
 
     bool levelingUp;
-    int selectedStatIndex;
-
+    int selectedStatIndex, currentPlayer, tempSP;
+    int[] orgStats = new int[0];
+    int[] tempStats;
     
     PlayerDataHandler playerDataHandler;
     EventSystem eventSystem;
@@ -84,28 +85,34 @@ public class SiteOfDisproportion : MonoBehaviour
 
     public void SetupPlayerStats(int playerID)
     {
+        currentPlayer = playerID;
         MainTab.SetActive(false);
         StatTab.SetActive(true);
         selectedStatIndex = 0;
-        LevelText.text = playerDataHandler.playerData[playerID].Level.ToString();
-        ExpText.text = playerDataHandler.playerData[playerID].Exp.ToString();
-        ExpToNextLevelText.text = playerDataHandler.playerData[playerID].ExpToNextLevel.ToString();
-        VitalityText.text = playerDataHandler.playerData[playerID].Vitality.ToString();
-        MentalityText.text = playerDataHandler.playerData[playerID].Mentality.ToString();
-        FortitudeText.text = playerDataHandler.playerData[playerID].Fortitude.ToString();
-        PhysicalPowerText.text = playerDataHandler.playerData[playerID].PhysicalPower.ToString();
-        NimblenessText.text = playerDataHandler.playerData[playerID].Nimbleness.ToString();
-        BrillianceText.text = playerDataHandler.playerData[playerID].Brilliance.ToString();
-        HopeText.text = playerDataHandler.playerData[playerID].Hope.ToString();
+        tempSP = playerDataHandler.playerData[currentPlayer].SkillPoints;
+        Debug.Log(orgStats);
+        Debug.Log(playerDataHandler.playerData[currentPlayer].Vitality);
+        ArrayUtility.Clear(ref orgStats);
+        ArrayUtility.Add(ref orgStats, playerDataHandler.playerData[currentPlayer].Vitality);
+        ArrayUtility.Add(ref orgStats, playerDataHandler.playerData[currentPlayer].Mentality);
+        ArrayUtility.Add(ref orgStats, playerDataHandler.playerData[currentPlayer].Fortitude);
+        ArrayUtility.Add(ref orgStats, playerDataHandler.playerData[currentPlayer].PhysicalPower);
+        ArrayUtility.Add(ref orgStats, playerDataHandler.playerData[currentPlayer].Nimbleness);
+        ArrayUtility.Add(ref orgStats, playerDataHandler.playerData[currentPlayer].Brilliance);
+        ArrayUtility.Add(ref orgStats, playerDataHandler.playerData[currentPlayer].Hope);
+        tempStats = orgStats;
+        LevelText.text = playerDataHandler.playerData[currentPlayer].Level.ToString();
+        ExpText.text = playerDataHandler.playerData[currentPlayer].Exp.ToString();
+        ExpToNextLevelText.text = playerDataHandler.playerData[currentPlayer].ExpToNextLevel.ToString();
+        SkillPointsText.text = tempSP.ToString();
+        VitalityText.text = orgStats[0].ToString();
+        MentalityText.text = orgStats[1].ToString();
+        FortitudeText.text = orgStats[2].ToString();
+        PhysicalPowerText.text = orgStats[3].ToString();
+        NimblenessText.text = orgStats[4].ToString();
+        BrillianceText.text = orgStats[5].ToString();
+        HopeText.text = orgStats[6].ToString();
         levelingUp = true;
-
-        VitalityText.AddComponent<Selectable>();
-        MentalityText.AddComponent<Selectable>();
-        FortitudeText.AddComponent<Selectable>();
-        PhysicalPowerText.AddComponent<Selectable>();
-        NimblenessText.AddComponent<Selectable>();
-        BrillianceText.AddComponent<Selectable>();
-        HopeText.AddComponent<Selectable>();
 
         VitalityText.GetComponent<Selectable>().Select();
         selector.transform.position = VitalityText.transform.position;
@@ -117,6 +124,31 @@ public class SiteOfDisproportion : MonoBehaviour
         {
             selector.transform.position = eventSystem.currentSelectedGameObject.transform.position;
         }
+    }
+
+    public void IncreseStat(int statID)
+    {
+        if (tempSP > 0 && tempStats[statID] < 99)
+        {
+            tempSP--;
+            tempStats[statID]++;
+            StatText[statID].GetComponent<TextMeshProUGUI>().text = tempStats[statID].ToString();
+            SkillPointsText.text = tempSP.ToString();
+        }
 
     }
+
+    public void DecreseStat(int statID)
+    {
+        Debug.Log(tempStats[statID] > 0);
+        Debug.Log(tempStats[statID] != orgStats[statID]);
+        if (tempStats[statID] > 0 && tempStats[statID] != orgStats[statID])
+        {
+            tempSP++;
+            tempStats[statID]--;
+            StatText[statID].GetComponent<TextMeshProUGUI>().text = tempStats[statID].ToString();
+            SkillPointsText.text = tempSP.ToString();
+        }
+
+    } 
 }
