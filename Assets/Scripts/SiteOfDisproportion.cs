@@ -3,6 +3,7 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class SiteOfDisproportion : MonoBehaviour
@@ -32,11 +33,12 @@ public class SiteOfDisproportion : MonoBehaviour
     GameObject[] StatText = new GameObject[0];
     [SerializeField] GameObject selector;
 
-    bool levelingUp;
-    int selectedStatIndex, currentPlayer, tempSP;
+    public bool levelingUp, InMainTab;
+    int selectedStatIndex, currentPlayer, tempSP, currentSelect;
     int[] orgStats = new int[0];
     int[] tempStats;
-    
+
+    PlayerOverworld player;
     PlayerDataHandler playerDataHandler;
     EventSystem eventSystem;
 
@@ -45,6 +47,8 @@ public class SiteOfDisproportion : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
+            player = other.GetComponent<PlayerOverworld>();
+            player.currentSite = this;
             eventSystem = GetComponentInChildren<EventSystem>();
             canvas.gameObject.SetActive(true);
             playerDataHandler = FindAnyObjectByType<PlayerDataHandler>();
@@ -57,7 +61,8 @@ public class SiteOfDisproportion : MonoBehaviour
             ArrayUtility.Add(ref StatText, NimblenessText.gameObject);
             ArrayUtility.Add(ref StatText, BrillianceText.gameObject);
             ArrayUtility.Add(ref StatText, HopeText.gameObject);
-            other.gameObject.GetComponent<PlayerOverworld>().InMenu = true;
+            player.InMenu = true;
+            InMainTab = true;
         }
         
     }
@@ -90,8 +95,6 @@ public class SiteOfDisproportion : MonoBehaviour
         StatTab.SetActive(true);
         selectedStatIndex = 0;
         tempSP = playerDataHandler.playerData[currentPlayer].SkillPoints;
-        Debug.Log(orgStats);
-        Debug.Log(playerDataHandler.playerData[currentPlayer].Vitality);
         ArrayUtility.Clear(ref orgStats);
         ArrayUtility.Add(ref orgStats, playerDataHandler.playerData[currentPlayer].Vitality);
         ArrayUtility.Add(ref orgStats, playerDataHandler.playerData[currentPlayer].Mentality);
@@ -113,17 +116,10 @@ public class SiteOfDisproportion : MonoBehaviour
         BrillianceText.text = orgStats[5].ToString();
         HopeText.text = orgStats[6].ToString();
         levelingUp = true;
+        InMainTab = false;  
 
         VitalityText.GetComponent<Selectable>().Select();
         selector.transform.position = VitalityText.transform.position;
-    }
-
-    private void Update()
-    {
-        if (levelingUp)
-        {
-            selector.transform.position = eventSystem.currentSelectedGameObject.transform.position;
-        }
     }
 
     public void IncreseStat(int statID)
@@ -135,14 +131,11 @@ public class SiteOfDisproportion : MonoBehaviour
             StatText[statID].GetComponent<TextMeshProUGUI>().text = tempStats[statID].ToString();
             SkillPointsText.text = tempSP.ToString();
         }
-
     }
 
     public void DecreseStat(int statID)
     {
-        Debug.Log(tempStats[statID] > 0);
-        Debug.Log(tempStats[statID] != orgStats[statID]);
-        if (tempStats[statID] > 0 && tempStats[statID] != orgStats[statID])
+        if (tempStats[statID] > 0 && tempStats[statID] == orgStats[statID])
         {
             tempSP++;
             tempStats[statID]--;
@@ -150,5 +143,56 @@ public class SiteOfDisproportion : MonoBehaviour
             SkillPointsText.text = tempSP.ToString();
         }
 
-    } 
+    }
+
+    public void comfirm()
+    {
+        playerDataHandler.playerData[currentPlayer].Vitality = tempStats[0];
+        playerDataHandler.playerData[currentPlayer].Mentality = tempStats[1];
+        playerDataHandler.playerData[currentPlayer].Fortitude = tempStats[2];
+        playerDataHandler.playerData[currentPlayer].PhysicalPower = tempStats[3];
+        playerDataHandler.playerData[currentPlayer].Nimbleness = tempStats[4];
+        playerDataHandler.playerData[currentPlayer].Brilliance = tempStats[5];
+        playerDataHandler.playerData[currentPlayer].Hope = tempStats[6];
+    }
+
+    public void OnPlayerCancel()
+    {
+        if (levelingUp)
+        {
+            MainTab.SetActive(true);
+            StatTab.SetActive(false);
+            InMainTab = true;
+            levelingUp = false;
+            PlayerButtons[0].Select();
+        }
+        else if (InMainTab)
+        {
+            canvas.gameObject.SetActive(false);
+            InMainTab = false;
+            player.InMenu = false;
+        }
+    }
+
+    public void OnPlayerMove(InputValue input)
+    {
+        if(input.Get<Vector2>().x > 0)
+        {
+            IncreseStat(currentSelect);
+        }
+        else if(input.Get<Vector2>().x < 0)
+        {
+            DecreseStat(currentSelect);
+        }
+        if (input.Get<Vector2>().y > 0 && currentSelect > 0)
+        {
+            currentSelect--;
+        }
+        else if (input.Get<Vector2>().y < 0 && currentSelect < StatText.Length)
+        {
+            currentSelect++;
+
+        }
+        selector.transform.position = StatText[currentSelect].transform.position;
+    }
 }
