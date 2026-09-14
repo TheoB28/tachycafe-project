@@ -63,7 +63,7 @@ public class PlayerData : ScriptableObject
         Exp += amount;
         if (Exp >= ExpToNextLevel)
         {
-            for (int i = amount; i > ExpToNextLevel; i -= ExpToNextLevel)
+            while (Exp >= ExpToNextLevel)
             {
                 Level++;
                 SkillPoints++;
@@ -71,13 +71,13 @@ public class PlayerData : ScriptableObject
                 ExpToNextLevel = (int)5 * Level ^ 2;
                 Debug.Log("Level Up! " + PlayerName + " is now level " + Level);
             }
+
         }
 
     }
 
     public void UppdateStats()
     {
-        
         if(Vitality <= 20) { MaxHP = Vitality * VitalityScale1To20; }
         else if(Vitality <= 40) { MaxHP = VitalityScale1To20 * 20 + (Vitality -20) * VitalityScale20To40; }
         else if(Vitality <= 60) { MaxHP = VitalityScale1To20 * 20 + VitalityScale20To40 * 20 + (Vitality -40) * VitalityScale40To60; }
@@ -89,5 +89,8 @@ public class PlayerData : ScriptableObject
         else if(Mentality <= 60) { MaxFP = MentalityScale1To20 * 20 + MentalityScale20To40 * 20 + (Mentality -40) * MentalityScale40To60; }
         else if(Mentality <= 80) { MaxFP = MentalityScale1To20 * 20 + MentalityScale20To40 * 20 + MentalityScale40To60 * 20 + (Mentality -60) * MentalityScale60To80; }
         else if(Mentality <= 100) { MaxFP = MentalityScale1To20 * 20 + MentalityScale20To40 * 20 + MentalityScale40To60 * 20 + MentalityScale60To80 * 20 + (Mentality -80) * MentalityScale80To100; }
+        HP = MaxHP;
+        FP = MaxFP;
+        
     }
 }

@@ -755,6 +755,13 @@ MonoBehaviour:
   CurrentEffects: []
   HPText: {fileID: 2133559745}
   FPText: {fileID: 1391718170}
+  Vitality: 0
+  Mentality: 0
+  Fortitude: 0
+  PhysicalPower: 0
+  Nimbleness: 0
+  Brilliance: 1
+  Hope: 0
   PlayerName: 
   EffectHolder: {fileID: 1124090959}
   EffectOffset: {x: 1, y: -1}
@@ -4655,6 +4662,13 @@ MonoBehaviour:
   CurrentEffects: []
   HPText: {fileID: 2012385751}
   FPText: {fileID: 334018791}
+  Vitality: 0
+  Mentality: 0
+  Fortitude: 0
+  PhysicalPower: 1
+  Nimbleness: 0
+  Brilliance: 0
+  Hope: 0
   PlayerName: 
   EffectHolder: {fileID: 2050754650}
   EffectOffset: {x: 1, y: -1}

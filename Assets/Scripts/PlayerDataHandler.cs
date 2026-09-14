@@ -45,6 +45,7 @@ public class PlayerDataHandler : MonoBehaviour
             playerData[i].MaxHP = player.MaxHP;
             playerData[i].MaxFP = player.MaxFP;
             playerData[i].IsDead = player.IsDead;
+            playerData[i].UppdateStats();
             if(playerData[i].IsDead)
             {
                 d++;
@@ -72,6 +73,15 @@ public class PlayerDataHandler : MonoBehaviour
             player.MaxFP = playerData[i].MaxFP;
             player.HPText.text = playerData[i].HP.ToString();
             player.FPText.text = playerData[i].FP.ToString();
+
+            player.Vitality = playerData[i].Vitality;
+            player.Mentality = playerData[i].Mentality;
+            player.Fortitude = playerData[i].Fortitude;
+            player.PhysicalPower = playerData[i].PhysicalPower;
+            player.Nimbleness = playerData[i].Nimbleness;
+            player.Brilliance = playerData[i].Brilliance;
+            player.Hope = playerData[i].Hope;
+
             i++;
         }
     }

@@ -12,7 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58a30df456204394082c855f1de177ac, type: 3}
   m_Name: Slash
   m_EditorClassIdentifier: Assembly-CSharp::Action
-  Damage: 2
+  EnemyDamage: 0
   Heal: 0
+  FPCost: 0
+  Duration: 0
   Target: 2
+  ActionEffect: {fileID: 0}
   Description: swings at a enemy
+  VitalityScale: 0
+  MentalityScale: 0
+  FortitudeScale: 0
+  PhysicalStrengthScale: 1
+  NimblenessScale: 1
+  BrillianceScale: 0
+  HopeScale: 0

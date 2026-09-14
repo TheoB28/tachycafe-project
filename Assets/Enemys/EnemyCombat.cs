@@ -17,6 +17,15 @@ public class EnemyCombat : MonoBehaviour
     [SerializeField] TextMeshProUGUI text;
     [SerializeField] public Effects[] CurrentEffects;
 
+    [Header("Stats")]
+    [SerializeField] public int Vitality;
+    [SerializeField] public int Mentality;
+    [SerializeField] public int Fortitude;
+    [SerializeField] public int PhysicalPower;
+    [SerializeField] public int Nimbleness;
+    [SerializeField] public int Brilliance;
+    [SerializeField] public int Hope;
+
     [SerializeField] CombatHandler CombatHandler;
 
     Action ChosenAction;
@@ -30,7 +39,7 @@ public class EnemyCombat : MonoBehaviour
         HP = Data.HP; FP = Data.FP; MaxHP = Data.MaxHP; MaxFP = Data.MaxFP; Behaviour = Data.Behavior; Actions = Data.Actions;
         text.text = HP.ToString();
     }
-    public void UseAction(Action action, Effects[] PlayerEffects)
+    public void UseAction(Action action, Effects[] PlayerEffects, PlayerCombat playerData)
     {
         if (action.ActionEffect != null)
         {
@@ -38,7 +47,49 @@ public class EnemyCombat : MonoBehaviour
             ArrayUtility.Add(ref CurrentEffects, effect);
         }
 
-        float ActualDamage = action.Damage;
+        float ActualDamage = action.GetDamage(playerData);
+        if (CurrentEffects.Length != 0)
+        {
+            foreach (var effect in CurrentEffects)
+            {
+
+                ActualDamage = ActualDamage * effect.DamageResistanceMultiplier;
+
+            }
+
+        }
+        if (PlayerEffects.Length != 0)
+        {
+            foreach (var effect in PlayerEffects)
+            {
+                ActualDamage = ActualDamage * effect.DamageMultiplier;
+            }
+        }
+        HP -= (int)ActualDamage;
+
+        if (HP <= 0)
+        {
+            HP = 0;
+            CombatHandler.EnemyDeath(this);
+            Destroy(gameObject);
+        }
+
+        HP += action.Heal;
+        if (HP > MaxHP)
+        {
+            HP = MaxHP;
+        }
+        text.text = HP.ToString();
+    }
+    public void UseAction(Action action, Effects[] PlayerEffects, EnemyCombat enemyCombat)
+    {
+        if (action.ActionEffect != null)
+        {
+            Effects effect = action.ActionEffect;
+            ArrayUtility.Add(ref CurrentEffects, effect);
+        }
+
+        float ActualDamage = action.GetDamage(enemyCombat);
         if (CurrentEffects.Length != 0)
         {
             foreach (var effect in CurrentEffects)
@@ -107,13 +158,13 @@ public class EnemyCombat : MonoBehaviour
         switch (ChosenAction.Target)
         {
             case Action.PossibleTarget.self:
-                UseAction(ChosenAction, CurrentEffects);
+                UseAction(ChosenAction, CurrentEffects, this);
                 break;
             case Action.PossibleTarget.ally:
-                TargetEnemy.UseAction(ChosenAction, CurrentEffects);
+                TargetEnemy.UseAction(ChosenAction, CurrentEffects, this);
                 break;
             case Action.PossibleTarget.enemy:
-                TargetPlayer.UseAction(ChosenAction, CurrentEffects);
+                TargetPlayer.UseAction(ChosenAction, CurrentEffects, this);
                 Debug.Log($"{gameObject.name} uses {ChosenAction.name} on {TargetPlayer.gameObject.name}");
                 break;
         }
@@ -123,7 +174,7 @@ public class EnemyCombat : MonoBehaviour
     {
         foreach (var action in Actions)
         {
-            if (action.Damage > ChosenAction.Damage && action.FPCost <= FP)
+            if (action.GetDamage(this) > ChosenAction.GetDamage(this) && action.FPCost <= FP)
             {
                 ChosenAction = action;
             }
@@ -167,12 +218,12 @@ public class EnemyCombat : MonoBehaviour
         {
             foreach (var action in Actions)
             {
-                if (action.Damage > ChosenAction.Damage && action.FPCost <= FP)
+                if (action.GetDamage(this) > ChosenAction.GetDamage(this) && action.FPCost <= FP)
                 {
                     ChosenAction = action;
                 }
             }
-            TargetPlayer.UseAction(ChosenAction, CurrentEffects);
+            TargetPlayer.UseAction(ChosenAction, CurrentEffects, this);
         }
         if (ChosenAction.FPCost > FP)
         {
@@ -222,12 +273,12 @@ public class EnemyCombat : MonoBehaviour
         {
             foreach (var action in Actions)
             {
-                if (action.Damage > ChosenAction.Damage)
+                if (action.GetDamage(this) > ChosenAction.GetDamage(this))
                 {
                     ChosenAction = action;
                 }
             }
-            TargetPlayer.UseAction(ChosenAction, CurrentEffects);
+            TargetPlayer.UseAction(ChosenAction, CurrentEffects, this);
         }
         if (ChosenAction.FPCost > FP)
         {

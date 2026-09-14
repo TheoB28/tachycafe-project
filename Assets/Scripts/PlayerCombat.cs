@@ -15,6 +15,15 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] public TextMeshProUGUI HPText;
     [SerializeField] public TextMeshProUGUI FPText;
 
+    [Header("Level Stats")]
+    [SerializeField] public int Vitality;
+    [SerializeField] public int Mentality;
+    [SerializeField] public int Fortitude;
+    [SerializeField] public int PhysicalPower;
+    [SerializeField] public int Nimbleness;
+    [SerializeField] public int Brilliance;
+    [SerializeField] public int Hope;
+
     [Header("Misc")]
     [SerializeField] public string PlayerName;
     [SerializeField] GameObject EffectHolder;
@@ -44,7 +53,7 @@ public class PlayerCombat : MonoBehaviour
         FPText.text = FP.ToString();
     }
 
-    public void UseAction(Action action, Effects[] UsersEffects)
+    public void UseAction(Action action, Effects[] UsersEffects, EnemyCombat enemy)
     {  
         //is called by the user to effect the player
         if(action.ActionEffect != null)
@@ -56,7 +65,7 @@ public class PlayerCombat : MonoBehaviour
 
         UpdateEffects();
 
-        float ActualDamage = action.Damage;
+        float ActualDamage = action.GetDamage(enemy);
         if (CurrentEffects.Length != 0)
         {
             foreach (var effect in CurrentEffects)
@@ -77,6 +86,49 @@ public class PlayerCombat : MonoBehaviour
 
         //hurts the player and clamps the health
         HP -= (int) ActualDamage;
+
+        if (HP <= 0)
+        {
+            HP = 0;
+            IsDead = true;
+            PlayerDataHandler.UpdateData();
+        }
+        HPText.text = HP.ToString();
+    }
+
+    public void UseAction(Action action, Effects[] UsersEffects, PlayerCombat Player)
+    {
+        //is called by the user to effect the player
+        if (action.ActionEffect != null)
+        {
+            Effects effect = ScriptableObject.CreateInstance<Effects>();
+            effect.copyFrom(action.ActionEffect);
+            ArrayUtility.Add(ref CurrentEffects, effect);
+        }
+
+        UpdateEffects();
+
+        float ActualDamage = action.GetDamage(Player);
+        if (CurrentEffects.Length != 0)
+        {
+            foreach (var effect in CurrentEffects)
+            {
+
+                ActualDamage = ActualDamage * effect.DamageResistanceMultiplier * effect.DamageMultiplier;
+
+            }
+        }
+
+        if (UsersEffects.Length != 0)
+        {
+            foreach (var effect in UsersEffects)
+            {
+                ActualDamage = ActualDamage * effect.DamageMultiplier;
+            }
+        }
+
+        //hurts the player and clamps the health
+        HP -= (int)ActualDamage;
 
         if (HP <= 0)
         {

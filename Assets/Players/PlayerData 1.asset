@@ -18,33 +18,33 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2111ab665aece6944a365d4b836ff243, type: 2}
   - {fileID: 11400000, guid: 113ac263df710c048a7e73af9d7011f1, type: 2}
   - {fileID: 11400000, guid: 72fffed0d65b2ac4c905facfa1c15735, type: 2}
-  HP: 10
-  FP: 5
-  MaxHP: 10
-  MaxFP: 5
+  HP: 0
+  FP: 0
+  MaxHP: 0
+  MaxFP: 0
   CurrentEffects: []
-  Level: 5
-  Exp: 103
-  ExpToNextLevel: 27
-  SkillPoints: 5
-  Vitality: 0
+  Level: 13
+  Exp: 33
+  ExpToNextLevel: 67
+  SkillPoints: 0
+  Vitality: 7
   Mentality: 0
   Fortitude: 0
-  PhysicalPower: 0
+  PhysicalPower: 23
   Nimbleness: 0
   Brilliance: 0
   Hope: 0
-  VitalityScale1To20: 0
-  VitalityScale20To40: 0
-  VitalityScale40To60: 0
-  VitalityScale60To80: 0
-  VitalityScale80To100: 0
-  MentalityScale1To20: 0
-  MentalityScale20To40: 0
-  MentalityScale40To60: 0
-  MentalityScale60To80: 0
-  MentalityScale80To100: 0
+  VitalityScale1To20: 5
+  VitalityScale20To40: 4
+  VitalityScale40To60: 3
+  VitalityScale60To80: 2
+  VitalityScale80To100: 1
+  MentalityScale1To20: 5
+  MentalityScale20To40: 4
+  MentalityScale40To60: 3
+  MentalityScale60To80: 2
+  MentalityScale80To100: 1
   IsDead: 0
-  Gender: -380
+  Gender: -520
   HasDysphoria: 1
-  SkipChans: 0.9973684
+  SkipChans: 0.9980769

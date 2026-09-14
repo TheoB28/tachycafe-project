@@ -169,6 +169,7 @@ public class SiteOfDisproportion : MonoBehaviour
             canvas.gameObject.SetActive(false);
             InMainTab = false;
             player.InMenu = false;
+            playerDataHandler.UpdateData();
         }
     }
 
@@ -210,5 +211,6 @@ public class SiteOfDisproportion : MonoBehaviour
         InMainTab = true;
         levelingUp = false;
         PlayerButtons[0].Select();
+        playerDataHandler.UpdateData();
     }
 }

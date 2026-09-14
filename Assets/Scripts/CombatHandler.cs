@@ -258,7 +258,7 @@ public class CombatHandler : MonoBehaviour
     public void ActivateAction(EnemyCombat Targget)
     {
         //activats the action on the chosen enemy
-        Targget.UseAction(players[CurrentCharacterID].Actions[CurrentActionID], players[CurrentCharacterID].CurrentEffects);
+        Targget.UseAction(players[CurrentCharacterID].Actions[CurrentActionID], players[CurrentCharacterID].CurrentEffects, players[CurrentCharacterID]);
         ChoosingTarget = false;
         players[CurrentCharacterID].UseFP(players[CurrentCharacterID].Actions[CurrentActionID].FPCost);
         NextPlayerTurn();
@@ -269,11 +269,11 @@ public class CombatHandler : MonoBehaviour
         //activats the action on the chosen ally/self
         if (players[CurrentCharacterID].Actions[CurrentActionID].Target == Action.PossibleTarget.self && players[CurrentCharacterID].gameObject == Tarrget.gameObject)
         {
-            Tarrget.UseAction(players[CurrentCharacterID].Actions[CurrentActionID], players[CurrentCharacterID].CurrentEffects);
+            Tarrget.UseAction(players[CurrentCharacterID].Actions[CurrentActionID], players[CurrentCharacterID].CurrentEffects, players[CurrentCharacterID]);
         }
         else if (players[CurrentCharacterID].Actions[CurrentActionID].Target == Action.PossibleTarget.ally && players[CurrentCharacterID].gameObject != Tarrget)
         {
-            Tarrget.UseAction(players[CurrentCharacterID].Actions[CurrentActionID], players[CurrentCharacterID].CurrentEffects);
+            Tarrget.UseAction(players[CurrentCharacterID].Actions[CurrentActionID], players[CurrentCharacterID].CurrentEffects, players[CurrentCharacterID]);
         }
         ChoosingTarget = false;
         players[CurrentCharacterID].UseFP(players[CurrentCharacterID].Actions[CurrentActionID].FPCost);

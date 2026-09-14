@@ -12,8 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58a30df456204394082c855f1de177ac, type: 3}
   m_Name: Zoltraak
   m_EditorClassIdentifier: Assembly-CSharp::Action
-  Damage: 1000000
+  EnemyDamage: 0
   Heal: 0
   FPCost: 10
+  Duration: 0
   Target: 2
+  ActionEffect: {fileID: 0}
   Description: blast
+  VitalityScale: 0
+  MentalityScale: 0.5
+  FortitudeScale: 0
+  PhysicalStrengthScale: 0
+  NimblenessScale: 0
+  BrillianceScale: 10
+  HopeScale: 0
