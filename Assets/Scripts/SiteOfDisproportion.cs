@@ -47,6 +47,7 @@ public class SiteOfDisproportion : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
+            other.gameObject.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
             player = other.GetComponent<PlayerOverworld>();
             player.currentSite = this;
             eventSystem = GetComponentInChildren<EventSystem>();
@@ -63,8 +64,7 @@ public class SiteOfDisproportion : MonoBehaviour
             ArrayUtility.Add(ref StatText, HopeText.gameObject);
             player.InMenu = true;
             InMainTab = true;
-        }
-        
+        }     
     }
 
     void Setup()
@@ -116,7 +116,8 @@ public class SiteOfDisproportion : MonoBehaviour
         BrillianceText.text = orgStats[5].ToString();
         HopeText.text = orgStats[6].ToString();
         levelingUp = true;
-        InMainTab = false;  
+        InMainTab = false;
+        currentSelect = 0;
 
         VitalityText.GetComponent<Selectable>().Select();
         selector.transform.position = VitalityText.transform.position;
@@ -142,7 +143,6 @@ public class SiteOfDisproportion : MonoBehaviour
             StatText[statID].GetComponent<TextMeshProUGUI>().text = tempStats[statID].ToString();
             SkillPointsText.text = tempSP.ToString();
         }
-
     }
 
     public void comfirm()
@@ -154,17 +154,15 @@ public class SiteOfDisproportion : MonoBehaviour
         playerDataHandler.playerData[currentPlayer].Nimbleness = tempStats[4];
         playerDataHandler.playerData[currentPlayer].Brilliance = tempStats[5];
         playerDataHandler.playerData[currentPlayer].Hope = tempStats[6];
+        playerDataHandler.playerData[currentPlayer].SkillPoints = tempSP;
+        ExitLeveling();
     }
 
     public void OnPlayerCancel()
     {
         if (levelingUp)
         {
-            MainTab.SetActive(true);
-            StatTab.SetActive(false);
-            InMainTab = true;
-            levelingUp = false;
-            PlayerButtons[0].Select();
+            ExitLeveling();
         }
         else if (InMainTab)
         {
@@ -176,23 +174,41 @@ public class SiteOfDisproportion : MonoBehaviour
 
     public void OnPlayerMove(InputValue input)
     {
-        if(input.Get<Vector2>().x > 0)
+  
+        if (input.Get<Vector2>().x > 0 && currentSelect != StatText.Length)
         {
             IncreseStat(currentSelect);
         }
-        else if(input.Get<Vector2>().x < 0)
+        else if(input.Get<Vector2>().x < 0 && currentSelect != StatText.Length)
         {
             DecreseStat(currentSelect);
         }
         if (input.Get<Vector2>().y > 0 && currentSelect > 0)
         {
+            selector.SetActive(true);
             currentSelect--;
+            selector.transform.position = StatText[currentSelect].transform.position;
         }
-        else if (input.Get<Vector2>().y < 0 && currentSelect < StatText.Length)
+        else if (input.Get<Vector2>().y < 0 && currentSelect < StatText.Length -1)
         {
-            currentSelect++;
+            selector.SetActive(true);
 
-        }
-        selector.transform.position = StatText[currentSelect].transform.position;
+            currentSelect++;
+            selector.transform.position = StatText[currentSelect].transform.position;
+        } 
+        else if (input.Get<Vector2>().y < 0 && currentSelect == StatText.Length - 1)
+        {
+            selector.SetActive(false);
+            currentSelect++;
+        }     
+    }
+
+    void ExitLeveling()
+    {
+        MainTab.SetActive(true);
+        StatTab.SetActive(false);
+        InMainTab = true;
+        levelingUp = false;
+        PlayerButtons[0].Select();
     }
 }
