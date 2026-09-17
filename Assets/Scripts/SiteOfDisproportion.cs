@@ -14,6 +14,10 @@ public class SiteOfDisproportion : MonoBehaviour
     [SerializeField] GameObject MainTab;
     [SerializeField] UnityEngine.UI.Button[] PlayerButtons;
 
+    [Header("Player Tab")]
+    [SerializeField] GameObject PlayerTab;
+    [SerializeField] GameObject LevelUpButton;
+
     [Header("Stat Tab")]
     [SerializeField] GameObject StatTab;
     [SerializeField] TextMeshProUGUI LevelText;
@@ -28,6 +32,17 @@ public class SiteOfDisproportion : MonoBehaviour
     [SerializeField] TextMeshProUGUI NimblenessText;
     [SerializeField] TextMeshProUGUI BrillianceText;
     [SerializeField] TextMeshProUGUI HopeText;
+
+    [Header("Action Tab")]
+    [SerializeField] GameObject ActionTab;
+    [SerializeField] TextMeshProUGUI EquippedAction1;
+    [SerializeField] TextMeshProUGUI EquippedAction2;
+    [SerializeField] TextMeshProUGUI EquippedAction3;
+    [SerializeField] TextMeshProUGUI EquippedAction4;
+
+    [SerializeField] GameObject actionHolder;
+    [SerializeField] GameObject actionItemPrefab;
+
 
     [Header("UI Navigation")]
     GameObject[] StatText = new GameObject[0];
@@ -50,7 +65,7 @@ public class SiteOfDisproportion : MonoBehaviour
             other.gameObject.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
             player = other.GetComponent<PlayerOverworld>();
             player.currentSite = this;
-            eventSystem = GetComponentInChildren<EventSystem>();
+            eventSystem = FindAnyObjectByType<EventSystem>();
             canvas.gameObject.SetActive(true);
             playerDataHandler = FindAnyObjectByType<PlayerDataHandler>();
             Setup();
@@ -88,10 +103,18 @@ public class SiteOfDisproportion : MonoBehaviour
         PlayerButtons[0].Select();
     }
 
-    public void SetupPlayerStats(int playerID)
+    public void SetupPlayerTab(int playerID)
     {
-        currentPlayer = playerID;
+        PlayerTab.SetActive(true);
         MainTab.SetActive(false);
+        eventSystem.SetSelectedGameObject(LevelUpButton);
+        currentPlayer = playerID;
+    }
+
+    public void SetupPlayerStats()
+    {
+
+        PlayerTab.SetActive(false);
         StatTab.SetActive(true);
         selectedStatIndex = 0;
         tempSP = playerDataHandler.playerData[currentPlayer].SkillPoints;
@@ -121,6 +144,23 @@ public class SiteOfDisproportion : MonoBehaviour
 
         VitalityText.GetComponent<Selectable>().Select();
         selector.transform.position = VitalityText.transform.position;
+    }
+
+    public void SetupPlayerActionTab()
+    {
+        ActionTab.SetActive(true);
+        PlayerTab.SetActive(false);
+        EquippedAction1.text = playerDataHandler.playerData[currentPlayer].Actions[0].name;
+        EquippedAction2.text = playerDataHandler.playerData[currentPlayer].Actions[1].name;
+        EquippedAction3.text = playerDataHandler.playerData[currentPlayer].Actions[2].name;
+        EquippedAction4.text = playerDataHandler.playerData[currentPlayer].Actions[3].name;
+        eventSystem.SetSelectedGameObject(EquippedAction1.gameObject);
+
+        foreach(Action action in playerDataHandler.playerData[currentPlayer].LernedActions)
+        {
+            GameObject newAction = Instantiate(actionItemPrefab, actionHolder.transform);
+            newAction.GetComponent<TextMeshProUGUI>().text = action.name;
+        }
     }
 
     public void IncreseStat(int statID)

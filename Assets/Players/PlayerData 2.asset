@@ -18,33 +18,46 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 72fffed0d65b2ac4c905facfa1c15735, type: 2}
   - {fileID: 11400000, guid: 72fffed0d65b2ac4c905facfa1c15735, type: 2}
   - {fileID: 11400000, guid: 72fffed0d65b2ac4c905facfa1c15735, type: 2}
-  HP: 5
-  FP: 10
-  MaxHP: 5
-  MaxFP: 10
+  HP: 15
+  FP: 0
+  MaxHP: 15
+  MaxFP: 0
   CurrentEffects: []
-  Level: 5
-  Exp: 110
-  ExpToNextLevel: 27
-  SkillPoints: 5
-  Vitality: 0
+  LernedActions:
+  - {fileID: 11400000, guid: 72fffed0d65b2ac4c905facfa1c15735, type: 2}
+  - {fileID: 11400000, guid: 72fffed0d65b2ac4c905facfa1c15735, type: 2}
+  - {fileID: 11400000, guid: 72fffed0d65b2ac4c905facfa1c15735, type: 2}
+  - {fileID: 11400000, guid: 72fffed0d65b2ac4c905facfa1c15735, type: 2}
+  - {fileID: 11400000, guid: 72fffed0d65b2ac4c905facfa1c15735, type: 2}
+  - {fileID: 11400000, guid: 72fffed0d65b2ac4c905facfa1c15735, type: 2}
+  - {fileID: 11400000, guid: 72fffed0d65b2ac4c905facfa1c15735, type: 2}
+  - {fileID: 11400000, guid: 72fffed0d65b2ac4c905facfa1c15735, type: 2}
+  - {fileID: 11400000, guid: 72fffed0d65b2ac4c905facfa1c15735, type: 2}
+  - {fileID: 11400000, guid: 72fffed0d65b2ac4c905facfa1c15735, type: 2}
+  - {fileID: 11400000, guid: 72fffed0d65b2ac4c905facfa1c15735, type: 2}
+  - {fileID: 11400000, guid: 72fffed0d65b2ac4c905facfa1c15735, type: 2}
+  Level: 14
+  Exp: 3
+  ExpToNextLevel: 68
+  SkillPoints: 1
+  Vitality: 3
   Mentality: 0
   Fortitude: 0
   PhysicalPower: 0
   Nimbleness: 0
-  Brilliance: 0
+  Brilliance: 10
   Hope: 0
-  VitalityScale1To20: 0
-  VitalityScale20To40: 0
-  VitalityScale40To60: 0
-  VitalityScale60To80: 0
-  VitalityScale80To100: 0
-  MentalityScale1To20: 0
-  MentalityScale20To40: 0
-  MentalityScale40To60: 0
-  MentalityScale60To80: 0
-  MentalityScale80To100: 0
-  IsDead: 1
+  VitalityScale1To20: 5
+  VitalityScale20To40: 4
+  VitalityScale40To60: 3
+  VitalityScale60To80: 2
+  VitalityScale80To100: 1
+  MentalityScale1To20: 8
+  MentalityScale20To40: 7
+  MentalityScale40To60: 5
+  MentalityScale60To80: 3
+  MentalityScale80To100: 1
+  IsDead: 0
   Gender: 0
   HasDysphoria: 0
   SkipChans: 0

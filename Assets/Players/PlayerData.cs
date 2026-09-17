@@ -11,6 +11,7 @@ public class PlayerData : ScriptableObject
     [SerializeField] public int MaxHP;
     [SerializeField] public int MaxFP;
     [SerializeField] public Effects[] CurrentEffects;
+    [SerializeField] public Action[] LernedActions;
 
     [Header("Level stats")]
     [SerializeField] public int Level;
