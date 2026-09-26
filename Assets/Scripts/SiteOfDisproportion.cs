@@ -39,16 +39,19 @@ public class SiteOfDisproportion : MonoBehaviour
     [SerializeField] TextMeshProUGUI EquippedAction2;
     [SerializeField] TextMeshProUGUI EquippedAction3;
     [SerializeField] TextMeshProUGUI EquippedAction4;
+    [SerializeField] float scrollIntencity;
 
     [SerializeField] GameObject actionHolder;
     [SerializeField] GameObject actionItemPrefab;
+
+    Vector2 moveVector;
 
 
     [Header("UI Navigation")]
     GameObject[] StatText = new GameObject[0];
     [SerializeField] GameObject selector;
 
-    public bool levelingUp, InMainTab;
+    public bool levelingUp, InMainTab, inActionTab;
     int selectedStatIndex, currentPlayer, tempSP, currentSelect;
     int[] orgStats = new int[0];
     int[] tempStats;
@@ -56,7 +59,6 @@ public class SiteOfDisproportion : MonoBehaviour
     PlayerOverworld player;
     PlayerDataHandler playerDataHandler;
     EventSystem eventSystem;
-
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -161,6 +163,8 @@ public class SiteOfDisproportion : MonoBehaviour
             GameObject newAction = Instantiate(actionItemPrefab, actionHolder.transform);
             newAction.GetComponent<TextMeshProUGUI>().text = action.name;
         }
+        inActionTab = true;
+        InMainTab = false;
     }
 
     public void IncreseStat(int statID)
@@ -211,37 +215,63 @@ public class SiteOfDisproportion : MonoBehaviour
             player.InMenu = false;
             playerDataHandler.UpdateData();
         }
+        else if (inActionTab)
+        {
+            MainTab.SetActive(true);
+            ActionTab.SetActive(false);
+            InMainTab = true;
+            inActionTab = false;
+            PlayerButtons[0].Select();
+            playerDataHandler.UpdateData();
+        }
     }
 
     public void OnPlayerMove(InputValue input)
     {
+
+        moveVector = input.Get<Vector2>().normalized;
   
-        if (input.Get<Vector2>().x > 0 && currentSelect != StatText.Length)
+        if (levelingUp && input.Get<Vector2>().x > 0 && currentSelect != StatText.Length)
         {
             IncreseStat(currentSelect);
         }
-        else if(input.Get<Vector2>().x < 0 && currentSelect != StatText.Length)
+        else if(levelingUp && input.Get<Vector2>().x < 0 && currentSelect != StatText.Length)
         {
             DecreseStat(currentSelect);
         }
-        if (input.Get<Vector2>().y > 0 && currentSelect > 0)
+        if (levelingUp && input.Get<Vector2>().y > 0 && currentSelect > 0)
         {
             selector.SetActive(true);
             currentSelect--;
             selector.transform.position = StatText[currentSelect].transform.position;
         }
-        else if (input.Get<Vector2>().y < 0 && currentSelect < StatText.Length -1)
+        else if (levelingUp && input.Get<Vector2>().y < 0 && currentSelect < StatText.Length -1)
         {
             selector.SetActive(true);
 
             currentSelect++;
             selector.transform.position = StatText[currentSelect].transform.position;
         } 
-        else if (input.Get<Vector2>().y < 0 && currentSelect == StatText.Length - 1)
+        else if (levelingUp && input.Get<Vector2>().y < 0 && currentSelect == StatText.Length - 1)
         {
             selector.SetActive(false);
             currentSelect++;
-        }     
+        }
+    }
+
+    public void MoveScroll(Transform newTransform)
+    {
+        RectTransform rectTransform = actionHolder.GetComponent<RectTransform>();
+        scrollIntencity = rectTransform.GetComponent<VerticalLayoutGroup>().spacing + newTransform.transform.localScale.y;
+        if (moveVector.y > 0)
+        {
+            rectTransform.position -= new Vector3(0, scrollIntencity);
+        }
+        else if (moveVector.y < 0)
+        {
+            rectTransform.position += new Vector3(0, scrollIntencity);
+        }
+
     }
 
     void ExitLeveling()
@@ -253,4 +283,5 @@ public class SiteOfDisproportion : MonoBehaviour
         PlayerButtons[0].Select();
         playerDataHandler.UpdateData();
     }
+
 }

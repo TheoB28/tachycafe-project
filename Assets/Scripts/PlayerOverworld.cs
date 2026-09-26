@@ -18,7 +18,7 @@ public class PlayerOverworld : MonoBehaviour
     {
         if (InMenu) 
         {
-            if (currentSite != null && currentSite.levelingUp)
+            if (currentSite != null)
             {
                 currentSite.OnPlayerMove(value);
             }
@@ -32,9 +32,13 @@ public class PlayerOverworld : MonoBehaviour
 
     void OnCancel()
     {
-        if (InMenu && currentSite != null && InMenu)
+        if (InMenu && currentSite != null)
         {
             currentSite.OnPlayerCancel();
+            if (currentSite.InMainTab)
+            {
+                currentSite = null;
+            } 
         }
     }
 }
