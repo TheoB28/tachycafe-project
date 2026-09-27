@@ -1,9 +1,10 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class UIActionItem : MonoBehaviour, ISelectHandler
 {
-
+    public Action action;
     SiteOfDisproportion SiteOfDisproportion;
 
     private void Start()
@@ -15,4 +16,7 @@ public class UIActionItem : MonoBehaviour, ISelectHandler
     {
         SiteOfDisproportion.MoveScroll(transform);
     }
+
+
+
 }

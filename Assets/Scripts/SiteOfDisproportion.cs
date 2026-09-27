@@ -35,11 +35,15 @@ public class SiteOfDisproportion : MonoBehaviour
 
     [Header("Action Tab")]
     [SerializeField] GameObject ActionTab;
-    [SerializeField] TextMeshProUGUI EquippedAction1;
-    [SerializeField] TextMeshProUGUI EquippedAction2;
-    [SerializeField] TextMeshProUGUI EquippedAction3;
-    [SerializeField] TextMeshProUGUI EquippedAction4;
+    [SerializeField] TextMeshProUGUI[] EquippedActions;
     [SerializeField] float scrollIntencity;
+    [SerializeField] public float blinkTime;
+    GameObject FirstAction, ActionToChange;
+    UIActionItem ReplacingAction;
+    string ReplacingActionName;
+    bool changingActions, IsBlinking, TextIsVisable;
+    Vector3 actionHolderPlace;
+
 
     [SerializeField] GameObject actionHolder;
     [SerializeField] GameObject actionItemPrefab;
@@ -51,7 +55,7 @@ public class SiteOfDisproportion : MonoBehaviour
     GameObject[] StatText = new GameObject[0];
     [SerializeField] GameObject selector;
 
-    public bool levelingUp, InMainTab, inActionTab;
+    public bool levelingUp, InMainTab, inActionTab, selectingPlayer;
     int selectedStatIndex, currentPlayer, tempSP, currentSelect;
     int[] orgStats = new int[0];
     int[] tempStats;
@@ -107,6 +111,7 @@ public class SiteOfDisproportion : MonoBehaviour
 
     public void SetupPlayerTab(int playerID)
     {
+        selectingPlayer = true;
         PlayerTab.SetActive(true);
         MainTab.SetActive(false);
         eventSystem.SetSelectedGameObject(LevelUpButton);
@@ -115,7 +120,7 @@ public class SiteOfDisproportion : MonoBehaviour
 
     public void SetupPlayerStats()
     {
-
+        selectingPlayer = false;
         PlayerTab.SetActive(false);
         StatTab.SetActive(true);
         selectedStatIndex = 0;
@@ -150,21 +155,25 @@ public class SiteOfDisproportion : MonoBehaviour
 
     public void SetupPlayerActionTab()
     {
+        selectingPlayer = false;
         ActionTab.SetActive(true);
         PlayerTab.SetActive(false);
-        EquippedAction1.text = playerDataHandler.playerData[currentPlayer].Actions[0].name;
-        EquippedAction2.text = playerDataHandler.playerData[currentPlayer].Actions[1].name;
-        EquippedAction3.text = playerDataHandler.playerData[currentPlayer].Actions[2].name;
-        EquippedAction4.text = playerDataHandler.playerData[currentPlayer].Actions[3].name;
-        eventSystem.SetSelectedGameObject(EquippedAction1.gameObject);
+        EquippedActions[0].text = playerDataHandler.playerData[currentPlayer].Actions[0].name;
+        EquippedActions[1].text = playerDataHandler.playerData[currentPlayer].Actions[1].name;
+        EquippedActions[2].text = playerDataHandler.playerData[currentPlayer].Actions[2].name;
+        EquippedActions[3].text = playerDataHandler.playerData[currentPlayer].Actions[3].name;
+        eventSystem.SetSelectedGameObject(EquippedActions[0].gameObject);
 
         foreach(Action action in playerDataHandler.playerData[currentPlayer].LernedActions)
         {
             GameObject newAction = Instantiate(actionItemPrefab, actionHolder.transform);
             newAction.GetComponent<TextMeshProUGUI>().text = action.name;
+            newAction.GetComponent<UIActionItem>().action = action;
+            if(FirstAction == null) { FirstAction = newAction; }
         }
         inActionTab = true;
         InMainTab = false;
+        actionHolderPlace = actionHolder.transform.position;
     }
 
     public void IncreseStat(int statID)
@@ -208,6 +217,13 @@ public class SiteOfDisproportion : MonoBehaviour
         {
             ExitLeveling();
         }
+        else if (selectingPlayer)
+        {
+            selectingPlayer = false;
+            PlayerTab.SetActive(false);
+            MainTab.SetActive(true);
+            PlayerButtons[0].Select();
+        }
         else if (InMainTab)
         {
             canvas.gameObject.SetActive(false);
@@ -215,14 +231,17 @@ public class SiteOfDisproportion : MonoBehaviour
             player.InMenu = false;
             playerDataHandler.UpdateData();
         }
+        else if (changingActions)
+        {
+            CancelInvoke("Blink");
+            ActionToChange.GetComponent<TextMeshProUGUI>().text = ReplacingActionName;
+            changingActions = false;
+            eventSystem.SetSelectedGameObject(ActionToChange);
+            actionHolder.transform.position = actionHolderPlace;
+        }
         else if (inActionTab)
         {
-            MainTab.SetActive(true);
-            ActionTab.SetActive(false);
-            InMainTab = true;
-            inActionTab = false;
-            PlayerButtons[0].Select();
-            playerDataHandler.UpdateData();
+            ExitActionTab();
         }
     }
 
@@ -259,6 +278,60 @@ public class SiteOfDisproportion : MonoBehaviour
         }
     }
 
+    public void OnPlayerSubmit()
+    {
+        if (inActionTab && !changingActions)
+        {
+            ActionToChange = eventSystem.currentSelectedGameObject;
+            eventSystem.SetSelectedGameObject(FirstAction.gameObject);
+            ReplacingActionName = FirstAction.name;
+            TextIsVisable = true;
+            IsBlinking = true;
+            InvokeRepeating("Blink", 0, blinkTime);
+            changingActions = true;
+        }
+        else if (inActionTab && changingActions)
+        {
+            int i = 0;
+            foreach (TextMeshProUGUI action in EquippedActions)
+            {
+                if (action.gameObject == ActionToChange)
+                {
+
+
+                    CancelInvoke("Blink");
+                    changingActions = false;
+                    actionHolder.transform.position = actionHolderPlace;
+
+                    playerDataHandler.playerData[currentPlayer].Actions[i] = eventSystem.currentSelectedGameObject.GetComponent<UIActionItem>().action;
+                    playerDataHandler.UpdateData();
+                    ActionToChange.GetComponent<TextMeshProUGUI>().text = playerDataHandler.playerData[currentPlayer].Actions[i].name;
+
+                    eventSystem.SetSelectedGameObject(ActionToChange);
+                }
+                i++;
+            }
+
+        }
+
+    }
+
+    void Blink()
+    {
+        if (TextIsVisable)
+        {
+            ReplacingActionName = ActionToChange.GetComponent<TextMeshProUGUI>().text;
+            ActionToChange.GetComponent<TextMeshProUGUI>().text = " ";
+            TextIsVisable = false;
+        }
+        else
+        {
+            ActionToChange.GetComponent<TextMeshProUGUI>().text = ReplacingActionName;
+            TextIsVisable = true;
+        }
+    }
+
+
     public void MoveScroll(Transform newTransform)
     {
         RectTransform rectTransform = actionHolder.GetComponent<RectTransform>();
@@ -280,6 +353,20 @@ public class SiteOfDisproportion : MonoBehaviour
         StatTab.SetActive(false);
         InMainTab = true;
         levelingUp = false;
+        PlayerButtons[0].Select();
+        playerDataHandler.UpdateData();
+    }
+
+    void ExitActionTab()
+    {
+        foreach (TextMeshProUGUI child in actionHolder.GetComponentsInChildren<TextMeshProUGUI>())
+        {
+            Destroy(child.gameObject);
+        }
+        MainTab.SetActive(true);
+        ActionTab.SetActive(false);
+        InMainTab = true;
+        inActionTab = false;
         PlayerButtons[0].Select();
         playerDataHandler.UpdateData();
     }

@@ -1161,7 +1161,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Selectable
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 2
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -1340,7 +1340,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Selectable
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 2
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -1821,17 +1821,20 @@ MonoBehaviour:
   BrillianceText: {fileID: 1121534658}
   HopeText: {fileID: 1034652848}
   ActionTab: {fileID: 1648172454}
-  EquippedAction1: {fileID: 284875624}
-  EquippedAction2: {fileID: 975803707}
-  EquippedAction3: {fileID: 290629560}
-  EquippedAction4: {fileID: 1505554067}
+  EquippedActions:
+  - {fileID: 284875624}
+  - {fileID: 975803707}
+  - {fileID: 290629560}
+  - {fileID: 1505554067}
   scrollIntencity: 60
+  blinkTime: 0.5
   actionHolder: {fileID: 1583973931}
   actionItemPrefab: {fileID: 1716329735776453223, guid: fcebfc7c394f8ff419815296695bc7d4, type: 3}
   selector: {fileID: 524829919}
   levelingUp: 0
   InMainTab: 0
   inActionTab: 0
+  selectingPlayer: 0
 --- !u!61 &384869447
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3678,7 +3681,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Selectable
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 2
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -5146,7 +5149,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Selectable
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 2
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}

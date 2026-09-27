@@ -35,10 +35,18 @@ public class PlayerOverworld : MonoBehaviour
         if (InMenu && currentSite != null)
         {
             currentSite.OnPlayerCancel();
-            if (currentSite.InMainTab)
-            {
-                currentSite = null;
-            } 
+        }
+        else if (currentSite.InMainTab)
+        {
+            currentSite = null;
+        }
+    }
+
+    void OnSubmit()
+    {
+        if (InMenu && currentSite != null)
+        {
+            currentSite.OnPlayerSubmit();
         }
     }
 }

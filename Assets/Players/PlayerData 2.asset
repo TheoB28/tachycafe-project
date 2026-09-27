@@ -14,16 +14,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerData
   PlayerName: w
   Actions:
+  - {fileID: 11400000, guid: 72fffed0d65b2ac4c905facfa1c15735, type: 2}
+  - {fileID: 11400000, guid: 72fffed0d65b2ac4c905facfa1c15735, type: 2}
+  - {fileID: 11400000, guid: 72fffed0d65b2ac4c905facfa1c15735, type: 2}
+  - {fileID: 11400000, guid: 72fffed0d65b2ac4c905facfa1c15735, type: 2}
+  HP: 10
+  FP: 24
+  MaxHP: 10
+  MaxFP: 24
+  CurrentEffects: []
+  LernedActions:
   - {fileID: 11400000, guid: cb871c57b397a874997f3bf052ebc0cd, type: 2}
   - {fileID: 11400000, guid: 72fffed0d65b2ac4c905facfa1c15735, type: 2}
   - {fileID: 11400000, guid: 72fffed0d65b2ac4c905facfa1c15735, type: 2}
   - {fileID: 11400000, guid: 72fffed0d65b2ac4c905facfa1c15735, type: 2}
-  HP: 15
-  FP: 0
-  MaxHP: 15
-  MaxFP: 0
-  CurrentEffects: []
-  LernedActions:
   - {fileID: 11400000, guid: 72fffed0d65b2ac4c905facfa1c15735, type: 2}
   - {fileID: 11400000, guid: 72fffed0d65b2ac4c905facfa1c15735, type: 2}
   - {fileID: 11400000, guid: 72fffed0d65b2ac4c905facfa1c15735, type: 2}
@@ -32,16 +36,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 72fffed0d65b2ac4c905facfa1c15735, type: 2}
   - {fileID: 11400000, guid: 72fffed0d65b2ac4c905facfa1c15735, type: 2}
   - {fileID: 11400000, guid: 72fffed0d65b2ac4c905facfa1c15735, type: 2}
-  - {fileID: 11400000, guid: 72fffed0d65b2ac4c905facfa1c15735, type: 2}
-  - {fileID: 11400000, guid: 72fffed0d65b2ac4c905facfa1c15735, type: 2}
-  - {fileID: 11400000, guid: 72fffed0d65b2ac4c905facfa1c15735, type: 2}
-  - {fileID: 11400000, guid: 72fffed0d65b2ac4c905facfa1c15735, type: 2}
-  Level: 14
-  Exp: 3
-  ExpToNextLevel: 68
-  SkillPoints: 1
-  Vitality: 3
-  Mentality: 0
+  Level: 15
+  Exp: 55
+  ExpToNextLevel: 73
+  SkillPoints: 0
+  Vitality: 2
+  Mentality: 3
   Fortitude: 0
   PhysicalPower: 0
   Nimbleness: 0
