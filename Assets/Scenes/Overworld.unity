@@ -6681,6 +6681,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CombatTrigger
   enemies:
   - {fileID: 11400000, guid: 6ae14f763748b4840aec5b2803cf3caf, type: 2}
+  - {fileID: 11400000, guid: 6ae14f763748b4840aec5b2803cf3caf, type: 2}
 --- !u!61 &1818009672
 BoxCollider2D:
   m_ObjectHideFlags: 0

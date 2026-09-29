@@ -124,24 +124,23 @@ public class CombatHandler : MonoBehaviour
     {
         //adds the data to the enemys and removes the vessels without data
         EnemyCombat[] NewEnemies = new EnemyCombat[0];
+
         int i = 0;
-        for (; i < Enemies.Length; )
+        foreach (EnemyData enemy in enemies)
         {
-            if(enemies == null) { return; }
-            if (i < enemies.Length)
-            { 
-                Enemies[i].LoadData(enemies[i]); 
-                ArrayUtility.Add(ref NewEnemies, Enemies[i]);
-                ExpReward += enemies[i].XPReward;
-            }
-            else
-            {
-                Destroy(Enemies[i].gameObject);
-                //Enemies[i].GameObject().SetActive(false);
-            }
+            Enemies[i].LoadData(enemies[i]);
+            ArrayUtility.Add(ref NewEnemies, Enemies[i]);
+            ExpReward += enemies[i].XPReward;
             i++;
         }
-         Enemies = NewEnemies;
+        foreach (EnemyCombat enemy in Enemies)
+        {
+            if (enemy.Data == null)
+            {
+                Destroy(enemy.gameObject);
+            }
+        }
+        Enemies = NewEnemies;
         
     }
 
@@ -204,7 +203,6 @@ public class CombatHandler : MonoBehaviour
             switch (players[CurrentCharacterID].Actions[CurrentActionID].Target)
             {
                 case Action.PossibleTarget.enemy:
-                    Debug.Log(CurrentTargetID);
                     ActivateAction(Enemies[CurrentTargetID]);
                     break;
                 case Action.PossibleTarget.ally:
