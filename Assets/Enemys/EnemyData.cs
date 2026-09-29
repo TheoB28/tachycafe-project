@@ -14,6 +14,15 @@ public class EnemyData : ScriptableObject
     [SerializeField] public int XPReward;
     [SerializeField] public EnemyBehavior Behavior;
 
+    [Header("Stats")]
+    [SerializeField] public int Vitality;
+    [SerializeField] public int Mentality;
+    [SerializeField] public int Fortitude;
+    [SerializeField] public int PhysicalPower;
+    [SerializeField] public int Nimbleness;
+    [SerializeField] public int Brilliance;
+    [SerializeField] public int Hope;
+
     CombatHandler CombatHandler;
 
     void Start()

@@ -124,7 +124,7 @@ public class CombatHandler : MonoBehaviour
     {
         //adds the data to the enemys and removes the vessels without data
         EnemyCombat[] NewEnemies = new EnemyCombat[0];
-
+        if(enemies == null) { return; }
         int i = 0;
         foreach (EnemyData enemy in enemies)
         {
