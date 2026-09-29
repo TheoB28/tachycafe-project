@@ -74,7 +74,7 @@ public class EnemyCombat : MonoBehaviour
             Destroy(gameObject);
         }
 
-        HP += action.Heal;
+        HP += action.GetHeal(playerData);
         if (HP > MaxHP)
         {
             HP = MaxHP;

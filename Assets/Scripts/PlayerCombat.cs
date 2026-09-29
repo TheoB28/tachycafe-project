@@ -130,6 +130,8 @@ public class PlayerCombat : MonoBehaviour
         //hurts the player and clamps the health
         HP -= (int)ActualDamage;
 
+        HP += action.GetHeal(Player);
+
         if (HP <= 0)
         {
             HP = 0;

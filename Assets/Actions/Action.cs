@@ -34,6 +34,10 @@ public class Action : ScriptableObject
         return actualDamage;
     }
 
-
+    public int GetHeal(PlayerCombat Player)
+    {
+        int Heal = (int)((VitalityScale * Player.Vitality) + (MentalityScale * Player.Mentality) + (FortitudeScale * Player.Fortitude) + (PhysicalStrengthScale * Player.PhysicalPower) + (NimblenessScale * Player.Nimbleness) + (BrillianceScale * Player.Brilliance) + (HopeScale * Player.Hope));
+        return Heal;
+    }
 
 }

@@ -38,6 +38,13 @@ public class SiteOfDisproportion : MonoBehaviour
     [SerializeField] TextMeshProUGUI[] EquippedActions;
     [SerializeField] float scrollIntencity;
     [SerializeField] public float blinkTime;
+
+    [SerializeField] TextMeshProUGUI ActionName;
+    [SerializeField] TextMeshProUGUI HealText;
+    [SerializeField] TextMeshProUGUI FPcostText;
+    [SerializeField] TextMeshProUGUI ScalingText;
+    [SerializeField] TextMeshProUGUI Description;
+
     GameObject FirstAction, ActionToChange;
     UIActionItem ReplacingAction;
     string ReplacingActionName;
@@ -331,6 +338,14 @@ public class SiteOfDisproportion : MonoBehaviour
         }
     }
 
+    public void AddDiscription(Action action)
+    {
+        ActionName.text = action.name;
+
+        FPcostText.text = "FP cost: " + action.FPCost.ToString();
+        ScalingText.text = "Vit " + action.VitalityScale.ToString() + "\n" + "Men " + action.MentalityScale.ToString() + "\n" + "For " + action.FortitudeScale.ToString() + "\n" + "Phy " + action.PhysicalStrengthScale.ToString() + "\n" + "Nim " + action.NimblenessScale.ToString() + "\n" + "Bri " + action.BrillianceScale.ToString() + "\n" + "Hop " + action.HopeScale.ToString();
+        Description.text = action.Description;
+    }
 
     public void MoveScroll(Transform newTransform)
     {

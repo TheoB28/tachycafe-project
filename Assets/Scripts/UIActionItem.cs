@@ -15,6 +15,7 @@ public class UIActionItem : MonoBehaviour, ISelectHandler
     public void OnSelect(BaseEventData eventData)
     {
         SiteOfDisproportion.MoveScroll(transform);
+        SiteOfDisproportion.AddDiscription(action);
     }
 
 
