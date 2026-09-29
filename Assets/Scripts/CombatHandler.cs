@@ -204,6 +204,7 @@ public class CombatHandler : MonoBehaviour
             switch (players[CurrentCharacterID].Actions[CurrentActionID].Target)
             {
                 case Action.PossibleTarget.enemy:
+                    Debug.Log(CurrentTargetID);
                     ActivateAction(Enemies[CurrentTargetID]);
                     break;
                 case Action.PossibleTarget.ally:
@@ -218,6 +219,7 @@ public class CombatHandler : MonoBehaviour
 
     void TargetSelecting(InputValue Input)
     {
+        CurrentTargetID = 0;
         //moves the selector and selects the target
         if (ChoosingTarget)
         {
