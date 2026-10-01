@@ -145,6 +145,7 @@ public class PlayerCombat : MonoBehaviour
     {
         FP -= amount;
         FPText.text = FP.ToString();
+        PlayerDataHandler.UpdateData();
     }   
 
     void UpdateEffects()

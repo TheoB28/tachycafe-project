@@ -45,13 +45,19 @@ public class PlayerDataHandler : MonoBehaviour
             playerData[i].MaxHP = player.MaxHP;
             playerData[i].MaxFP = player.MaxFP;
             playerData[i].IsDead = player.IsDead;
-            playerData[i].UppdateStats();
             if(playerData[i].IsDead)
             {
                 d++;
             }
             i++;
         }
+
+        foreach (PlayerData player in playerData)
+        {
+            player.uppdateFriendList(this);
+
+        }
+
         if (d == playerCombat.Length)
         {
             Debug.Log("GameOver");
@@ -115,4 +121,13 @@ public class PlayerDataHandler : MonoBehaviour
             player.GiveXP(XP);
         }
     }
+    
+    public void Rest()
+    {
+        foreach(PlayerData player in playerData)
+        {
+            player.Rest();
+        }
+    }
+
 }

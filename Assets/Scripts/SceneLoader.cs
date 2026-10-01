@@ -33,6 +33,7 @@ public class SceneLoader : MonoBehaviour
 
     public void LoadOverworld()
     {
+        playerDataHandler.UpdateData();
         SceneManager.LoadScene("Overworld");
     }
 

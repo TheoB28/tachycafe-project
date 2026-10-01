@@ -20,3 +20,10 @@ MonoBehaviour:
   MaxFP: 0
   XPReward: 10
   Behavior: 0
+  Vitality: 0
+  Mentality: 0
+  Fortitude: 0
+  PhysicalPower: 2
+  Nimbleness: 0
+  Brilliance: 0
+  Hope: 0

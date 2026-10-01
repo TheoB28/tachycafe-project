@@ -215,6 +215,7 @@ public class SiteOfDisproportion : MonoBehaviour
         playerDataHandler.playerData[currentPlayer].Brilliance = tempStats[5];
         playerDataHandler.playerData[currentPlayer].Hope = tempStats[6];
         playerDataHandler.playerData[currentPlayer].SkillPoints = tempSP;
+        playerDataHandler.playerData[currentPlayer].UppdateStats();
         ExitLeveling();
     }
 
@@ -236,7 +237,7 @@ public class SiteOfDisproportion : MonoBehaviour
             canvas.gameObject.SetActive(false);
             InMainTab = false;
             player.InMenu = false;
-            playerDataHandler.UpdateData();
+            playerDataHandler.Rest();
         }
         else if (changingActions)
         {
@@ -311,7 +312,6 @@ public class SiteOfDisproportion : MonoBehaviour
                     actionHolder.transform.position = actionHolderPlace;
 
                     playerDataHandler.playerData[currentPlayer].Actions[i] = eventSystem.currentSelectedGameObject.GetComponent<UIActionItem>().action;
-                    playerDataHandler.UpdateData();
                     ActionToChange.GetComponent<TextMeshProUGUI>().text = playerDataHandler.playerData[currentPlayer].Actions[i].name;
 
                     eventSystem.SetSelectedGameObject(ActionToChange);
@@ -369,7 +369,6 @@ public class SiteOfDisproportion : MonoBehaviour
         InMainTab = true;
         levelingUp = false;
         PlayerButtons[0].Select();
-        playerDataHandler.UpdateData();
     }
 
     void ExitActionTab()
@@ -383,7 +382,6 @@ public class SiteOfDisproportion : MonoBehaviour
         InMainTab = true;
         inActionTab = false;
         PlayerButtons[0].Select();
-        playerDataHandler.UpdateData();
     }
 
 }

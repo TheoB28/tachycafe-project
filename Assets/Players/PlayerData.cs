@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "PlayerData", menuName = "Scriptable Objects/PlayerData")]
@@ -12,6 +13,7 @@ public class PlayerData : ScriptableObject
     [SerializeField] public int MaxFP;
     [SerializeField] public Effects[] CurrentEffects;
     [SerializeField] public Action[] LernedActions;
+    public int[] FriendLevel;
 
     [Header("Level stats")]
     [SerializeField] public int Level;
@@ -77,9 +79,15 @@ public class PlayerData : ScriptableObject
 
     }
 
+    public void Rest()
+    {
+        HP = MaxHP;
+        FP = MaxFP;
+    }
+
     public void UppdateStats()
     {
-        if(Vitality <= 20) { MaxHP = Vitality * VitalityScale1To20; }
+        if (Vitality <= 20) { MaxHP = Vitality * VitalityScale1To20; }
         else if(Vitality <= 40) { MaxHP = VitalityScale1To20 * 20 + (Vitality -20) * VitalityScale20To40; }
         else if(Vitality <= 60) { MaxHP = VitalityScale1To20 * 20 + VitalityScale20To40 * 20 + (Vitality -40) * VitalityScale40To60; }
         else if(Vitality <= 80) { MaxHP = VitalityScale1To20 * 20 + VitalityScale20To40 * 20 + VitalityScale40To60 * 20 + (Vitality -60) * VitalityScale60To80; }
@@ -90,8 +98,21 @@ public class PlayerData : ScriptableObject
         else if(Mentality <= 60) { MaxFP = MentalityScale1To20 * 20 + MentalityScale20To40 * 20 + (Mentality -40) * MentalityScale40To60; }
         else if(Mentality <= 80) { MaxFP = MentalityScale1To20 * 20 + MentalityScale20To40 * 20 + MentalityScale40To60 * 20 + (Mentality -60) * MentalityScale60To80; }
         else if(Mentality <= 100) { MaxFP = MentalityScale1To20 * 20 + MentalityScale20To40 * 20 + MentalityScale40To60 * 20 + MentalityScale60To80 * 20 + (Mentality -80) * MentalityScale80To100; }
-        HP = MaxHP;
-        FP = MaxFP;
-        
+    }
+
+    public void uppdateFriendList(PlayerDataHandler dataHandler)
+    {
+        int[] newList = new int[dataHandler.playerData.Length];
+        int i = 0;
+        foreach(int level in FriendLevel)
+        {
+            newList[i] = level;
+            i++;
+        }
+    }
+
+    public void AddFriendLevel(int increse, int characterID)
+    {
+        FriendLevel[characterID] += increse;
     }
 }

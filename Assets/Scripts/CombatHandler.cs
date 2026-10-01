@@ -376,7 +376,7 @@ public class CombatHandler : MonoBehaviour
     {
         PlayerDataHandler.giveExp(ExpReward);
         HasWon = true;
-        PlayerDataHandler.UpdateData();
+        //PlayerDataHandler.UpdateData();
         SceneLoader.LoadOverworld();
     }
 
