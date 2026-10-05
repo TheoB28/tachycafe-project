@@ -243,13 +243,13 @@ public class CombatHandler : MonoBehaviour
         else if (ChoosingTarget && Teamworking)
         {
             if(CurrentTargetID == CurrentCharacterID) { return; }
-            Debug.Log(players[CurrentCharacterID].name + " hugs " + players[CurrentTargetID].name);
             players[CurrentTargetID].Heal(players[CurrentCharacterID].FriendLevel[CurrentTargetID]);
             Effects effect = ScriptableObject.CreateInstance<Effects>();
             effect.copyFrom(toutched);
             ArrayUtility.Add(ref players[CurrentTargetID].CurrentEffects, effect);
             Teamworking = false;
             NextPlayerTurn();
+            combatLog(players[CurrentCharacterID].name + " hugs " + players[CurrentTargetID].name);
         }
     }
 
@@ -315,6 +315,7 @@ public class CombatHandler : MonoBehaviour
         ChoosingTarget = false;
         players[CurrentCharacterID].UseFP(players[CurrentCharacterID].Actions[CurrentActionID].FPCost);
         NextPlayerTurn();
+        combatLog(players[CurrentCharacterID].name + " uses " + players[CurrentCharacterID].Actions[CurrentActionID] + " on " + Targget.name);
     }
 
     public void ActivateAction(PlayerCombat Tarrget)
@@ -331,6 +332,7 @@ public class CombatHandler : MonoBehaviour
         ChoosingTarget = false;
         players[CurrentCharacterID].UseFP(players[CurrentCharacterID].Actions[CurrentActionID].FPCost);
         NextPlayerTurn();
+        combatLog(players[CurrentCharacterID].name + " uses " + players[CurrentCharacterID].Actions[CurrentActionID] + " on " + players[CurrentCharacterID].name);
     }
 
     IEnumerator StartEnemyTurn()
@@ -363,7 +365,7 @@ public class CombatHandler : MonoBehaviour
         {
             if(effect.activation == Effects.ActivationType.preAction)
             {
-                CombatLogText.text = effect.Log(players[CurrentCharacterID].gameObject);
+                combatLog(effect.Log(players[CurrentCharacterID].gameObject));
  
             }
             
@@ -412,6 +414,11 @@ public class CombatHandler : MonoBehaviour
             SetupPlayerTabs();
             FightButton.Select();
         }
+    }
+
+    public void combatLog(string text)
+    {
+        CombatLogText.text += "\n" + text;
     }
 
     public void EnemyDeath(EnemyCombat enemy)

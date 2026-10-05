@@ -166,9 +166,10 @@ public class EnemyCombat : MonoBehaviour
                 break;
             case Action.PossibleTarget.enemy:
                 TargetPlayer.UseAction(ChosenAction, CurrentEffects, this);
-                Debug.Log($"{gameObject.name} uses {ChosenAction.name} on {TargetPlayer.gameObject.name}");
+                CombatHandler.combatLog(gameObject.name + " uses " + ChosenAction + " on " + TargetPlayer);
                 break;
         }
+
     }
 
     void AggresivAction(PlayerCombat[] players, EnemyCombat[] enemies)
