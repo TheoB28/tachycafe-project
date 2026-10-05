@@ -1,14 +1,11 @@
+using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class CombatHandler : MonoBehaviour
 {
@@ -39,6 +36,7 @@ public class CombatHandler : MonoBehaviour
     public int CurrentCharacterID;
     [SerializeField] Material OutlineMaterial;
     [SerializeField] Material DefaultMaterial;
+    [SerializeField] Effects toutched;
 
     [Header("Enemys")]
     [SerializeField] public EnemyCombat[] Enemies;
@@ -51,6 +49,7 @@ public class CombatHandler : MonoBehaviour
     public int ExpReward;
     public bool ChoosingTarget;
     public bool PlayerTurn;
+    public bool Teamworking;
     bool HasWon;
 
     PlayerDataHandler PlayerDataHandler;
@@ -81,7 +80,14 @@ public class CombatHandler : MonoBehaviour
 
     public void OnCancel()
     {
-        if (ChoosingTarget)
+        if (ChoosingTarget && Teamworking)
+        {
+            FightButton.Select();
+            Teamworking = false;
+            ChoosingTarget = false;
+            Selector.SetActive(false);
+        }
+        else if (ChoosingTarget)
         {
             action1Button.Select();
             ChoosingTarget = false;
@@ -102,6 +108,13 @@ public class CombatHandler : MonoBehaviour
         ItemsTab.SetActive(false);
         action1Button.Select();
     }
+
+    public void Teamwork()
+    {
+        Teamworking = true;
+        StartChosing();
+    }
+
     public void ShowItemTab()
     {
         FightTab.SetActive(false);
@@ -164,6 +177,18 @@ public class CombatHandler : MonoBehaviour
         DescriptionText.text = players[CurrentCharacterID].Actions[ID].Description;
     }
 
+    public void StartChosing()
+    {
+        //starts the choosing off targets
+        if (PlayerTurn && Teamworking)
+        {
+            ChoosingTarget = true;
+            PlaceSelector();
+            eventSystem.SetSelectedGameObject(null);
+            Selector.SetActive(true);
+        }
+    }
+
     public void StartChosing(int ID)
     {
         //starts the choosing off targets
@@ -174,6 +199,7 @@ public class CombatHandler : MonoBehaviour
             PlaceSelector();
             eventSystem.SetSelectedGameObject(null);
             Selector.SetActive(true);
+            CurrentTargetID = 0;
         }
     }
 
@@ -192,13 +218,14 @@ public class CombatHandler : MonoBehaviour
                 Selector.transform.position = players[CurrentCharacterID].transform.position + new Vector3(0, SelectorHeight, 0);
                 break;
         }
+        if (Teamworking) { Selector.transform.position = players[0].transform.position + new Vector3(0, SelectorHeight, 0); }
         Selector.SetActive(false);
     }
 
     void submitAction()
     {
         //activates the action
-        if (ChoosingTarget)
+        if (ChoosingTarget && !Teamworking)
         {
             switch (players[CurrentCharacterID].Actions[CurrentActionID].Target)
             {
@@ -213,13 +240,24 @@ public class CombatHandler : MonoBehaviour
                     break;
             }
         }
+        else if (ChoosingTarget && Teamworking)
+        {
+            if(CurrentTargetID == CurrentCharacterID) { return; }
+            Debug.Log(players[CurrentCharacterID].name + " hugs " + players[CurrentTargetID].name);
+            players[CurrentTargetID].Heal(players[CurrentCharacterID].FriendLevel[CurrentTargetID]);
+            Effects effect = ScriptableObject.CreateInstance<Effects>();
+            effect.copyFrom(toutched);
+            ArrayUtility.Add(ref players[CurrentTargetID].CurrentEffects, effect);
+            Teamworking = false;
+            NextPlayerTurn();
+        }
     }
 
     void TargetSelecting(InputValue Input)
     {
-        CurrentTargetID = 0;
+        
         //moves the selector and selects the target
-        if (ChoosingTarget)
+        if (ChoosingTarget && !Teamworking)
         {
             switch (players[CurrentCharacterID].Actions[CurrentActionID].Target)
             {
@@ -240,7 +278,7 @@ public class CombatHandler : MonoBehaviour
                 case Action.PossibleTarget.ally:
                     if (Input.Get<Vector2>().x > 0)
                     {
-                        if (CurrentTargetID == 0) { return; }
+                        if (CurrentTargetID < 0) { return; }
                         Selector.transform.position = players[CurrentTargetID - 1].transform.position + new Vector3(0, SelectorHeight, 0);
                         CurrentTargetID--;
                     }
@@ -251,6 +289,21 @@ public class CombatHandler : MonoBehaviour
                         CurrentTargetID++;
                     }
                     break;
+            }
+        }
+        else if(ChoosingTarget && Teamworking)
+        {
+            if (Input.Get<Vector2>().x > 0)
+            {
+                if (CurrentTargetID == 0) { return; }
+                Selector.transform.position = players[CurrentTargetID - 1].transform.position + new Vector3(0, SelectorHeight, 0);
+                CurrentTargetID--;
+            }
+            else if (Input.Get<Vector2>().x < 0)
+            {
+                if (CurrentTargetID >= players.Length - 1) { return; }
+                Selector.transform.position = players[CurrentTargetID + 1].transform.position + new Vector3(0, SelectorHeight, 0);
+                CurrentTargetID++;
             }
         }
     }
@@ -315,7 +368,7 @@ public class CombatHandler : MonoBehaviour
             }
             
         }
-        float i = Random.value;
+        float i = UnityEngine.Random.value;
         if (PlayerDataHandler.playerData[CurrentCharacterID].HasDysphoria && i < PlayerDataHandler.playerData[CurrentCharacterID].SkipChans)
         {
             CombatLogText.text = players[CurrentCharacterID].name + " does nothing due to dysphoria.";

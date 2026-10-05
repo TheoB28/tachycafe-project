@@ -2672,7 +2672,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1850517739}
         m_TargetAssemblyTypeName: CombatHandler, Assembly-CSharp
-        m_MethodName: ShowFightTab
+        m_MethodName: Teamwork
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5050,6 +5050,7 @@ MonoBehaviour:
   CurrentCharacterID: 0
   OutlineMaterial: {fileID: 2100000, guid: 3aeb2589311ab6f408ed8d177a7d051e, type: 2}
   DefaultMaterial: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  toutched: {fileID: 11400000, guid: d42898b90e48bb7408380209b2b87326, type: 2}
   Enemies:
   - {fileID: 1535020081}
   - {fileID: 609077758}
@@ -5062,6 +5063,7 @@ MonoBehaviour:
   ExpReward: 0
   ChoosingTarget: 0
   PlayerTurn: 0
+  Teamworking: 0
 --- !u!4 &1850517740
 Transform:
   m_ObjectHideFlags: 0

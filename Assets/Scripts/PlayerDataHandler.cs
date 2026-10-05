@@ -31,6 +31,11 @@ public class PlayerDataHandler : MonoBehaviour
     private void Start()
     {
         sceneLoader = FindAnyObjectByType<SceneLoader>();
+
+        foreach (PlayerData player in playerData)
+        {
+            player.uppdateFriendList(this);
+        }
     }
 
 
@@ -52,11 +57,6 @@ public class PlayerDataHandler : MonoBehaviour
             i++;
         }
 
-        foreach (PlayerData player in playerData)
-        {
-            player.uppdateFriendList(this);
-
-        }
 
         if (d == playerCombat.Length)
         {
@@ -79,6 +79,7 @@ public class PlayerDataHandler : MonoBehaviour
             player.MaxFP = playerData[i].MaxFP;
             player.HPText.text = playerData[i].HP.ToString();
             player.FPText.text = playerData[i].FP.ToString();
+            player.FriendLevel = playerData[i].FriendLevel;
 
             player.Vitality = playerData[i].Vitality;
             player.Mentality = playerData[i].Mentality;

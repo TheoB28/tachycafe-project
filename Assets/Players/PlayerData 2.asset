@@ -19,9 +19,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 72fffed0d65b2ac4c905facfa1c15735, type: 2}
   - {fileID: 11400000, guid: 72fffed0d65b2ac4c905facfa1c15735, type: 2}
   HP: 10
-  FP: 24
+  FP: 32
   MaxHP: 10
-  MaxFP: 24
+  MaxFP: 32
   CurrentEffects: []
   LernedActions:
   - {fileID: 11400000, guid: cb871c57b397a874997f3bf052ebc0cd, type: 2}
@@ -36,12 +36,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 72fffed0d65b2ac4c905facfa1c15735, type: 2}
   - {fileID: 11400000, guid: 72fffed0d65b2ac4c905facfa1c15735, type: 2}
   - {fileID: 11400000, guid: 72fffed0d65b2ac4c905facfa1c15735, type: 2}
-  Level: 15
-  Exp: 55
-  ExpToNextLevel: 73
-  SkillPoints: 0
+  FriendLevel: 0700000000000000
+  Level: 25
+  Exp: 0
+  ExpToNextLevel: 127
+  SkillPoints: 9
   Vitality: 2
-  Mentality: 3
+  Mentality: 4
   Fortitude: 0
   PhysicalPower: 0
   Nimbleness: 0

@@ -14,6 +14,7 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] public Effects[] CurrentEffects;
     [SerializeField] public TextMeshProUGUI HPText;
     [SerializeField] public TextMeshProUGUI FPText;
+    public int[] FriendLevel;
 
     [Header("Level Stats")]
     [SerializeField] public int Vitality;
@@ -130,15 +131,8 @@ public class PlayerCombat : MonoBehaviour
         //hurts the player and clamps the health
         HP -= (int)ActualDamage;
 
-        HP += action.GetHeal(Player);
+        Heal(action.GetHeal(Player));
 
-        if (HP <= 0)
-        {
-            HP = 0;
-            IsDead = true;
-            PlayerDataHandler.UpdateData();
-        }
-        HPText.text = HP.ToString();
     }
 
     public void UseFP(int amount)
@@ -147,6 +141,22 @@ public class PlayerCombat : MonoBehaviour
         FPText.text = FP.ToString();
         PlayerDataHandler.UpdateData();
     }   
+
+    public void Heal(int amount)
+    {
+        HP += amount;
+        if (HP <= 0)
+        {
+            HP = 0;
+            IsDead = true;
+            PlayerDataHandler.UpdateData();
+        }
+        else if (HP > MaxHP)
+        {
+            HP = MaxHP;
+            HPText.text = HP.ToString();
+        }
+    }
 
     void UpdateEffects()
     {

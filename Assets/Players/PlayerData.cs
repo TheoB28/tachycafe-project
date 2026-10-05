@@ -13,7 +13,7 @@ public class PlayerData : ScriptableObject
     [SerializeField] public int MaxFP;
     [SerializeField] public Effects[] CurrentEffects;
     [SerializeField] public Action[] LernedActions;
-    public int[] FriendLevel;
+    public int[] FriendLevel = new int[0];
 
     [Header("Level stats")]
     [SerializeField] public int Level;
@@ -109,6 +109,7 @@ public class PlayerData : ScriptableObject
             newList[i] = level;
             i++;
         }
+        FriendLevel = newList;
     }
 
     public void AddFriendLevel(int increse, int characterID)
