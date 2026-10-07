@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - UI Action
+  - NPC
   layers:
   - Default
   - TransparentFX
