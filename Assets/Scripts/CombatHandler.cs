@@ -407,6 +407,10 @@ public class CombatHandler : MonoBehaviour
 
         if (CurrentCharacterID >= players.Length)
         {
+            if (Enemies.Length == 0)
+            {
+                return;
+            }
             PlayerTurn = false;
             StartCoroutine(StartEnemyTurn());
         }
