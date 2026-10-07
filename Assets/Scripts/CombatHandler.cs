@@ -248,8 +248,9 @@ public class CombatHandler : MonoBehaviour
             effect.copyFrom(toutched);
             ArrayUtility.Add(ref players[CurrentTargetID].CurrentEffects, effect);
             Teamworking = false;
-            NextPlayerTurn();
             combatLog(players[CurrentCharacterID].name + " hugs " + players[CurrentTargetID].name);
+            NextPlayerTurn();
+
         }
     }
 
@@ -314,8 +315,9 @@ public class CombatHandler : MonoBehaviour
         Targget.UseAction(players[CurrentCharacterID].Actions[CurrentActionID], players[CurrentCharacterID].CurrentEffects, players[CurrentCharacterID]);
         ChoosingTarget = false;
         players[CurrentCharacterID].UseFP(players[CurrentCharacterID].Actions[CurrentActionID].FPCost);
+        combatLog(players[CurrentCharacterID].name + " uses " + players[CurrentCharacterID].Actions[CurrentActionID].name + " on " + Targget.name);
         NextPlayerTurn();
-        combatLog(players[CurrentCharacterID].name + " uses " + players[CurrentCharacterID].Actions[CurrentActionID] + " on " + Targget.name);
+
     }
 
     public void ActivateAction(PlayerCombat Tarrget)
@@ -331,8 +333,9 @@ public class CombatHandler : MonoBehaviour
         }
         ChoosingTarget = false;
         players[CurrentCharacterID].UseFP(players[CurrentCharacterID].Actions[CurrentActionID].FPCost);
+        combatLog(players[CurrentCharacterID].name + " uses " + players[CurrentCharacterID].Actions[CurrentActionID].name + " on " + players[CurrentCharacterID].name);
         NextPlayerTurn();
-        combatLog(players[CurrentCharacterID].name + " uses " + players[CurrentCharacterID].Actions[CurrentActionID] + " on " + players[CurrentCharacterID].name);
+
     }
 
     IEnumerator StartEnemyTurn()
@@ -377,7 +380,6 @@ public class CombatHandler : MonoBehaviour
             NextPlayerTurn();
         }
     }
-
 
     void StartPlayerTurn()
     {

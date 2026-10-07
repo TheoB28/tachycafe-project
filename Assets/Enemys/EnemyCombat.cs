@@ -166,7 +166,7 @@ public class EnemyCombat : MonoBehaviour
                 break;
             case Action.PossibleTarget.enemy:
                 TargetPlayer.UseAction(ChosenAction, CurrentEffects, this);
-                CombatHandler.combatLog(gameObject.name + " uses " + ChosenAction + " on " + TargetPlayer);
+                CombatHandler.combatLog(gameObject.name + " uses " + ChosenAction.name + " on " + TargetPlayer.name);
                 break;
         }
 
