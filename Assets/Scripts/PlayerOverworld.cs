@@ -40,6 +40,7 @@ public class PlayerOverworld : MonoBehaviour
 
     void OnCancel()
     {
+        if (InMenu && InDialoge) { return; }
         if (InMenu && currentSite != null)
         {
             currentSite.OnPlayerCancel();

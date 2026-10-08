@@ -30,16 +30,19 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] GameObject EffectHolder;
     [SerializeField] Vector2 EffectOffset;
     [SerializeField] int ListSize = 5;
+    [SerializeField] AnimationClip IdleAnimation;
 
     public bool IsDead = false;
 
 
     Canvas Canvas;
     PlayerDataHandler PlayerDataHandler;
+    Animator Animator;
 
     private void Awake()
     {
         Canvas = GetComponent<Canvas>();
+        Animator = GetComponent<Animator>();
     }
 
     private void Update()
@@ -52,6 +55,8 @@ public class PlayerCombat : MonoBehaviour
         PlayerDataHandler = GetComponentInParent<PlayerDataHandler>();
         HPText.text = HP.ToString();
         FPText.text = FP.ToString();
+        Animator.Play(IdleAnimation.name);
+
     }
 
     public void UseAction(Action action, Effects[] UsersEffects, EnemyCombat enemy)
