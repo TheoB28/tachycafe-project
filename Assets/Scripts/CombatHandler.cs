@@ -63,9 +63,14 @@ public class CombatHandler : MonoBehaviour
     }
 
 
-    private void Start()
+    private void Update()
     {
-
+        if (!PlayerTurn)
+        {
+            FightTab.SetActive(false);
+            DescriptionTab.SetActive(false);
+            ItemsTab.SetActive(false);
+        }
     }
 
 
@@ -164,6 +169,7 @@ public class CombatHandler : MonoBehaviour
     void SetupPlayerTabs()
     {
         //sets up the UI or the current character
+        if(CurrentCharacterID >= players.Length) { return; }
         TextMeshProUGUI ButtonText = action1Button.GetComponentInChildren<TextMeshProUGUI>();
         ButtonText.text = players[CurrentCharacterID].Actions[0].name;
         ButtonText = action2Button.GetComponentInChildren<TextMeshProUGUI>();
@@ -178,6 +184,7 @@ public class CombatHandler : MonoBehaviour
     public void ChangeDescription(int ID)
     {
         //Take a wild guess
+        if (CurrentCharacterID >= players.Length) { return; }
         DescriptionText.text = players[CurrentCharacterID].Actions[ID].Description;
     }
 
@@ -382,7 +389,7 @@ public class CombatHandler : MonoBehaviour
         if (PlayerDataHandler.playerData[CurrentCharacterID].HasDysphoria && i < PlayerDataHandler.playerData[CurrentCharacterID].SkipChans)
         {
             CombatLogText.text = players[CurrentCharacterID].name + " does nothing due to dysphoria.";
-            //NextPlayerTurn();
+            NextPlayerTurn();
         }
 
     }
@@ -407,11 +414,12 @@ public class CombatHandler : MonoBehaviour
 
     void NextPlayerTurn()
     {
+
         Selector.SetActive(false);
-        CurrentCharacterID++;
+        FightButton.Select();
         FightTab.SetActive(false);
         DescriptionTab.SetActive(false);
-        Debug.Log("Next Player Turn: " + CurrentCharacterID);
+        CurrentCharacterID++;
         if (CurrentCharacterID >= players.Length)
         {
             if (Enemies.Length == 0)
