@@ -1,4 +1,3 @@
-using System.Linq;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
@@ -30,14 +29,14 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] GameObject EffectHolder;
     [SerializeField] Vector2 EffectOffset;
     [SerializeField] int ListSize = 5;
-    [SerializeField] AnimationClip IdleAnimation;
+    [SerializeField] public AnimationClip IdleAnimation;
 
     public bool IsDead = false;
 
 
     Canvas Canvas;
     PlayerDataHandler PlayerDataHandler;
-    Animator Animator;
+    public Animator Animator;
 
     private void Awake()
     {

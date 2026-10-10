@@ -50,6 +50,7 @@ public class CombatHandler : MonoBehaviour
     public bool ChoosingTarget;
     public bool PlayerTurn;
     public bool Teamworking;
+    public bool StopNav;
     bool HasWon;
 
     PlayerDataHandler PlayerDataHandler;
@@ -70,16 +71,19 @@ public class CombatHandler : MonoBehaviour
 
     public void OnNavigate(InputValue Input)
     {
+        if (StopNav) { return; }
         TargetSelecting(Input);
     }
 
     public void OnSubmit()
     {
+        if (StopNav) { return; }
         submitAction();
     }
 
     public void OnCancel()
     {
+        if (StopNav) { return; }
         if (ChoosingTarget && Teamworking)
         {
             FightButton.Select();
@@ -247,6 +251,7 @@ public class CombatHandler : MonoBehaviour
             Effects effect = ScriptableObject.CreateInstance<Effects>();
             effect.copyFrom(toutched);
             ArrayUtility.Add(ref players[CurrentTargetID].CurrentEffects, effect);
+            ChoosingTarget = false;
             Teamworking = false;
             combatLog(players[CurrentCharacterID].name + " hugs " + players[CurrentTargetID].name);
             NextPlayerTurn();
@@ -377,8 +382,9 @@ public class CombatHandler : MonoBehaviour
         if (PlayerDataHandler.playerData[CurrentCharacterID].HasDysphoria && i < PlayerDataHandler.playerData[CurrentCharacterID].SkipChans)
         {
             CombatLogText.text = players[CurrentCharacterID].name + " does nothing due to dysphoria.";
-            NextPlayerTurn();
+            //NextPlayerTurn();
         }
+
     }
 
     void StartPlayerTurn()
@@ -405,7 +411,7 @@ public class CombatHandler : MonoBehaviour
         CurrentCharacterID++;
         FightTab.SetActive(false);
         DescriptionTab.SetActive(false);
-
+        Debug.Log("Next Player Turn: " + CurrentCharacterID);
         if (CurrentCharacterID >= players.Length)
         {
             if (Enemies.Length == 0)

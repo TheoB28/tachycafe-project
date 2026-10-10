@@ -110,6 +110,7 @@ public class PlayerDataHandler : MonoBehaviour
             if (player == null) { return; }
             player.gameObject.SetActive(true);
             UpdateCombat();
+            player.Animator.Play(player.IdleAnimation.name);
         }
         combatHandler = FindAnyObjectByType<CombatHandler>();
         combatHandler.SetupPlayers(playerCombat);

@@ -1522,6 +1522,7 @@ MonoBehaviour:
   EffectOffset: {x: 1, y: -1}
   ListSize: 5
   IdleAnimation: {fileID: 7400000, guid: 2595e9cbdcaffa347a124990b5209c2c, type: 2}
+  CharacterIndex: 1
   IsDead: 0
 --- !u!4 &303950754
 Transform:
@@ -7727,6 +7728,7 @@ MonoBehaviour:
   EffectOffset: {x: 1, y: -1}
   ListSize: 5
   IdleAnimation: {fileID: 7400000, guid: 752ef207d27efcf448f096f6ca6e0b3d, type: 2}
+  CharacterIndex: 0
   IsDead: 0
 --- !u!212 &1861109346
 SpriteRenderer:
