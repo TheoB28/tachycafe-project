@@ -404,6 +404,7 @@ public class CombatHandler : MonoBehaviour
         Selector.SetActive(false);
         CurrentCharacterID++;
         FightTab.SetActive(false);
+        DescriptionTab.SetActive(false);
 
         if (CurrentCharacterID >= players.Length)
         {

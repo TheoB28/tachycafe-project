@@ -39,6 +39,7 @@ public class EnemyCombat : MonoBehaviour
         HP = Data.HP; FP = Data.FP; MaxHP = Data.MaxHP; MaxFP = Data.MaxFP; Behaviour = Data.Behavior; Actions = Data.Actions;
         Vitality = data.Vitality; Mentality = data.Mentality; Fortitude = data.Fortitude; PhysicalPower = data.PhysicalPower; Nimbleness = data.Nimbleness; Brilliance = data.Brilliance; Hope = data.Hope;
         text.text = HP.ToString();
+        gameObject.name = data.name;
     }
     public void UseAction(Action action, Effects[] PlayerEffects, PlayerCombat playerData)
     {
