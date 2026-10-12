@@ -1,9 +1,15 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class PlayerOverworld : MonoBehaviour
 {
     [SerializeField] float moveSpeed = 5f;
+
+    [SerializeField] Canvas PauseMenu;
+    [SerializeField] Button MainMenuButton;
+
     public bool InMenu, InDialoge;
 
     Vector2 movementInput;
@@ -12,10 +18,18 @@ public class PlayerOverworld : MonoBehaviour
     public SiteOfDisproportion currentSite;
     public NPC currentNPC;
     Rigidbody2D Rigidbody;
+    EventSystem eventSystem;
+    SceneLoader sceneLoader;
 
     private void Awake()
     {
         Rigidbody = GetComponent<Rigidbody2D>();
+    }
+
+    private void Start()
+    {
+        eventSystem = eventSystem ?? EventSystem.current;
+        sceneLoader = FindAnyObjectByType<SceneLoader>();
     }
 
     void OnMove(InputValue value)
@@ -72,6 +86,32 @@ public class PlayerOverworld : MonoBehaviour
                 InDialoge = true;
             }
         }
+    }
+
+    void OnEsc()
+    {
+        Pause();
+    }
+
+    void Pause()
+    {
+        if (PauseMenu.gameObject.activeSelf) {
+            PauseMenu.gameObject.SetActive(false); 
+            InMenu = false;
+            Time.timeScale = 1;
+            return;
+        }
+        if (currentSite != null) {return; }
+        PauseMenu.gameObject.SetActive(true);
+        InMenu = true;
+        Rigidbody.linearVelocity = Vector2.zero;
+        Time.timeScale = 0;
+        eventSystem.SetSelectedGameObject(MainMenuButton.gameObject);
+    }
+
+    public void ToMain()
+    {
+        sceneLoader.GoToMainMenu();
     }
 
     private void OnDrawGizmos()

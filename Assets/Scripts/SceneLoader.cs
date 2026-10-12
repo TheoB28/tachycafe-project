@@ -37,6 +37,11 @@ public class SceneLoader : MonoBehaviour
         SceneManager.LoadScene("Overworld");
     }
 
+    public void GoToMainMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
+
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         switch (scene.name)

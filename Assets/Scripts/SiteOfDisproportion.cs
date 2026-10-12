@@ -237,6 +237,7 @@ public class SiteOfDisproportion : MonoBehaviour
             canvas.gameObject.SetActive(false);
             InMainTab = false;
             player.InMenu = false;
+            player.currentSite = null;
             playerDataHandler.Rest();
         }
         else if (changingActions)
