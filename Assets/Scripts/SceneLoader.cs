@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -33,7 +34,7 @@ public class SceneLoader : MonoBehaviour
 
     public void LoadOverworld()
     {
-        playerDataHandler.UpdateData();
+        playerDataHandler?.UpdateData();
         SceneManager.LoadScene("Overworld");
     }
 
@@ -44,6 +45,7 @@ public class SceneLoader : MonoBehaviour
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        if (!playerDataHandler) { playerDataHandler = FindAnyObjectByType<PlayerDataHandler>(); }
         switch (scene.name)
         {
             case "CombatScene":
@@ -56,6 +58,9 @@ public class SceneLoader : MonoBehaviour
                 Incombat = false;
                 combatHandler = null;
                 playerDataHandler.DeactivateCombat();
+                break;
+            case "MainMenu":
+                FindAnyObjectByType(typeof(MainMenu)).GetComponent<MainMenu>().Setup(this);
                 break;
         }
     }

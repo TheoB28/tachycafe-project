@@ -8,7 +8,7 @@ public class PlayerOverworld : MonoBehaviour
     [SerializeField] float moveSpeed = 5f;
 
     [SerializeField] Canvas PauseMenu;
-    [SerializeField] Button MainMenuButton;
+    [SerializeField] public Button MainMenuButton;
 
     public bool InMenu, InDialoge;
 
@@ -111,6 +111,8 @@ public class PlayerOverworld : MonoBehaviour
 
     public void ToMain()
     {
+        InMenu = false;
+        Time.timeScale = 1;
         sceneLoader.GoToMainMenu();
     }
 
