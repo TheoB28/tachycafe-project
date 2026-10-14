@@ -1,16 +1,25 @@
+using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using static UnityEditor.Rendering.MaterialUpgrader;
 
 public class PlayerOverworld : MonoBehaviour
 {
     [SerializeField] float moveSpeed = 5f;
 
+    [SerializeField] TextMeshProUGUI thoghts;
+    [SerializeField] float TextDelay = 0.1f;
+    [SerializeField] float DisplayTime = 2;
+    [SerializeField] float EraseTime = 0.05f;
+
     [SerializeField] Canvas PauseMenu;
     [SerializeField] public Button MainMenuButton;
 
-    public bool InMenu, InDialoge;
+    float baseTextDelay, BaseEraseDelay;
+    public bool InMenu, InDialoge, writing;
 
     Vector2 movementInput;
     Vector2 lookvector;
@@ -20,6 +29,7 @@ public class PlayerOverworld : MonoBehaviour
     Rigidbody2D Rigidbody;
     EventSystem eventSystem;
     SceneLoader sceneLoader;
+    PlayerDataHandler playerDataHandler;
 
     private void Awake()
     {
@@ -30,6 +40,9 @@ public class PlayerOverworld : MonoBehaviour
     {
         eventSystem = eventSystem ?? EventSystem.current;
         sceneLoader = FindAnyObjectByType<SceneLoader>();
+        playerDataHandler = FindAnyObjectByType<PlayerDataHandler>();
+        baseTextDelay = TextDelay;
+        BaseEraseDelay = EraseTime;
     }
 
     void OnMove(InputValue value)
@@ -84,6 +97,9 @@ public class PlayerOverworld : MonoBehaviour
                 currentNPC = hit.transform.GetComponent<NPC>();
                 InMenu = true;
                 InDialoge = true;
+            } else if (hit.collider != null && hit.transform.GetComponent<ObservableObject>())
+            {
+                observe(hit.transform.GetComponent<ObservableObject>().Descript(playerDataHandler.playerData[0].HasDysphoria));
             }
         }
     }
@@ -114,6 +130,40 @@ public class PlayerOverworld : MonoBehaviour
         InMenu = false;
         Time.timeScale = 1;
         sceneLoader.GoToMainMenu();
+    }
+
+    public void observe(string Text)
+    {
+        if (writing) { return; }
+        StartCoroutine(ShowText(Text));
+    }
+
+    IEnumerator ShowText(string Text)
+    {
+        if (playerDataHandler.playerData[0].HasDysphoria)
+        {
+            TextDelay = baseTextDelay * 1.5f;
+            EraseTime = BaseEraseDelay * 0.75f;
+        }
+        writing = true;
+        string currentText;
+        for (int i = 0; i < Text.Length; i++)
+        {
+            currentText = Text.Substring(0, i);
+            thoghts.text = currentText;
+            yield return new WaitForSeconds(TextDelay);
+        }
+        thoghts.text = Text;
+
+        yield return new WaitForSeconds(DisplayTime);
+        for (int i = Text.Length; i > 0; i--)
+        {
+            currentText = Text.Substring(0, i);
+            thoghts.text = currentText;
+            yield return new WaitForSeconds(EraseTime);
+        }
+        thoghts.text = "";
+        writing = false;
     }
 
     private void OnDrawGizmos()
