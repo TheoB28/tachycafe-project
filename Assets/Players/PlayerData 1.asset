@@ -51,6 +51,6 @@ MonoBehaviour:
   MentalityScale60To80: 2
   MentalityScale80To100: 1
   IsDead: 0
-  Gender: -840
-  HasDysphoria: 0
-  SkipChans: 0.9988095
+  Gender: -850
+  HasDysphoria: 1
+  SkipChans: 0.9988235

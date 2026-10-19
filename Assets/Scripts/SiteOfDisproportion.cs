@@ -46,7 +46,7 @@ public class SiteOfDisproportion : MonoBehaviour
     [SerializeField] TextMeshProUGUI Description;
 
     GameObject FirstAction, ActionToChange;
-    UIActionItem ReplacingAction;
+    UIItem ReplacingAction;
     string ReplacingActionName;
     bool changingActions, IsBlinking, TextIsVisable;
     Vector3 actionHolderPlace;
@@ -175,7 +175,7 @@ public class SiteOfDisproportion : MonoBehaviour
         {
             GameObject newAction = Instantiate(actionItemPrefab, actionHolder.transform);
             newAction.GetComponent<TextMeshProUGUI>().text = action.name;
-            newAction.GetComponent<UIActionItem>().action = action;
+            newAction.GetComponent<UIItem>().action = action;
             if(FirstAction == null) { FirstAction = newAction; }
         }
         inActionTab = true;
@@ -312,7 +312,7 @@ public class SiteOfDisproportion : MonoBehaviour
                     changingActions = false;
                     actionHolder.transform.position = actionHolderPlace;
 
-                    playerDataHandler.playerData[currentPlayer].Actions[i] = eventSystem.currentSelectedGameObject.GetComponent<UIActionItem>().action;
+                    playerDataHandler.playerData[currentPlayer].Actions[i] = eventSystem.currentSelectedGameObject.GetComponent<UIItem>().action;
                     ActionToChange.GetComponent<TextMeshProUGUI>().text = playerDataHandler.playerData[currentPlayer].Actions[i].name;
 
                     eventSystem.SetSelectedGameObject(ActionToChange);

@@ -6,6 +6,7 @@ public class PlayerDataHandler : MonoBehaviour
 
     [SerializeField] public PlayerData[] playerData;
     [SerializeField] public PlayerCombat[] playerCombat;
+    [SerializeField] public Quest[] Quests;
 
     int tick;
 

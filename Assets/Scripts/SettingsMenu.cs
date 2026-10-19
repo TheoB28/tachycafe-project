@@ -11,7 +11,11 @@ public class SettingsMenu : MonoBehaviour
     public void SetMenu(bool active)
     {
         menu.SetActive(!active);
-
+        PlayerOverworld playerOverworld = FindAnyObjectByType<PlayerOverworld>();
+        if (playerOverworld != null)
+        {
+            playerOverworld.CloseQuestMenu();
+        }
         foreach (var child in children)
         {
             child.gameObject.SetActive(active);

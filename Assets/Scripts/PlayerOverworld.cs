@@ -1,22 +1,31 @@
 using System.Collections;
 using TMPro;
+using Unity.Multiplayer.PlayMode;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
-using static UnityEditor.Rendering.MaterialUpgrader;
 
 public class PlayerOverworld : MonoBehaviour
 {
     [SerializeField] float moveSpeed = 5f;
 
+    [Header("thoughts")]
     [SerializeField] TextMeshProUGUI thoghts;
     [SerializeField] float TextDelay = 0.1f;
     [SerializeField] float DisplayTime = 2;
     [SerializeField] float EraseTime = 0.05f;
 
+    [Header("Menus")]
     [SerializeField] Canvas PauseMenu;
     [SerializeField] public Button MainMenuButton;
+    [SerializeField] GameObject QuestMenu;
+    [SerializeField] GameObject QuestHolder;
+    [SerializeField] GameObject QuestPrefab;
+    [SerializeField] TextMeshProUGUI QuestName;
+    [SerializeField] TextMeshProUGUI QuestDescription;
+    [SerializeField] float scrollIntencity;
 
     float baseTextDelay, BaseEraseDelay;
     public bool InMenu, InDialoge, writing;
@@ -67,7 +76,7 @@ public class PlayerOverworld : MonoBehaviour
 
     void OnCancel()
     {
-        if (InMenu && InDialoge) { return; }
+        if (InMenu && InDialoge || currentSite == null) { return; }
         if (InMenu && currentSite != null)
         {
             currentSite.OnPlayerCancel();
@@ -131,6 +140,46 @@ public class PlayerOverworld : MonoBehaviour
         Time.timeScale = 1;
         sceneLoader.GoToMainMenu();
     }
+
+    public void OpenQuestMenu()
+    {
+        QuestMenu.gameObject.SetActive(true);
+
+        foreach (Quest quest in playerDataHandler.Quests)
+        {
+            GameObject newQuest = Instantiate(QuestPrefab, QuestHolder.transform);
+            newQuest.GetComponent<TextMeshProUGUI>().text = quest.Name;
+            newQuest.GetComponent<UIItem>().quest = quest;
+        }
+    }
+
+    public void CloseQuestMenu()
+    {
+        QuestMenu.gameObject.SetActive(false);
+    }
+
+    public void MoveScroll(Transform newTransform)
+    {
+        RectTransform rectTransform = QuestHolder.GetComponent<RectTransform>();
+        scrollIntencity = rectTransform.GetComponent<VerticalLayoutGroup>().spacing + newTransform.transform.localScale.y;
+        if (lookvector.y > 0)
+        {
+            rectTransform.position -= new Vector3(0, scrollIntencity);
+        }
+        else if (lookvector.y < 0)
+        {
+            rectTransform.position += new Vector3(0, scrollIntencity);
+        }
+
+    }
+
+    public void addQuestDescription(Quest quest)
+    {
+        QuestName.text = quest.Name;
+        QuestDescription.text = quest.Description;
+        QuestDescription.GetComponent<RectTransform>().sizeDelta = new Vector2(500, QuestDescription.fontSize * QuestDescription.textInfo.lineCount);
+    }
+
 
     public void observe(string Text)
     {
