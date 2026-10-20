@@ -150,6 +150,7 @@ public class CombatHandler : MonoBehaviour
         int i = 0;
         foreach (EnemyData enemy in enemies)
         {
+
             Enemies[i].LoadData(enemies[i]);
             ArrayUtility.Add(ref NewEnemies, Enemies[i]);
             ExpReward += enemies[i].XPReward;

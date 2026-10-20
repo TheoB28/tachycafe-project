@@ -31,13 +31,19 @@ public class EnemyCombat : MonoBehaviour
     Action ChosenAction;
     PlayerCombat TargetPlayer;
     EnemyCombat TargetEnemy;
+    Animator Animator;
+
+    
 
     public void LoadData(EnemyData data)
     {
+        Animator = GetComponent<Animator>();
+
         //lodas the data into the enemy
         Data = data;
         HP = Data.HP; FP = Data.FP; MaxHP = Data.MaxHP; MaxFP = Data.MaxFP; Behaviour = Data.Behavior; Actions = Data.Actions;
         Vitality = data.Vitality; Mentality = data.Mentality; Fortitude = data.Fortitude; PhysicalPower = data.PhysicalPower; Nimbleness = data.Nimbleness; Brilliance = data.Brilliance; Hope = data.Hope;
+        Animator.Play(data.AnimationClip.name);
         text.text = HP.ToString();
         gameObject.name = data.name;
     }

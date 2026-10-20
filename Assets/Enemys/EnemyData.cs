@@ -13,6 +13,7 @@ public class EnemyData : ScriptableObject
     [SerializeField] public int MaxFP;
     [SerializeField] public int XPReward;
     [SerializeField] public EnemyBehavior Behavior;
+    [SerializeField] public AnimationClip AnimationClip;
 
     [Header("Stats")]
     [SerializeField] public int Vitality;
