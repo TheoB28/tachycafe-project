@@ -7,6 +7,7 @@ public class PlayerDataHandler : MonoBehaviour
     [SerializeField] public PlayerData[] playerData;
     [SerializeField] public PlayerCombat[] playerCombat;
     [SerializeField] public Quest[] Quests;
+    [SerializeField] public Quest[] CompleteQuests;
 
     int tick;
 
@@ -131,6 +132,25 @@ public class PlayerDataHandler : MonoBehaviour
         {
             player.Rest();
         }
+    }
+
+    public void AddQuest(Quest newQuest)
+    {
+        foreach (Quest quest in Quests)
+        {
+            if(quest == newQuest) {  return; }
+        }
+        foreach (Quest quest in CompleteQuests)
+        {
+            if (quest == newQuest) { return; }
+        }
+        ArrayUtility.Add(ref Quests, newQuest);
+        switch (newQuest.type)
+        {
+            case (Quest.QuestType.fetch):
+                newQuest.item.gameObject.SetActive(true);
+                break;
+        } 
     }
 
 }

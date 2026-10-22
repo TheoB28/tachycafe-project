@@ -4564,8 +4564,8 @@ MonoBehaviour:
   playerCombat:
   - {fileID: 1861109345}
   - {fileID: 303950753}
-  Quests:
-  - {fileID: 11400000, guid: 4f2fbaa18a414984a8ac5d7cbd13f03e, type: 2}
+  Quests: []
+  CompleteQuests: []
 --- !u!4 &454586047
 Transform:
   m_ObjectHideFlags: 0
@@ -6086,7 +6086,7 @@ GameObject:
   - component: {fileID: 686837851}
   - component: {fileID: 686837850}
   m_Layer: 0
-  m_Name: watter DataTilemap
+  m_Name: grass DataTilemap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23185,7 +23185,7 @@ TilemapRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -44136,6 +44136,19 @@ MonoBehaviour:
   - {fileID: 2230990254015516025, guid: ba8cebbe79b015548bd60e5ff37809c6, type: 3}
   TextDelay: 0.1
   currentLineIndex: 0
+  hasQuest: 1
+  quest: {fileID: 11400000, guid: 4f2fbaa18a414984a8ac5d7cbd13f03e, type: 2}
+  dialogueLinesGive:
+  - I need potion
+  - I need potion
+  dialogueLinesReward:
+  - arigathanks goozaimuch
+  - arigathanks goozaimuch
+  dialogueLinesAksAboutQuest:
+  - hurry up
+  - hurry up
+  hasGivenReward: 0
+  LinesToWrite: []
 --- !u!61 &1119629681
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -44696,7 +44709,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -287.5, y: -66}
-  m_SizeDelta: {x: 746.3463, y: 600}
+  m_SizeDelta: {x: 746.3463, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1328992890
 MonoBehaviour:
@@ -48326,7 +48339,7 @@ GameObject:
   - component: {fileID: 2037730885}
   - component: {fileID: 2037730884}
   m_Layer: 0
-  m_Name: watter Dual Grid
+  m_Name: grass Dual Grid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -50042,25 +50055,6 @@ Tilemap:
       e31: 0
       e32: 0
       e33: 1
-  - serializedVersion: 2
-    m_RefCount: 0
-    m_Data:
-      e00: 0
-      e01: 0
-      e02: 0
-      e03: 0
-      e10: 0
-      e11: 0
-      e12: 0
-      e13: 0
-      e20: 0
-      e21: 0
-      e22: 0
-      e23: 0
-      e30: 0
-      e31: 0
-      e32: 0
-      e33: 0
   m_TileColorArray:
   - serializedVersion: 2
     m_RefCount: 115
@@ -50089,6 +50083,63 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!1001 &7777529167399775345
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4283829299008283383, guid: c7b55e206a7943f4d9a85ccde0238b2b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -4.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4283829299008283383, guid: c7b55e206a7943f4d9a85ccde0238b2b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -4.7113333
+      objectReference: {fileID: 0}
+    - target: {fileID: 4283829299008283383, guid: c7b55e206a7943f4d9a85ccde0238b2b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4283829299008283383, guid: c7b55e206a7943f4d9a85ccde0238b2b, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4283829299008283383, guid: c7b55e206a7943f4d9a85ccde0238b2b, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4283829299008283383, guid: c7b55e206a7943f4d9a85ccde0238b2b, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4283829299008283383, guid: c7b55e206a7943f4d9a85ccde0238b2b, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4283829299008283383, guid: c7b55e206a7943f4d9a85ccde0238b2b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4283829299008283383, guid: c7b55e206a7943f4d9a85ccde0238b2b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4283829299008283383, guid: c7b55e206a7943f4d9a85ccde0238b2b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 8276385107328215823, guid: c7b55e206a7943f4d9a85ccde0238b2b, type: 3}
+      propertyPath: m_Name
+      value: Healing potion (quest)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c7b55e206a7943f4d9a85ccde0238b2b, type: 3}
 --- !u!1001 &8093063137179753413
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -50167,3 +50218,4 @@ SceneRoots:
   - {fileID: 2037730885}
   - {fileID: 827067182}
   - {fileID: 1999548818}
+  - {fileID: 7777529167399775345}

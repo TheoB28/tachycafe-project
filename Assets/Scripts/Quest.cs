@@ -8,4 +8,14 @@ public class Quest : ScriptableObject
     [SerializeField] public string Description;
     public bool Completed;
     [SerializeField] public QuestType type;
+
+    [Header("Fetch quest")]
+    [SerializeField] public QuestItem item;
+    public bool HasItem;
+
+    public void Activate()
+    {
+        item.gameObject.SetActive(true);
+    }
+    
 }
