@@ -23,7 +23,7 @@ public class QuestItem : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.CompareTag("player"))
+        if (other.gameObject.CompareTag("Player"))
         {
             quest.HasItem = true;
             Destroy(gameObject);

@@ -90,14 +90,16 @@ public class NPC : MonoBehaviour
 
     void QuestDialoge()
     {
+        if (hasGivenReward || quest.Completed) { LinesToWrite = dialogueLines;  return;}
         foreach (Quest quests in playerDataHandler.Quests)
         {
             if(quests == quest) { LinesToWrite = dialogueLinesAksAboutQuest; }
-            return;
-        }
-        foreach (Quest quests in playerDataHandler.CompleteQuests)
-        {
-            if (quests == quest && !hasGivenReward) { LinesToWrite = dialogueLinesReward; }
+            if (quests == quest && quest.HasItem)
+            {
+                hasGivenReward = true;
+                LinesToWrite = dialogueLinesReward;
+                playerDataHandler.CompleteQuest(quest);
+            }
             return;
         }
         LinesToWrite = dialogueLinesGive;

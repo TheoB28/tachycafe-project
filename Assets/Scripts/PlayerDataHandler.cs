@@ -1,4 +1,5 @@
 using UnityEditor;
+using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 
 public class PlayerDataHandler : MonoBehaviour
@@ -7,7 +8,7 @@ public class PlayerDataHandler : MonoBehaviour
     [SerializeField] public PlayerData[] playerData;
     [SerializeField] public PlayerCombat[] playerCombat;
     [SerializeField] public Quest[] Quests;
-    [SerializeField] public Quest[] CompleteQuests;
+    [SerializeField] public Quest[] CompletedQuests;
 
     int tick;
 
@@ -140,7 +141,7 @@ public class PlayerDataHandler : MonoBehaviour
         {
             if(quest == newQuest) {  return; }
         }
-        foreach (Quest quest in CompleteQuests)
+        foreach (Quest quest in CompletedQuests)
         {
             if (quest == newQuest) { return; }
         }
@@ -148,9 +149,20 @@ public class PlayerDataHandler : MonoBehaviour
         switch (newQuest.type)
         {
             case (Quest.QuestType.fetch):
-                newQuest.item.gameObject.SetActive(true);
+                newQuest.Activate();
                 break;
         } 
+    }
+
+    public void CompleteQuest(Quest Quest)
+    {
+        ArrayUtility.Remove(ref Quests, Quest);
+        ArrayUtility.Add(ref CompletedQuests, Quest);
+        Quest.Completed = true;
+        foreach(PlayerData playerData in playerData)
+        {
+            playerData.GiveXP(Quest.XPReward);
+        }
     }
 
 }
