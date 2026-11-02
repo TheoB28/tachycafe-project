@@ -54,6 +54,11 @@ public class PlayerOverworld : MonoBehaviour
         BaseEraseDelay = EraseTime;
     }
 
+    private void FixedUpdate()
+    {
+        movement();
+    }
+
     void OnMove(InputValue value)
     {
         if (InMenu) 
@@ -118,8 +123,14 @@ public class PlayerOverworld : MonoBehaviour
         Pause();
     }
 
+    void movement()
+    {
+        Rigidbody.linearVelocity = movementInput * moveSpeed;
+    }
+
     void Pause()
     {
+        if (InDialoge) { return; }
         if (PauseMenu.gameObject.activeSelf) {
             PauseMenu.gameObject.SetActive(false); 
             InMenu = false;
