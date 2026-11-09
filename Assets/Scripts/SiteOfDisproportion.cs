@@ -60,7 +60,6 @@ public class SiteOfDisproportion : MonoBehaviour
 
     [Header("UI Navigation")]
     GameObject[] StatText = new GameObject[0];
-    [SerializeField] GameObject selector;
 
     public bool levelingUp, InMainTab, inActionTab, selectingPlayer;
     int selectedStatIndex, currentPlayer, tempSP, currentSelect;
@@ -157,7 +156,6 @@ public class SiteOfDisproportion : MonoBehaviour
         currentSelect = 0;
 
         VitalityText.GetComponent<Selectable>().Select();
-        selector.transform.position = VitalityText.transform.position;
     }
 
     public void SetupPlayerActionTab()
@@ -269,20 +267,14 @@ public class SiteOfDisproportion : MonoBehaviour
         }
         if (levelingUp && input.Get<Vector2>().y > 0 && currentSelect > 0)
         {
-            selector.SetActive(true);
             currentSelect--;
-            selector.transform.position = StatText[currentSelect].transform.position;
         }
         else if (levelingUp && input.Get<Vector2>().y < 0 && currentSelect < StatText.Length -1)
         {
-            selector.SetActive(true);
-
             currentSelect++;
-            selector.transform.position = StatText[currentSelect].transform.position;
         } 
         else if (levelingUp && input.Get<Vector2>().y < 0 && currentSelect == StatText.Length - 1)
         {
-            selector.SetActive(false);
             currentSelect++;
         }
     }

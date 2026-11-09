@@ -131,7 +131,9 @@ public class PlayerOverworld : MonoBehaviour
     void Pause()
     {
         if (InDialoge) { return; }
-        if (PauseMenu.gameObject.activeSelf) {
+        if (PauseMenu.gameObject.activeSelf) 
+        {
+            CloseQuestMenu();
             PauseMenu.gameObject.SetActive(false); 
             InMenu = false;
             Time.timeScale = 1;
@@ -140,7 +142,7 @@ public class PlayerOverworld : MonoBehaviour
         if (currentSite != null) {return; }
         PauseMenu.gameObject.SetActive(true);
         InMenu = true;
-        Rigidbody.linearVelocity = Vector2.zero;
+        movementInput = Vector2.zero;
         Time.timeScale = 0;
         eventSystem.SetSelectedGameObject(MainMenuButton.gameObject);
     }
@@ -154,6 +156,7 @@ public class PlayerOverworld : MonoBehaviour
 
     public void OpenQuestMenu()
     {
+        if(QuestMenu.gameObject.activeSelf || playerDataHandler.Quests.Length == 0) { return; }
         QuestMenu.gameObject.SetActive(true);
 
         foreach (Quest quest in playerDataHandler.Quests)
@@ -167,6 +170,10 @@ public class PlayerOverworld : MonoBehaviour
     public void CloseQuestMenu()
     {
         QuestMenu.gameObject.SetActive(false);
+        foreach(Transform t in QuestHolder.transform)
+        {
+            Destroy(t.gameObject);
+        }
     }
 
     public void MoveScroll(Transform newTransform)
