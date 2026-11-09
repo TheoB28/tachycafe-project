@@ -1,3 +1,4 @@
+using Unity.Cinemachine;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -6,9 +7,14 @@ public class SceneLoader : MonoBehaviour
 {
     EnemyData[] Enemies;
     [SerializeField] PlayerDataHandler playerDataHandler;
-    public bool Incombat;
+    public bool Incombat, newOScene;
+
+    Vector2 newPlayerPos;
 
     CombatHandler combatHandler;
+    PlayerOverworld playerOverworld;
+    CinemachineBrain MainCamera;
+    CinemachineCamera Camera;
 
 
     void Start()
@@ -23,6 +29,9 @@ public class SceneLoader : MonoBehaviour
             DontDestroyOnLoad(gameObject);
         }
         SceneManager.sceneLoaded += OnSceneLoaded;
+        playerOverworld = FindAnyObjectByType<PlayerOverworld>();
+        MainCamera = FindAnyObjectByType<CinemachineBrain>();
+        Camera = FindAnyObjectByType<CinemachineCamera>();
     }
 
     public void LoadCombatScene(EnemyData[] enemies)
@@ -46,6 +55,16 @@ public class SceneLoader : MonoBehaviour
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         if (!playerDataHandler) { playerDataHandler = FindAnyObjectByType<PlayerDataHandler>(); }
+
+        if (playerOverworld)
+        {
+            SceneManager.MoveGameObjectToScene(playerOverworld.gameObject, SceneManager.GetActiveScene());
+            playerOverworld.transform.position = newPlayerPos;
+            SceneManager.MoveGameObjectToScene(MainCamera.gameObject, SceneManager.GetActiveScene());
+            SceneManager.MoveGameObjectToScene(Camera.gameObject, SceneManager.GetActiveScene());
+        }
+
+
         switch (scene.name)
         {
             case "CombatScene":
@@ -63,5 +82,15 @@ public class SceneLoader : MonoBehaviour
                 FindAnyObjectByType(typeof(MainMenu)).GetComponent<MainMenu>().Setup(this);
                 break;
         }
+    }
+
+    public void LoadScene(string sceneName, Vector2 pos)
+    {
+        newPlayerPos = pos;
+        newOScene = true;
+        DontDestroyOnLoad(playerOverworld);
+        DontDestroyOnLoad(MainCamera);
+        DontDestroyOnLoad(Camera);
+        SceneManager.LoadScene(sceneName);
     }
 }
