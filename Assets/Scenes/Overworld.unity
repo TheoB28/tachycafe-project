@@ -50231,7 +50231,7 @@ GameObject:
   - component: {fileID: 2114514092}
   - component: {fileID: 2114514089}
   m_Layer: 0
-  m_Name: Square
+  m_Name: Castle Door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -50249,7 +50249,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c316cfe9d357cf40acb25df3523d838, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneDoor
-  SceneName: Casle
+  SceneName: Castle
+  posToLoad: {x: 0, y: 0}
+  color: {r: 0, g: 0, b: 0, a: 1}
 --- !u!212 &2114514090
 SpriteRenderer:
   serializedVersion: 3
@@ -50319,7 +50321,7 @@ Transform:
   m_GameObject: {fileID: 2114514088}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 5, z: 0}
+  m_LocalPosition: {x: 1, y: 11.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

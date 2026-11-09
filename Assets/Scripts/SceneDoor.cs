@@ -5,6 +5,7 @@ public class SceneDoor : MonoBehaviour
 
     [SerializeField] string SceneName;
     [SerializeField] Vector2 posToLoad;
+    [SerializeField] Color color = new Color(230, 144, 78);
 
     SceneLoader loader;
 
@@ -17,7 +18,7 @@ public class SceneDoor : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            loader.LoadScene(SceneName, posToLoad);
+            loader.LoadScene(SceneName, posToLoad, color);
         }
     }
 

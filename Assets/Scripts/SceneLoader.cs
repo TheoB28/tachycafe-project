@@ -84,12 +84,13 @@ public class SceneLoader : MonoBehaviour
         }
     }
 
-    public void LoadScene(string sceneName, Vector2 pos)
+    public void LoadScene(string sceneName, Vector2 pos, Color color)
     {
         newPlayerPos = pos;
         newOScene = true;
         DontDestroyOnLoad(playerOverworld);
         DontDestroyOnLoad(MainCamera);
+        MainCamera.GetComponent<Camera>().backgroundColor = color;
         DontDestroyOnLoad(Camera);
         SceneManager.LoadScene(sceneName);
     }
