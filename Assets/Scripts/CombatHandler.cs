@@ -62,7 +62,6 @@ public class CombatHandler : MonoBehaviour
         eventSystem = GetComponentInChildren<EventSystem>();
     }
 
-
     private void Update()
     {
         if (!PlayerTurn)
@@ -72,7 +71,6 @@ public class CombatHandler : MonoBehaviour
             ItemsTab.SetActive(false);
         }
     }
-
 
     public void OnNavigate(InputValue Input)
     {

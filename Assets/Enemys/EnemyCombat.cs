@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
@@ -17,6 +18,7 @@ public class EnemyCombat : MonoBehaviour
     [SerializeField] TextMeshProUGUI text;
     [SerializeField] public Effects[] CurrentEffects;
 
+
     [Header("Stats")]
     [SerializeField] public int Vitality;
     [SerializeField] public int Mentality;
@@ -26,18 +28,22 @@ public class EnemyCombat : MonoBehaviour
     [SerializeField] public int Brilliance;
     [SerializeField] public int Hope;
 
+    [Header("Misc")]
     [SerializeField] CombatHandler CombatHandler;
+    [SerializeField] DamageText DamageText;
+    [SerializeField] float blinkInterval;
 
     Action ChosenAction;
     PlayerCombat TargetPlayer;
     EnemyCombat TargetEnemy;
     Animator Animator;
-
+    SpriteRenderer SpriteRenderer;
     
 
     public void LoadData(EnemyData data)
     {
         Animator = GetComponent<Animator>();
+        SpriteRenderer = GetComponent<SpriteRenderer>();
 
         //lodas the data into the enemy
         Data = data;
@@ -74,9 +80,14 @@ public class EnemyCombat : MonoBehaviour
             }
         }
         HP -= (int)ActualDamage;
+        DamageText ndam = Instantiate(DamageText, transform.position, Quaternion.identity);
+        ndam.bounce((int)ActualDamage);
+
+        StartCoroutine(blink());
 
         if (HP <= 0)
         {
+
             HP = 0;
             CombatHandler.EnemyDeath(this);
             Destroy(gameObject);
@@ -120,6 +131,7 @@ public class EnemyCombat : MonoBehaviour
         if (HP <= 0)
         {
             HP = 0;
+
             CombatHandler.EnemyDeath(this);
             Destroy(gameObject);
         }
@@ -162,7 +174,6 @@ public class EnemyCombat : MonoBehaviour
                 SupportivAction(players, enemies);
                 break;
         }
-
         switch (ChosenAction.Target)
         {
             case Action.PossibleTarget.self:
@@ -298,6 +309,17 @@ public class EnemyCombat : MonoBehaviour
                     ChosenAction = action;
                 }
             }
+        }
+    }
+
+    IEnumerator blink()
+    {
+        for (var i = 0; i < 3; i++)
+        {
+            SpriteRenderer.enabled = false;
+            yield return new WaitForSeconds(blinkInterval);
+            SpriteRenderer.enabled = true;
+            yield return new WaitForSeconds(blinkInterval);
         }
     }
 }

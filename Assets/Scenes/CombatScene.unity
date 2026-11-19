@@ -698,6 +698,8 @@ MonoBehaviour:
   Brilliance: 0
   Hope: 0
   CombatHandler: {fileID: 1850517739}
+  DamageText: {fileID: 1957567978918742052, guid: f1cddb830e1230e45a8465a9c4c69301, type: 3}
+  blinkInterval: 0.35
 --- !u!4 &346044924
 Transform:
   m_ObjectHideFlags: 0
@@ -1286,6 +1288,8 @@ MonoBehaviour:
   Brilliance: 0
   Hope: 0
   CombatHandler: {fileID: 1850517739}
+  DamageText: {fileID: 1957567978918742052, guid: f1cddb830e1230e45a8465a9c4c69301, type: 3}
+  blinkInterval: 0.35
 --- !u!4 &490383803
 Transform:
   m_ObjectHideFlags: 0
@@ -1570,6 +1574,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4f7a0a5c87685544c8879f2359a146ea, type: 2}
   playerCombat: []
   Quests: []
+  CompletedQuests: []
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -1876,6 +1881,8 @@ MonoBehaviour:
   Brilliance: 0
   Hope: 0
   CombatHandler: {fileID: 1850517739}
+  DamageText: {fileID: 1957567978918742052, guid: f1cddb830e1230e45a8465a9c4c69301, type: 3}
+  blinkInterval: 0.35
 --- !u!212 &609077759
 SpriteRenderer:
   serializedVersion: 3
@@ -4442,6 +4449,8 @@ MonoBehaviour:
   Brilliance: 0
   Hope: 0
   CombatHandler: {fileID: 1850517739}
+  DamageText: {fileID: 1957567978918742052, guid: f1cddb830e1230e45a8465a9c4c69301, type: 3}
+  blinkInterval: 0.35
 --- !u!212 &1535020084
 SpriteRenderer:
   serializedVersion: 3
@@ -4813,6 +4822,8 @@ MonoBehaviour:
   Brilliance: 0
   Hope: 0
   CombatHandler: {fileID: 1850517739}
+  DamageText: {fileID: 1957567978918742052, guid: f1cddb830e1230e45a8465a9c4c69301, type: 3}
+  blinkInterval: 0.35
 --- !u!4 &1610975061
 Transform:
   m_ObjectHideFlags: 0
@@ -5012,7 +5023,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -5088,6 +5099,8 @@ MonoBehaviour:
   Brilliance: 0
   Hope: 0
   CombatHandler: {fileID: 1850517739}
+  DamageText: {fileID: 1957567978918742052, guid: f1cddb830e1230e45a8465a9c4c69301, type: 3}
+  blinkInterval: 0.35
 --- !u!4 &1733868597
 Transform:
   m_ObjectHideFlags: 0

@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
@@ -30,6 +31,8 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] Vector2 EffectOffset;
     [SerializeField] int ListSize = 5;
     [SerializeField] public AnimationClip IdleAnimation;
+    [SerializeField] DamageText DamageText;
+    [SerializeField] float blinkInterval;
 
     public bool IsDead = false;
 
@@ -37,11 +40,13 @@ public class PlayerCombat : MonoBehaviour
     Canvas Canvas;
     PlayerDataHandler PlayerDataHandler;
     public Animator Animator;
+    SpriteRenderer SpriteRenderer;
 
     private void Awake()
     {
         Canvas = GetComponent<Canvas>();
         Animator = GetComponent<Animator>();
+        SpriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     private void Update()
@@ -89,9 +94,12 @@ public class PlayerCombat : MonoBehaviour
             }
         }
 
-        //hurts the player and clamps the health
+     
         HP -= (int) ActualDamage;
-
+        DamageText ndam = Instantiate(DamageText, transform.position, Quaternion.identity);
+        ndam.bounce(((int)ActualDamage));
+        StartCoroutine(blink());
+        //hurts the player and clamps the health
         if (HP <= 0)
         {
             HP = 0;
@@ -180,4 +188,14 @@ public class PlayerCombat : MonoBehaviour
         }
     }
 
+    IEnumerator blink()
+    {
+        for (var i = 0; i < 3; i++)
+        {
+            SpriteRenderer.enabled = false;
+            yield return new WaitForSeconds(blinkInterval);
+            SpriteRenderer.enabled = true;
+            yield return new WaitForSeconds(blinkInterval);
+        }
+    }
 }

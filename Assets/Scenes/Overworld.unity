@@ -3547,6 +3547,8 @@ MonoBehaviour:
   EffectOffset: {x: 1, y: -1}
   ListSize: 5
   IdleAnimation: {fileID: 7400000, guid: 2595e9cbdcaffa347a124990b5209c2c, type: 2}
+  DamageText: {fileID: 1957567978918742052, guid: f1cddb830e1230e45a8465a9c4c69301, type: 3}
+  blinkInterval: 0.4
   IsDead: 0
   Animator: {fileID: 0}
 --- !u!4 &303950754
@@ -48802,6 +48804,8 @@ MonoBehaviour:
   EffectOffset: {x: 1, y: -1}
   ListSize: 5
   IdleAnimation: {fileID: 7400000, guid: 752ef207d27efcf448f096f6ca6e0b3d, type: 2}
+  DamageText: {fileID: 1957567978918742052, guid: f1cddb830e1230e45a8465a9c4c69301, type: 3}
+  blinkInterval: 0.35
   IsDead: 0
   Animator: {fileID: 0}
 --- !u!212 &1861109346
@@ -48951,6 +48955,7 @@ MonoBehaviour:
   InMenu: 0
   InDialoge: 0
   writing: 0
+  movementInput: {x: 0, y: 0}
   currentSite: {fileID: 0}
   currentNPC: {fileID: 0}
 --- !u!114 &1874571178
@@ -49103,7 +49108,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

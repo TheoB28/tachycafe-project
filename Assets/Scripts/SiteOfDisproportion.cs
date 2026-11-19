@@ -77,6 +77,7 @@ public class SiteOfDisproportion : MonoBehaviour
             other.gameObject.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
             player = other.GetComponent<PlayerOverworld>();
             player.currentSite = this;
+            player.movementInput = Vector2.zero;
             eventSystem = FindAnyObjectByType<EventSystem>();
             canvas.gameObject.SetActive(true);
             playerDataHandler = FindAnyObjectByType<PlayerDataHandler>();

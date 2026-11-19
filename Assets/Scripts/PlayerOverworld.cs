@@ -30,7 +30,7 @@ public class PlayerOverworld : MonoBehaviour
     float baseTextDelay, BaseEraseDelay;
     public bool InMenu, InDialoge, writing;
 
-    Vector2 movementInput;
+    public Vector2 movementInput;
     Vector2 lookvector;
 
     public SiteOfDisproportion currentSite;
