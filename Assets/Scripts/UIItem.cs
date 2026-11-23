@@ -8,6 +8,7 @@ public class UIItem : MonoBehaviour, ISelectHandler
     public Type type;
     public Action action;
     public Quest quest;
+    public Item item;
 
     PlayerOverworld playerOverworld;
     SiteOfDisproportion SiteOfDisproportion;
@@ -22,8 +23,10 @@ public class UIItem : MonoBehaviour, ISelectHandler
             case Type.Quest:
                 playerOverworld = FindAnyObjectByType<PlayerOverworld>();
                 break;
+            case Type.Item:
+                playerOverworld = FindAnyObjectByType<PlayerOverworld>();
+                break;
         }
-
     }
 
     public void OnSelect(BaseEventData eventData)
@@ -41,7 +44,5 @@ public class UIItem : MonoBehaviour, ISelectHandler
         }
 
     }
-
-
 
 }

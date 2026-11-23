@@ -1,10 +1,8 @@
 using System.Collections;
 using TMPro;
-using Unity.Multiplayer.PlayMode;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 
 public class PlayerOverworld : MonoBehaviour
@@ -17,7 +15,7 @@ public class PlayerOverworld : MonoBehaviour
     [SerializeField] float DisplayTime = 2;
     [SerializeField] float EraseTime = 0.05f;
 
-    [Header("Menus")]
+    [Header("Pause Menu")]
     [SerializeField] Canvas PauseMenu;
     [SerializeField] public Button MainMenuButton;
     [SerializeField] GameObject QuestMenu;
@@ -27,8 +25,14 @@ public class PlayerOverworld : MonoBehaviour
     [SerializeField] TextMeshProUGUI QuestDescription;
     [SerializeField] float scrollIntencity;
 
+    [Header("Player menu")]
+    [SerializeField] Canvas PlayerMenu;
+    [SerializeField] GameObject Inventory;
+    [SerializeField] Button[] PlayerButtons;
+    [SerializeField] UIItem[] PlayerItems;
+
     float baseTextDelay, BaseEraseDelay;
-    public bool InMenu, InDialoge, writing;
+    public bool InMenu, InDialoge, InInventory, writing;
 
     public Vector2 movementInput;
     Vector2 lookvector;
@@ -68,7 +72,6 @@ public class PlayerOverworld : MonoBehaviour
                 currentSite.OnPlayerMove(value);
             }
             Rigidbody.linearVelocity = Vector2.zero;
-
             return; 
         }
         movementInput = value.Get<Vector2>();
@@ -81,6 +84,11 @@ public class PlayerOverworld : MonoBehaviour
 
     void OnCancel()
     {
+        if (InMenu && InInventory)
+        {
+            eventSystem.SetSelectedGameObject(PlayerButtons[0].gameObject);
+            Inventory.gameObject.SetActive(false);
+        }
         if (InMenu && InDialoge || currentSite == null) { return; }
         if (InMenu && currentSite != null)
         {
@@ -90,6 +98,7 @@ public class PlayerOverworld : MonoBehaviour
         {
             currentSite = null;
         }
+
     }
 
     void OnSubmit()
@@ -121,6 +130,11 @@ public class PlayerOverworld : MonoBehaviour
     void OnEsc()
     {
         Pause();
+    }
+
+    void OnTab()
+    {
+        OpenPlayerMenu();
     }
 
     void movement()
@@ -198,6 +212,55 @@ public class PlayerOverworld : MonoBehaviour
         QuestDescription.GetComponent<RectTransform>().sizeDelta = new Vector2(500, QuestDescription.fontSize * QuestDescription.textInfo.lineCount);
     }
 
+    public void OpenPlayerMenu()
+    {
+        if (InDialoge) { return; }
+        if (PlayerMenu.gameObject.activeSelf)
+        {
+            PlayerMenu.gameObject.SetActive(false);
+            InMenu = false;
+            Time.timeScale = 1;
+            return;
+        }
+        if (currentSite != null) { return; }
+        PlayerMenu.gameObject.SetActive(true);
+        InMenu = true;
+        movementInput = Vector2.zero;
+        Time.timeScale = 0;
+
+        int i = 0;
+        foreach(Button button in PlayerButtons)
+        {
+            if (i < playerDataHandler.playerData.Length)
+            {
+                button.gameObject.SetActive(true);
+                button.GetComponentInChildren<TextMeshProUGUI>().text = playerDataHandler.playerData[i].PlayerName;
+            }
+            else
+            {
+                button.gameObject.SetActive(false);
+            }
+            i++;
+        }
+        eventSystem.SetSelectedGameObject(PlayerButtons[0].gameObject);
+    }
+
+    public void OpenInventory(int playerID)
+    {
+        InInventory = true;
+        Inventory.gameObject.SetActive(true);
+        int i = 0;
+        foreach(Item item in playerDataHandler.playerData[playerID].inventory)
+        {
+            if(item) 
+            {
+                PlayerItems[i].GetComponent<TextMeshProUGUI>().text = item.name;
+                PlayerItems[i].item = item;
+            }
+            i++;
+        }
+        eventSystem.SetSelectedGameObject(PlayerItems[0].gameObject);
+    }
 
     public void observe(string Text)
     {

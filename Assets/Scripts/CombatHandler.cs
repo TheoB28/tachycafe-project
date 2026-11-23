@@ -129,6 +129,25 @@ public class CombatHandler : MonoBehaviour
         ItemsTab.SetActive(true);
     }
 
+    public void Run()
+    {
+
+        int dex = 0;
+        foreach (PlayerCombat player in players) 
+        {
+            dex += player.Nimbleness;
+        }
+        dex = dex/players.Length;
+        if (dex >= UnityEngine.Random.Range(0, 100))
+        {
+            SceneLoader.LoadOverworld();
+        }
+        else
+        {
+            NextPlayerTurn();
+        }
+    }
+
     public void SetupPlayers(PlayerCombat[] players)
     {
         PlayerDataHandler = FindAnyObjectByType<PlayerDataHandler>();
@@ -140,18 +159,17 @@ public class CombatHandler : MonoBehaviour
         PlayerNameText.text = players[CurrentCharacterID].PlayerName;
     }
 
-    public void SetupEnemies(EnemyData[] enemies)
+    public void SetupEnemies()
     {
         //adds the data to the enemys and removes the vessels without data
         EnemyCombat[] NewEnemies = new EnemyCombat[0];
-        if(enemies == null) { return; }
+        if(SceneLoader.Enemies == null) { return; }
         int i = 0;
-        foreach (EnemyData enemy in enemies)
+        foreach (EnemyData enemy in SceneLoader.Enemies)
         {
-
-            Enemies[i].LoadData(enemies[i]);
+            Enemies[i].LoadData(SceneLoader.Enemies[i]);
             ArrayUtility.Add(ref NewEnemies, Enemies[i]);
-            ExpReward += enemies[i].XPReward;
+            ExpReward += SceneLoader.Enemies[i].XPReward;
             i++;
         }
         foreach (EnemyCombat enemy in Enemies)
@@ -387,7 +405,7 @@ public class CombatHandler : MonoBehaviour
         float i = UnityEngine.Random.value;
         if (PlayerDataHandler.playerData[CurrentCharacterID].HasDysphoria && i < PlayerDataHandler.playerData[CurrentCharacterID].SkipChans)
         {
-            CombatLogText.text = players[CurrentCharacterID].name + " does nothing due to dysphoria.";
+            combatLog(players[CurrentCharacterID].name + " seems like they don't want to fight.");
             NextPlayerTurn();
         }
 

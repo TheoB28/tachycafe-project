@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class SceneLoader : MonoBehaviour
 {
-    EnemyData[] Enemies;
+    public EnemyData[] Enemies;
     [SerializeField] PlayerDataHandler playerDataHandler;
     public bool Incombat, newOScene;
 
@@ -70,8 +70,8 @@ public class SceneLoader : MonoBehaviour
             case "CombatScene":
                 Incombat = true;
                 playerDataHandler.ActivateCombat();
-                combatHandler = FindObjectOfType<CombatHandler>();
-                combatHandler.SetupEnemies(Enemies);
+                combatHandler = FindAnyObjectByType<CombatHandler>();
+                combatHandler.SetupEnemies();
                 break;
             case "Overworld":
                 Incombat = false;

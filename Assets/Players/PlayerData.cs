@@ -28,6 +28,9 @@ public class PlayerData : ScriptableObject
     [SerializeField] public int Brilliance;
     [SerializeField] public int Hope;
 
+    [Header("Inventory")]
+    [SerializeField] public Item[] inventory = new Item[10];
+
     [Header("Stat scaling")]
     [SerializeField] public int VitalityScale1To20;
     [SerializeField] public int VitalityScale20To40;
