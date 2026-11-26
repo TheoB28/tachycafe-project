@@ -52,6 +52,7 @@ public class PlayerDataHandler : MonoBehaviour
             playerData[i].FP = player.FP;
             playerData[i].MaxHP = player.MaxHP;
             playerData[i].MaxFP = player.MaxFP;
+            playerData[i].inventory = player.inventory;
             playerData[i].IsDead = player.IsDead;
             if(playerData[i].IsDead)
             {
@@ -92,6 +93,7 @@ public class PlayerDataHandler : MonoBehaviour
             player.Brilliance = playerData[i].Brilliance;
             player.Hope = playerData[i].Hope;
 
+            player.inventory = playerData[i].inventory;
             i++;
         }
     }

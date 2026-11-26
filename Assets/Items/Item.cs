@@ -3,9 +3,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Item", menuName = "Scriptable Objects/Item")]
 public class Item : ScriptableObject
 {
-    [SerializeField] string Name;
-    [SerializeField] string Description;
-    [SerializeField] int cost;
-    [SerializeField] int sellValue;
+    [SerializeField] public string Name;
+    [SerializeField] public string Description;
+    [SerializeField] public int cost;
+    [SerializeField] public int sellValue;
 
 }

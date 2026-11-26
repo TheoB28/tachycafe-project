@@ -24,7 +24,7 @@ public class UIItem : MonoBehaviour, ISelectHandler
                 playerOverworld = FindAnyObjectByType<PlayerOverworld>();
                 break;
             case Type.Item:
-                playerOverworld = FindAnyObjectByType<PlayerOverworld>();
+                
                 break;
         }
     }

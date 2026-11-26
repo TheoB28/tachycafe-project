@@ -25,6 +25,9 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] public int Brilliance;
     [SerializeField] public int Hope;
 
+    [Header("Inventory")]
+    [SerializeField] public Item[] inventory = new Item[10];
+
     [Header("Misc")]
     [SerializeField] public string PlayerName;
     [SerializeField] GameObject EffectHolder;

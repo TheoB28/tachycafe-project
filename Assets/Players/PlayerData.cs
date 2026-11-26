@@ -101,6 +101,7 @@ public class PlayerData : ScriptableObject
         else if(Mentality <= 60) { MaxFP = MentalityScale1To20 * 20 + MentalityScale20To40 * 20 + (Mentality -40) * MentalityScale40To60; }
         else if(Mentality <= 80) { MaxFP = MentalityScale1To20 * 20 + MentalityScale20To40 * 20 + MentalityScale40To60 * 20 + (Mentality -60) * MentalityScale60To80; }
         else if(Mentality <= 100) { MaxFP = MentalityScale1To20 * 20 + MentalityScale20To40 * 20 + MentalityScale40To60 * 20 + MentalityScale60To80 * 20 + (Mentality -80) * MentalityScale80To100; }
+        
     }
 
     public void uppdateFriendList(PlayerDataHandler dataHandler)

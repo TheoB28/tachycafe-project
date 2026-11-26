@@ -22,9 +22,11 @@ public class CombatHandler : MonoBehaviour
     [SerializeField] Button action2Button;
     [SerializeField] Button action3Button;
     [SerializeField] Button action4Button;
-    
+
     [Header("Items Tab")]
     [SerializeField] GameObject ItemsTab;
+    [SerializeField] UIItem[] Items;
+    [SerializeField] TextMeshProUGUI ItemDescription;
 
     [Header("Description Tab")]
     [SerializeField] GameObject DescriptionTab;
@@ -41,13 +43,14 @@ public class CombatHandler : MonoBehaviour
     [Header("Enemys")]
     [SerializeField] public EnemyCombat[] Enemies;
 
+
     [Header("Turn")]
     [SerializeField] GameObject Selector;
     [SerializeField] float SelectorHeight;
     int CurrentTargetID;
 
     public int ExpReward;
-    public bool ChoosingTarget;
+    public bool ChoosingTarget, ChoosingItem;
     public bool PlayerTurn;
     public bool Teamworking;
     public bool StopNav;
@@ -105,12 +108,13 @@ public class CombatHandler : MonoBehaviour
             FightButton.Select();
             FightTab.SetActive(false);
             DescriptionTab.SetActive(false);
+            ItemsTab.SetActive(false);
         }
     }
 
     public void ShowFightTab()
     {
-        FightTab.SetActive(true);  
+        FightTab.SetActive(true);
         DescriptionTab.SetActive(true);
         ItemsTab.SetActive(false);
         action1Button.Select();
@@ -127,17 +131,34 @@ public class CombatHandler : MonoBehaviour
         FightTab.SetActive(false);
         DescriptionTab.SetActive(false);
         ItemsTab.SetActive(true);
+        ChoosingItem = true;
+        eventSystem.SetSelectedGameObject(Items[0].gameObject);
+        int i = 0;
+        foreach(Item item in players[CurrentCharacterID].inventory)
+        {
+            if(item == null) 
+            { 
+                Items[i].GetComponent<TextMeshProUGUI>().text = "------"; 
+            }
+            else
+            {
+                Items[i].item = item;
+                Items[i].GetComponent<TextMeshProUGUI>().text = item.name;
+            }
+
+            i++;
+        }
     }
 
     public void Run()
     {
 
         int dex = 0;
-        foreach (PlayerCombat player in players) 
+        foreach (PlayerCombat player in players)
         {
             dex += player.Nimbleness;
         }
-        dex = dex/players.Length;
+        dex = dex / players.Length;
         if (dex >= UnityEngine.Random.Range(0, 100))
         {
             SceneLoader.LoadOverworld();
@@ -163,7 +184,7 @@ public class CombatHandler : MonoBehaviour
     {
         //adds the data to the enemys and removes the vessels without data
         EnemyCombat[] NewEnemies = new EnemyCombat[0];
-        if(SceneLoader.Enemies == null) { return; }
+        if (SceneLoader.Enemies == null) { return; }
         int i = 0;
         foreach (EnemyData enemy in SceneLoader.Enemies)
         {
@@ -180,13 +201,13 @@ public class CombatHandler : MonoBehaviour
             }
         }
         Enemies = NewEnemies;
-        
+
     }
 
     void SetupPlayerTabs()
     {
         //sets up the UI or the current character
-        if(CurrentCharacterID >= players.Length) { return; }
+        if (CurrentCharacterID >= players.Length) { return; }
         TextMeshProUGUI ButtonText = action1Button.GetComponentInChildren<TextMeshProUGUI>();
         ButtonText.text = players[CurrentCharacterID].Actions[0].name;
         ButtonText = action2Button.GetComponentInChildren<TextMeshProUGUI>();
@@ -270,7 +291,7 @@ public class CombatHandler : MonoBehaviour
         }
         else if (ChoosingTarget && Teamworking)
         {
-            if(CurrentTargetID == CurrentCharacterID) { return; }
+            if (CurrentTargetID == CurrentCharacterID) { return; }
             players[CurrentTargetID].Heal(players[CurrentCharacterID].FriendLevel[CurrentTargetID]);
             Effects effect = ScriptableObject.CreateInstance<Effects>();
             effect.copyFrom(toutched);
@@ -285,7 +306,7 @@ public class CombatHandler : MonoBehaviour
 
     void TargetSelecting(InputValue Input)
     {
-        
+
         //moves the selector and selects the target
         if (ChoosingTarget && !Teamworking)
         {
@@ -321,7 +342,7 @@ public class CombatHandler : MonoBehaviour
                     break;
             }
         }
-        else if(ChoosingTarget && Teamworking)
+        else if (ChoosingTarget && Teamworking)
         {
             if (Input.Get<Vector2>().x > 0)
             {
@@ -365,6 +386,26 @@ public class CombatHandler : MonoBehaviour
         combatLog(players[CurrentCharacterID].name + " uses " + players[CurrentCharacterID].Actions[CurrentActionID].name + " on " + players[CurrentCharacterID].name);
         NextPlayerTurn();
 
+    }
+
+    public void ItemSelect(int ID)
+    {
+        if (players[CurrentCharacterID].inventory[ID] != null)
+        {
+            ItemDescription.text = players[CurrentCharacterID].inventory[ID].Description;
+        }
+        else
+        {
+            ItemDescription.text = null;
+        }
+    }
+
+    public void UseItem(int ID)
+    {
+        if (players[CurrentCharacterID].inventory[ID] != null)
+        {
+            Debug.Log("code type shit");
+        } 
     }
 
     IEnumerator StartEnemyTurn()

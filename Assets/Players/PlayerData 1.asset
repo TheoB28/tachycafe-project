@@ -18,9 +18,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2111ab665aece6944a365d4b836ff243, type: 2}
   - {fileID: 11400000, guid: 113ac263df710c048a7e73af9d7011f1, type: 2}
   - {fileID: 11400000, guid: 72fffed0d65b2ac4c905facfa1c15735, type: 2}
-  HP: 35
+  HP: 0
   FP: 0
-  MaxHP: 35
+  MaxHP: 0
   MaxFP: 0
   CurrentEffects: []
   LernedActions:
@@ -40,6 +40,17 @@ MonoBehaviour:
   Nimbleness: 0
   Brilliance: 0
   Hope: 0
+  inventory:
+  - {fileID: 11400000, guid: f52ab81f784a4f949bca5968d5d5840b, type: 2}
+  - {fileID: 0}
+  - {fileID: 11400000, guid: 12ad66a8a3c5fcd46b65a47915187f8e, type: 2}
+  - {fileID: 0}
+  - {fileID: 11400000, guid: 12ad66a8a3c5fcd46b65a47915187f8e, type: 2}
+  - {fileID: 11400000, guid: f52ab81f784a4f949bca5968d5d5840b, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 11400000, guid: 12ad66a8a3c5fcd46b65a47915187f8e, type: 2}
+  - {fileID: 11400000, guid: f52ab81f784a4f949bca5968d5d5840b, type: 2}
   VitalityScale1To20: 5
   VitalityScale20To40: 4
   VitalityScale40To60: 3
